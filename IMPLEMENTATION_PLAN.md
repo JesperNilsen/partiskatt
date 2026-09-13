@@ -9,7 +9,7 @@ Autoritativ produktkontekst: `PROJECT.md`. Denne filen er fremdriftsloggen og ov
 | S0 | Repo, Vite/TS-strict/Vitest/CSS-tokens/CI/netlify.toml, privat remote | `npm run check` grønn; CI grønn | ☑ 2026-09-13 |
 | S1 | (subagent kjørte 2026-09-13 — sjekk `sources/manifest.json` + `sources/worksheets/baseline-2026.md`) Referansekilder arkivert (Lovdata-vedtak, Prop. 1 LS Tabell 1.7, Innst. 2/3 S, Skatteetaten, NAV, Lånekassen, SSB FBU) + `sources/worksheets/baseline-2026.md` | manifest med sha256 for alle; kryssjekk Lovdata↔Skatteetaten | ☑ 2026-09-13 (81ff3f9; manifest slått sammen → `sources/manifest.json`) |
 | S2 | `src/types/` + `src/engine/money.ts` | money-tester, tsc rent | ☑ 2026-09-13 (RatePerUnit = 1/10 000 kr per enhet, ikke øre) |
-| S3 | Beregningsmotor + `data/baseline/2026/adopted.ts` | invarianter + terskelmatrise + fem profiler grønne | ◐ 2026-09-13 motor + 74 tester grønne; adopted.ts gjenstår |
+| S3 | Beregningsmotor + `data/baseline/2026/adopted.ts` | invarianter + terskelmatrise + fem profiler grønne | ☑ 2026-09-13 (72 tester mot vedtatt 2026; alt `estimated`) |
 | S4 | `proposed.ts` + `forlik.ts` | forlik-diff-test passerer; Ap = 0 | ☐ |
 | S5 | Åtte partibudsjetter hentet, `pdftotext`, manifest (V og R evt. `operator`) | manifestrader for alle 9 | ☑ 2026-09-13 (alle 8 hentet; V via --http1.1+Referer, R via Wayback) |
 | S6 | Uavhengig dobbel ekstraksjon per parti (Claude-subagent + Codex) → `reconciled.md` | avstemte ark finnes; uenigheter listet | ☑ 2026-09-13 (8 claude + 8 codex + 8 reconciled; 9f8f117) |
@@ -35,12 +35,12 @@ Autoritativ produktkontekst: `PROJECT.md`. Denne filen er fremdriftsloggen og ov
 3. Manuell kontroll av referansesystemets totaler for de fem testprofilene mot Skatteetatens kalkulator før snapshot-verdiene fryses som `confirmed`.
 4. Offentlig repo og endelig merkenavn: begge er ett-token-endringer (`src/config/brand.ts`).
 
-## Neste økt (overlevering 2026-09-13 kl. 16:50, økt stoppet ved kontekst-tak)
-1. **S6 Codex-pass: FERDIG** 2026-09-13 kl. 16:53 (commit 37148ba): alle åtte `sources/worksheets/<parti>.codex.md` finnes (73–100 linjer hver); kjørelogger i `briefs/codex-s6/`. Startskriptet er `scripts/codex-extract.zsh` (delegate: consult, effort high, timeout 1500 s) om et parti må kjøres om.
-2. **S6 reconcile: FERDIG** 2026-09-13 kl. 17:56 (commit 9f8f117, parallell økt): `scripts/reconcile.ts` → `<parti>.reconciled.md` + `sources/worksheets/RECONCILIATION.md`; 267 rader: 211 enige, 56 uenige (not-reviewed), 47 kodbare i S7, 34 kan inn i overskriften. `npm run reconcile -- --check` er del av `npm run check`. Kjente knuter (KNOWN_KNOTS i skriptet): frikortgrense→trygdeavgift (H/FrP/SV/R), KrF-vedlegg tomt i pdftotext (`source-text-incomplete`), Venstre elavgift mot dagens sats (`baseline-not-proposed`), MDG uten mva-satser/G.
-3. **S3b (hovedtråd):** motoren er ferdig og grønn (`src/engine/*`, 74 tester mot syntetisk regelsett i `src/tests/`). Gjenstår: `src/data/baseline/2026/adopted.ts` fra `sources/worksheets/baseline-2026.md` (les arket én gang, ~23 KB), `src/data/sources.ts` (speiler `sources/manifest.json`), `src/data/parties/ap.ts` (null deltas), `src/data/index.ts` (DataBundle). Motorens API: `calculateAll(profile, toggles, data)`; `DataBundle = { proposed, adopted, parties[] }`.
-4. **S4:** `proposed.ts` + `forlik.ts` + diff-test (15 endrede regler, se S1-funn). Deretter S7 (parties/*.ts kun fra reconciled-ark; ekte `scripts/gen-data-status.ts`), S8 UI-subagent, S9 docs, S10 mobil + deploy.
-5. Operatørporter uendret: Netlify-kobling, Skatteetaten-kryssjekk av fem fixtures, offentlig repo + navn.
+## Neste økt (overlevering 2026-09-13 kl. 18:15)
+1. **S3b adopted.ts: FERDIG** — `src/data/baseline/2026/adopted.ts` (`ADOPTED_2026`): alle 33 formler fra `baseline-2026.md`, provenance mot manifest-id-er, **ingen** `confirmed` (alt `estimated`). Kjente usikkerheter flagget i `note`: primærbolig 14 mill.-trinn (junilov 2026 vs SE-FU 10 mill.), vin/brennevin omregnet fra kr/vol.pst. (12/40 pst antagelse), minstefradrag nedre grense 0, barnetrygd effektiv 1.2.2026, studiestøtte 2026–2027-sats. Sammensatte drivstoffavgifter = veibruk + CO2. 72 tester grønne mot vedtatt 2026 (`profiles`, `thresholds`, `invariants`); `synthetic-rules.ts` beholdt for isolerte overlay-tester.
+2. **S4 (hovedtråd):** `src/data/baseline/2026/proposed.ts` (Prop. 1 LS Tabell 1.7/1.8) + `forlik.ts` (15 endrede regler) + diff-test adopted≠proposed. Deretter `src/data/sources.ts`, `src/data/parties/ap.ts`, `src/data/index.ts` (`DataBundle`).
+3. **S7:** `data/parties/*.ts` kun fra reconciled-ark; ekte `scripts/gen-data-status.ts`. S6 reconcile ferdig (9f8f117); 56 uenige rader, 4 KNOWN_KNOTS — se `RECONCILIATION.md`.
+4. **S8** UI-subagent (`../partiskatt-ui`), **S9** docs, **S10** mobil + deploy.
+5. Operatørporter: **gate 3** — Jesper kryssjekker fem fixtures mot Skatteetaten før noe settes `confirmed`; Netlify-kobling; offentlig repo + navn.
 
 ## S1-funn (agentrapport 2026-09-13, filene er leveransen)
 - `sources/manifest.json` (baseline-delen): 31 rader (30 arkivert, 1 blokkert: Skatteetatens `/satser/`-sider for fradrag finnes ikke; erstattet av `skatteetaten-forskuddsutskrivingen-2026` som har hele 2026-satstabellen). Særavgifter er ett Lovdata-vedtak per avgift (seks id-er). Konsolidert skatteloven kap. 4 arkivert fordi verdsettelsesreglene ikke står i skattevedtaket.
