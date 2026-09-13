@@ -1,24 +1,30 @@
 import { PARTY_META } from '../config/parties.ts';
-import { DATA_STATUS_CATEGORIES, DATA_STATUS_SNAPSHOT } from '../content/data-status-snapshot.ts';
+import { DATA_STATUS_CATEGORIES, DATA_STATUS_TABLE } from '../content/data-status-snapshot.ts';
 import type { PartyId } from '../types/index.ts';
 import { PARTY_IDS } from '../types/index.ts';
 import { DATA_STATUS_HINTS } from '../utils/status-labels.ts';
 import { StatusBadge } from './StatusBadge.tsx';
 
 interface DataStatusTableProps {
-  /** When true, show a note that the table is provisional until S7 lands. */
+  /** When true, show a note that the table is from the pre-S7 static snapshot. */
   provisional?: boolean;
 }
 
 export function DataStatusTable({ provisional = false }: DataStatusTableProps) {
+  const table = DATA_STATUS_TABLE;
+
   return (
     <div className="data-status">
       {provisional ? (
         <p className="data-status__note muted">
-          Tabellen speiler <code>DATA_STATUS.md</code> per {new Date().toLocaleDateString('nb-NO')}. Ingen kategori er
-          kontrollert ennå — alt er merket «ikke gjennomgått» til partidata er avstemt (S7).
+          Tabellen er en statisk snapshot — alle kategorier er «ikke gjennomgått» til partidata er koblet på.
         </p>
-      ) : null}
+      ) : (
+        <p className="data-status__note muted">
+          Tabellen speiler <code>DATA_STATUS.md</code> (generert fra <code>src/data/</code>). Ingen kategori er
+          bekreftet ennå — kodede endringer er merket anslått eller uavklart.
+        </p>
+      )}
 
       <div className="table-scroll" tabIndex={0} role="region" aria-label="Datastatus per parti og kategori">
         <table className="doc-table data-status__table">
@@ -37,7 +43,7 @@ export function DataStatusTable({ provisional = false }: DataStatusTableProps) {
                 <th scope="row">{PARTY_META[id].shortName}</th>
                 {DATA_STATUS_CATEGORIES.map((cat) => (
                   <td key={cat.id}>
-                    <StatusBadge status={DATA_STATUS_SNAPSHOT[id][cat.id]} />
+                    <StatusBadge status={table[id][cat.id]} />
                   </td>
                 ))}
               </tr>

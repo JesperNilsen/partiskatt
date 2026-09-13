@@ -54,7 +54,8 @@ export function SourcesView() {
         ) : (
           <p className="lede calm">
             Tallene bygger på de vedtatte 2026-reglene, Lovdata-vedtak og partienes alternative statsbudsjetter listet
-            nedenfor.
+            nedenfor. Alle kodede endringer er merket <strong>anslått</strong> — ingen er bekreftet mot primærkilde
+            ennå.
           </p>
         )}
       </header>
@@ -111,8 +112,8 @@ export function SourcesView() {
           <DataStatusTable provisional={provisional || !data} />
         )}
         <p className="muted">
-          Maskinlesbar versjon: <code>DATA_STATUS.md</code> i repoet (genereres av <code>scripts/gen-data-status.ts</code>{' '}
-          når datalaget er klart).
+          Maskinlesbar versjon: <code>DATA_STATUS.md</code> i repoet (genereres av{' '}
+          <code>scripts/gen-data-status.ts</code> fra <code>src/data/</code>).
         </p>
       </section>
 
