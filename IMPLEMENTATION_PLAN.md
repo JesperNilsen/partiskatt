@@ -10,7 +10,7 @@ Autoritativ produktkontekst: `PROJECT.md`. Denne filen er fremdriftsloggen og ov
 | S1 | (subagent kjørte 2026-09-13 — sjekk `sources/manifest.json` + `sources/worksheets/baseline-2026.md`) Referansekilder arkivert (Lovdata-vedtak, Prop. 1 LS Tabell 1.7, Innst. 2/3 S, Skatteetaten, NAV, Lånekassen, SSB FBU) + `sources/worksheets/baseline-2026.md` | manifest med sha256 for alle; kryssjekk Lovdata↔Skatteetaten | ☑ 2026-09-13 (81ff3f9; manifest slått sammen → `sources/manifest.json`) |
 | S2 | `src/types/` + `src/engine/money.ts` | money-tester, tsc rent | ☑ 2026-09-13 (RatePerUnit = 1/10 000 kr per enhet, ikke øre) |
 | S3 | Beregningsmotor + `data/baseline/2026/adopted.ts` | invarianter + terskelmatrise + fem profiler grønne | ☑ 2026-09-13 (72 tester mot vedtatt 2026; alt `estimated`) |
-| S4 | `proposed.ts` + `forlik.ts` | forlik-diff-test passerer; Ap = 0 | ☐ |
+| S4 | `proposed.ts` + `forlik.ts` | forlik-diff-test passerer; Ap = 0 | ☑ 2026-09-13 |
 | S5 | Åtte partibudsjetter hentet, `pdftotext`, manifest (V og R evt. `operator`) | manifestrader for alle 9 | ☑ 2026-09-13 (alle 8 hentet; V via --http1.1+Referer, R via Wayback) |
 | S6 | Uavhengig dobbel ekstraksjon per parti (Claude-subagent + Codex) → `reconciled.md` | avstemte ark finnes; uenigheter listet | ☑ 2026-09-13 (8 claude + 8 codex + 8 reconciled; 9f8f117) |
 | S7 | `data/parties/*.ts` kun fra avstemte ark; `DATA_STATUS.md` generert | provenance-, anker- og baseline-tester grønne | ☐ |
@@ -35,12 +35,12 @@ Autoritativ produktkontekst: `PROJECT.md`. Denne filen er fremdriftsloggen og ov
 3. Manuell kontroll av referansesystemets totaler for de fem testprofilene mot Skatteetatens kalkulator før snapshot-verdiene fryses som `confirmed`.
 4. Offentlig repo og endelig merkenavn: begge er ett-token-endringer (`src/config/brand.ts`).
 
-## Neste økt (overlevering 2026-09-13 kl. 18:15)
-1. **S3b adopted.ts: FERDIG** — `src/data/baseline/2026/adopted.ts` (`ADOPTED_2026`): alle 33 formler fra `baseline-2026.md`, provenance mot manifest-id-er, **ingen** `confirmed` (alt `estimated`). Kjente usikkerheter flagget i `note`: primærbolig 14 mill.-trinn (junilov 2026 vs SE-FU 10 mill.), vin/brennevin omregnet fra kr/vol.pst. (12/40 pst antagelse), minstefradrag nedre grense 0, barnetrygd effektiv 1.2.2026, studiestøtte 2026–2027-sats. Sammensatte drivstoffavgifter = veibruk + CO2. 72 tester grønne mot vedtatt 2026 (`profiles`, `thresholds`, `invariants`); `synthetic-rules.ts` beholdt for isolerte overlay-tester.
-2. **S4 (hovedtråd):** `src/data/baseline/2026/proposed.ts` (Prop. 1 LS Tabell 1.7/1.8) + `forlik.ts` (15 endrede regler) + diff-test adopted≠proposed. Deretter `src/data/sources.ts`, `src/data/parties/ap.ts`, `src/data/index.ts` (`DataBundle`).
-3. **S7:** `data/parties/*.ts` kun fra reconciled-ark; ekte `scripts/gen-data-status.ts`. S6 reconcile ferdig (9f8f117); 56 uenige rader, 4 KNOWN_KNOTS — se `RECONCILIATION.md`.
-4. **S8** UI-subagent (`../partiskatt-ui`), **S9** docs, **S10** mobil + deploy.
-5. Operatørporter: **gate 3** — Jesper kryssjekker fem fixtures mot Skatteetaten før noe settes `confirmed`; Netlify-kobling; offentlig repo + navn.
+## Neste økt (overlevering 2026-09-13 kl. 18:20)
+1. **S4 proposed + forlik: FERDIG** — `src/data/baseline/2026/proposed.ts` (Prop. 1 LS Tabell 1.7/1.8, patch fra adopted), `forlik.ts` (15 endrede regler med provenance), `src/tests/forlik-diff.test.ts` (14 tester: 7 modellerte forlik-endringer på 6 formel-id-er + `wealth.valuation` som dokumentert non-forlik-diff). Alt `estimated`. 86 tester grønne.
+2. **S4 rest / S7:** `src/data/sources.ts`, `src/data/parties/ap.ts`, `src/data/index.ts` (`DataBundle` med ekte `PROPOSED_2026`); deretter `data/parties/*.ts` fra reconciled-ark + `scripts/gen-data-status.ts`.
+3. **S8** UI-subagent (`../partiskatt-ui`), **S9** docs, **S10** mobil + deploy.
+4. Operatørporter: **gate 3** — Jesper kryssjekker fem fixtures mot Skatteetaten før noe settes `confirmed`; Netlify-kobling; offentlig repo + navn.
+5. **Beslutninger til Jesper:** (a) proposed barnetrygd 1 968 kr/mnd som tolkning av «nominell videreføring»; (b) primærbolig 14 vs 10 mill. er vedtatt≠proposed uten forlik — behold som `NON_FORLIK_BASELINE_DIFFS`?
 
 ## S1-funn (agentrapport 2026-09-13, filene er leveransen)
 - `sources/manifest.json` (baseline-delen): 31 rader (30 arkivert, 1 blokkert: Skatteetatens `/satser/`-sider for fradrag finnes ikke; erstattet av `skatteetaten-forskuddsutskrivingen-2026` som har hele 2026-satstabellen). Særavgifter er ett Lovdata-vedtak per avgift (seks id-er). Konsolidert skatteloven kap. 4 arkivert fordi verdsettelsesreglene ikke står i skattevedtaket.
