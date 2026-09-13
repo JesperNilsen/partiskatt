@@ -1,6 +1,6 @@
 /* UI layer — builds on tokens.css and base.css */
 
-.app { min-height: 100dvh; display: flex; flex-direction: column; }
+.app { min-height: 100dvh; display: flex; flex-direction: column; min-width: 0; overflow-x: clip; }
 .main { flex: 1; padding-bottom: var(--sp-8); }
 
 .site-header {
@@ -267,7 +267,8 @@ input[type='number'], select {
   text-align: center;
   padding: var(--sp-8) var(--sp-4);
 }
-.doc-page { max-width: 44rem; }
+.doc-page { max-width: 44rem; min-width: 0; }
+.data-status { min-width: 0; }
 .doc-page section { margin-bottom: var(--sp-6); }
 .doc-page ul, .doc-page ol { padding-left: 1.2rem; }
 .doc-page__header { margin-bottom: var(--sp-6); }
@@ -290,12 +291,20 @@ input[type='number'], select {
 }
 
 .table-scroll {
+  display: block;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   margin-bottom: var(--sp-4);
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
   background: #fff;
+  max-width: 100%;
+  width: 100%;
+}
+.data-status__table,
+.corrections-table {
+  width: max-content;
+  min-width: 100%;
 }
 
 .doc-table {
@@ -379,7 +388,21 @@ input[type='number'], select {
 .corrections-table td:first-child { white-space: nowrap; }
 
 @media (max-width: 639px) {
-  .site-nav { gap: var(--sp-2); font-size: var(--fs-xs); flex-wrap: wrap; justify-content: flex-end; }
+  .site-header__inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sp-2);
+  }
+  .site-nav {
+    gap: var(--sp-2);
+    font-size: var(--fs-xs);
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    width: 100%;
+  }
   .doc-table { font-size: var(--fs-xs); }
   .status-badge { font-size: 0.6875rem; padding: 0.05rem var(--sp-1); }
+  .child-list li { flex-direction: column; align-items: stretch; }
+  .child-list li .btn { width: 100%; }
+  .form-actions .btn { flex: 1 1 100%; }
 }
