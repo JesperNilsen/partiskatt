@@ -1,10 +1,24 @@
-import { BRAND } from './config/brand.ts';
+import { Route, Router } from 'wouter';
+import { Shell } from './components/Shell.tsx';
+import { AppProvider } from './state/app.tsx';
+import { CalculatorView } from './views/CalculatorView.tsx';
+import { CorrectionsView } from './views/CorrectionsView.tsx';
+import { MethodView } from './views/MethodView.tsx';
+import { ResultsView } from './views/ResultsView.tsx';
+import { SourcesView } from './views/SourcesView.tsx';
 
 export function App() {
   return (
-    <main className="shell">
-      <h1>{BRAND.name}</h1>
-      <p className="beta">{BRAND.betaNotice}</p>
-    </main>
+    <AppProvider>
+      <Router>
+        <Shell>
+          <Route path="/" component={CalculatorView} />
+          <Route path="/resultat" component={ResultsView} />
+          <Route path="/metode" component={MethodView} />
+          <Route path="/kilder" component={SourcesView} />
+          <Route path="/rettelseslogg" component={CorrectionsView} />
+        </Shell>
+      </Router>
+    </AppProvider>
   );
 }

@@ -1,0 +1,160 @@
+import { Link } from 'wouter';
+import { DocDataBanner } from '../components/DocDataBanner.tsx';
+import { BRAND } from '../config/brand.ts';
+
+export function MethodView() {
+  return (
+    <article className="doc-page">
+      <DocDataBanner />
+
+      <header className="doc-page__header">
+        <h1>Metode</h1>
+        <p className="lede calm">
+          {BRAND.name} sammenligner det vedtatte skatte-, avgifts- og ytelsessystemet for 2026 med hvert partis alternative
+          statsbudsjett. Tallene er anslag basert på standardiserte antagelser — ikke en individuell skatteberegning.
+        </p>
+      </header>
+
+      <section>
+        <h2>Referanse</h2>
+        <p>
+          Referansen er det endelig <strong>vedtatte</strong> 2026-systemet etter Stortingets vedtak (Lovdata), ikke
+          regjeringens opprinnelige forslag (Prop. 1 LS). Alle ni partier sammenlignes med samme referanse.
+        </p>
+        <p>
+          Arbeiderpartiet er regjeringsparti og har ikke et alternativt statsbudsjett for 2026. Partiets kort viser derfor
+          null avvik per konstruksjon — det vedtatte systemet er regjeringens politikk etter budsjettforliket.
+        </p>
+        <p>
+          Endringer fra forliket (15 regler som avviker fra Prop. 1 LS) er dokumentert i prosjektets kildemateriale og
+          vises under <Link href="/kilder">Kilder</Link>.
+        </p>
+      </section>
+
+      <section>
+        <h2>Tre regelsett</h2>
+        <p>Beregningen skiller mellom tre lag av regler:</p>
+        <ol>
+          <li>
+            <strong>Regjeringens forslag</strong> (Prop. 1 LS) — utgangspunkt partiene selv bruker i sine alternative
+            budsjetter.
+          </li>
+          <li>
+            <strong>Vedtatt referanse</strong> — det faktiske 2026-systemet etter Stortingets vedtak. Dette er
+            baseline for alle sammenligninger.
+          </li>
+          <li>
+            <strong>Partiregler</strong> — for hvert opposisjonsparti overlegges bare de reglene partiet faktisk foreslår
+            endret. Alt annet følger referansen.
+          </li>
+        </ol>
+        <p>
+          Partienes egne tall er formulert som avvik fra regjeringens forslag. Vi regner om til absolutte satser og
+          terskler, og sammenligner med referansen. Løse formuleringer i partiprogram brukes ikke.
+        </p>
+      </section>
+
+      <section>
+        <h2>Hva inngår i hovedtallet</h2>
+        <p>Hovedtallet — kroner mer eller mindre igjen per år — består av:</p>
+        <ul>
+          <li>
+            <strong>Direkte skatt</strong> — inntektsskatt, trinnskatt, trygdeavgift, personfradrag, minstefradrag,
+            relevante fradrag og formuesskatt der kildene tillater det.
+          </li>
+          <li>
+            <strong>Moms og særavgifter</strong> — beregnet fra en standardisert forbruksprofil (nøktern, typisk eller
+            høy) som du kan justere. Moms regnes ikke som en prosent av hele inntekten.
+          </li>
+          <li>
+            <strong>Direkte kontantytelser</strong> — for eksempel barnetrygd, der partiet har konkrete, tallfestede
+            forslag.
+          </li>
+        </ul>
+        <p>
+          Offentlige tjenester, gratisordninger, makspriser og dynamiske vekstvirkninger er ikke med. Utbytte og
+          næringsinntekt er utenfor MVP-en. Kun nasjonale regler — ingen kommunal eiendomsskatt.
+        </p>
+      </section>
+
+      <section>
+        <h2>Incidensantagelser</h2>
+        <ul>
+          <li>Direkte skatt og kontantytelser fordeles 100&nbsp;% på personen.</li>
+          <li>
+            Moms og særavgifter: 100&nbsp;% overveltning til forbrukerpris, uendrede mengder. Særavgifter beregnes per
+            enhet (liter, kWh, passasjer) og mva legges oppå avgiften.
+          </li>
+          <li>
+            <strong>Arbeidsgiveravgift</strong> er av som standard. Når du slår den på, brukes full langsiktig incidens
+            på arbeidstakeren som foreløpig antagelse. Beløpet vises adskilt fra direkte skatt og påvirker ikke
+            standardrangeringen uten at du har valgt det utvidete scenarioet.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Forbruksprofil</h2>
+        <p>
+          Standardprofilene bygger på SSBs forbruksundersøkelse (tabell 14100). Profilen angir årlig forbruk inkl. mva per
+          kategori og fysiske mengder for avgiftsbelagte varer. Alle verdier kan endres under avanserte felt.
+        </p>
+        <p className="muted">
+          Inntil SSB-data er koblet på i datalaget, kan profilene være merket som midlertidige i kalkulatoren.
+        </p>
+      </section>
+
+      <section>
+        <h2>Avrunding</h2>
+        <p>
+          Alle beløp er hele kroner. Hver navngitt komponent avrundes én gang (halv opp, bort fra null). Summen av
+          komponentene er per definisjon lik hovedtallet.
+        </p>
+      </section>
+
+      <section>
+        <h2>Usikkerhet og status</h2>
+        <p>Hver regel har en status som bestemmer om den inngår i hovedtallet:</p>
+        <ul>
+          <li><strong>Bekreftet</strong> og <strong>anslått</strong> — inngår i hovedtallet.</li>
+          <li>
+            <strong>Ikke tallfestet</strong>, <strong>ikke gjennomgått</strong> og <strong>ikke relevant</strong> — kan
+            vises, men telles ikke.
+          </li>
+        </ul>
+        <p>
+          Forslag merket som usikre er av som standard og kan slås på under «Mulige endringer» i kalkulatoren. Da vises
+          antagelsen, kilden og hvorfor forslaget er usikkert.
+        </p>
+        <p>
+          Full oversikt per parti og kategori: <Link href="/kilder">datastatus under Kilder</Link>.
+        </p>
+      </section>
+
+      <section>
+        <h2>Personvern og beregning</h2>
+        <p>
+          All beregning skjer lokalt i nettleseren. Ingen lønn, formue eller husholdningsdata sendes, lagres eller legges
+          i URL-en.
+        </p>
+      </section>
+
+      <section>
+        <h2>Feil og rettelser</h2>
+        <p>
+          Oppdager du en feil?{' '}
+          <a href={BRAND.feedbackMailto}>Meld fra</a> eller se{' '}
+          <Link href="/rettelseslogg">rettelsesloggen</Link> for publiserte korreksjoner.
+        </p>
+      </section>
+
+      <nav className="doc-page__nav" aria-label="Relaterte sider">
+        <Link href="/kilder">Se kilder</Link>
+        <span aria-hidden="true"> · </span>
+        <Link href="/rettelseslogg">Rettelseslogg</Link>
+        <span aria-hidden="true"> · </span>
+        <Link href="/">Tilbake til kalkulatoren</Link>
+      </nav>
+    </article>
+  );
+}

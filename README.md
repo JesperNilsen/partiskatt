@@ -5,7 +5,7 @@ Kalkulator som viser hvor mange kroner mer eller mindre en person eller husholdn
 - Produktkontekst: `PROJECT.md` (autoritativ)
 - Plan og fremdrift: `IMPLEMENTATION_PLAN.md`
 - Datadekning per parti og kategori: `DATA_STATUS.md` (generert)
-- Metode: `METHODOLOGY.md` · Rettelser: `CORRECTIONS.md`
+- Metode: `/metode` · Kilder: `/kilder` · Rettelser: `/rettelseslogg` (speiler `METHODOLOGY.md` og `CORRECTIONS.md`)
 - Kilder: `sources/manifest.json` + `src/data/sources.ts`
 
 All beregning skjer i nettleseren. Ingen backend, ingen innlogging, ingen analyse.
