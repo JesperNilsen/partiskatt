@@ -13,7 +13,7 @@ Autoritativ produktkontekst: `PROJECT.md`. Denne filen er fremdriftsloggen og ov
 | S4 | `proposed.ts` + `forlik.ts` | forlik-diff-test passerer; Ap = 0 | ☑ 2026-09-13 |
 | S5 | Åtte partibudsjetter hentet, `pdftotext`, manifest (V og R evt. `operator`) | manifestrader for alle 9 | ☑ 2026-09-13 (alle 8 hentet; V via --http1.1+Referer, R via Wayback) |
 | S6 | Uavhengig dobbel ekstraksjon per parti (Claude-subagent + Codex) → `reconciled.md` | avstemte ark finnes; uenigheter listet | ☑ 2026-09-13 (8 claude + 8 codex + 8 reconciled; 9f8f117) |
-| S7 | `data/parties/*.ts` kun fra avstemte ark; `DATA_STATUS.md` generert | provenance-, anker- og baseline-tester grønne | ☐ |
+| S7 | `data/parties/*.ts` kun fra avstemte ark; `DATA_STATUS.md` generert | provenance-, anker- og baseline-tester grønne | ☑ 2026-09-13 |
 | S8 | Brukergrensesnitt mot frosset motor-API | fem profiler rendrer; brytere virker; ingen URL-tilstand | ☐ |
 | S9 | `METHODOLOGY.md`, `CORRECTIONS.md`, README, `/metode`, `/kilder` | hver antagelse i kode har et metodeavsnitt | ☐ |
 | S10 | Mobilsjekk 375/390 px, produksjonsbygg, push, deploy-steg | `vite build` ok; CI grønn; skjermbilde | ☐ |
@@ -35,12 +35,12 @@ Autoritativ produktkontekst: `PROJECT.md`. Denne filen er fremdriftsloggen og ov
 3. Manuell kontroll av referansesystemets totaler for de fem testprofilene mot Skatteetatens kalkulator før snapshot-verdiene fryses som `confirmed`.
 4. Offentlig repo og endelig merkenavn: begge er ett-token-endringer (`src/config/brand.ts`).
 
-## Neste økt (overlevering 2026-09-13 kl. 18:20)
-1. **S4 proposed + forlik: FERDIG** — `src/data/baseline/2026/proposed.ts` (Prop. 1 LS Tabell 1.7/1.8, patch fra adopted), `forlik.ts` (15 endrede regler med provenance), `src/tests/forlik-diff.test.ts` (14 tester: 7 modellerte forlik-endringer på 6 formel-id-er + `wealth.valuation` som dokumentert non-forlik-diff). Alt `estimated`. 86 tester grønne.
-2. **S4 rest / S7:** `src/data/sources.ts`, `src/data/parties/ap.ts`, `src/data/index.ts` (`DataBundle` med ekte `PROPOSED_2026`); deretter `data/parties/*.ts` fra reconciled-ark + `scripts/gen-data-status.ts`.
-3. **S8** UI-subagent (`../partiskatt-ui`), **S9** docs, **S10** mobil + deploy.
+## Neste økt (overlevering 2026-09-13 kl. 18:25)
+1. **S7 datalag: FERDIG** — `src/data/sources.ts`, `rule-helpers.ts`, `knots.ts`, `index.ts` (`DATA_BUNDLE` + `PARTY_META`), `parties/*.ts` (kun `agreed-value`-rader fra reconciler; alt `estimated`). `scripts/gen-data-status.ts` genererer `DATA_STATUS.md`. `src/tests/party-data.test.ts` (36 tester: anker, ingen `confirmed`, KNOWN_KNOTS, agreed-value-dekning). 122 tester grønne.
+2. **S8** UI-subagent (`../partiskatt-ui`) kobles til `DATA_BUNDLE` fra `src/data/index.ts`.
+3. **S9** docs, **S10** mobil + deploy.
 4. Operatørporter: **gate 3** — Jesper kryssjekker fem fixtures mot Skatteetaten før noe settes `confirmed`; Netlify-kobling; offentlig repo + navn.
-5. **Beslutninger til Jesper:** (a) proposed barnetrygd 1 968 kr/mnd som tolkning av «nominell videreføring»; (b) primærbolig 14 vs 10 mill. er vedtatt≠proposed uten forlik — behold som `NON_FORLIK_BASELINE_DIFFS`?
+5. **Beslutninger til Jesper:** (a) proposed barnetrygd 1 968 kr/mnd; (b) primærbolig 14 vs 10 mill. (`NON_FORLIK_BASELINE_DIFFS`); (c) **K1** — encode frikort 150k for H/FrP/SV/Rødt som `income.socialSecurity` (estimated) eller la stå ute? (d) **K3** — Venstre `excise.kwh` er encodet mot 6 øre med baseline-flagg; rebase på `proposed`?
 
 ## S1-funn (agentrapport 2026-09-13, filene er leveransen)
 - `sources/manifest.json` (baseline-delen): 31 rader (30 arkivert, 1 blokkert: Skatteetatens `/satser/`-sider for fradrag finnes ikke; erstattet av `skatteetaten-forskuddsutskrivingen-2026` som har hele 2026-satstabellen). Særavgifter er ett Lovdata-vedtak per avgift (seks id-er). Konsolidert skatteloven kap. 4 arkivert fordi verdsettelsesreglene ikke står i skattevedtaket.
