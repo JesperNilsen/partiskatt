@@ -1,7 +1,11 @@
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
+html {
+  -webkit-text-size-adjust: 100%;
+  overflow-x: clip;
+}
 body {
   margin: 0;
+  overflow-x: clip;
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-sans);
@@ -14,5 +18,5 @@ p { margin: 0 0 var(--sp-3); }
 a { color: inherit; }
 button, input, select { font: inherit; }
 :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
-.shell { max-width: var(--maxw); margin: 0 auto; padding: var(--sp-5) var(--sp-4) var(--sp-8); }
+.shell { max-width: var(--maxw); margin: 0 auto; padding: var(--sp-5) var(--sp-4) var(--sp-8); min-width: 0; }
 .beta { color: var(--ink-2); font-size: var(--fs-sm); }
