@@ -48,8 +48,8 @@ const SV = 'lovdata-skattevedtak-2026';
 const SV_URL = 'https://lovdata.no/dokument/LTI/forskrift/2025-12-18-2747';
 const FT = 'lovdata-folketrygdavgift-2026';
 const FT_URL = 'https://lovdata.no/dokument/LTI/forskrift/2025-12-18-2748';
-const SKL = 'lovdata-skatteloven-kap4-2026';
-const SKL_URL = 'https://lovdata.no/dokument/NL/lov/1999-03-26-14/KAPITTEL_4-2';
+const SKL_ENDR = 'lovdata-endringslov-2026-06-23-66';
+const SKL_ENDR_URL = 'https://lovdata.no/dokument/LTI/lov/2026-06-23-66';
 const MVA = 'lovdata-mva-2026';
 const MVA_URL = 'https://lovdata.no/dokument/LTI/forskrift/2025-12-18-2752';
 const I4L = 'innst-4-l-2025-2026';
@@ -171,15 +171,15 @@ export const ADOPTED_2026: BaselineRuleSet = {
       },
       'Verdsettelsesrabatter formue (primærbolig, aksjer, driftsmidler)',
       prov(
-        SKL,
-        SKL_URL,
-        '§4-10, §4-12, §4-17',
+        SKL_ENDR,
+        SKL_ENDR_URL,
+        'Del II (§4-10 andre ledd tredje punktum); Del IV (ikrafttredelse); konsolidert sktl. §4-10, §4-12, §4-17',
         'omsetningsverdien som overstiger 14 000 000 kroner',
-        'Primærbolig 25 pst under 14 mill., 70 pst over (sktl. §4-10 endret lov 23.06.2026 nr. 66 — ikke arkivert; avviker fra Prop./SE-FU som sier 10 mill.). Sekundærbolig 100 pst; aksjer 80 pst; driftsmidler 70 pst i otherBp.',
+        'Primærbolig 25 pst under 14 mill., 70 pst over. Endringslov 23.06.2026 nr. 66 Del II, «med verknad frå og med inntektsåret 2026» (arkivert 2026-09-13); konsolidert sktl. §4-10 (lovdata-skatteloven-kap4-2026) samsvarer ordrett. Prop. 1 LS Tabell 1.7 / SE-FU sier 10 mill. fordi de er eldre enn lovendringen. Sekundærbolig 100 pst; aksjer 80 pst; driftsmidler 70 pst i otherBp (sktl. §4-12, §4-17).',
         '2026-01-01',
-        'low',
+        'high',
       ),
-      { note: '14 mill.-terskel fra skatteloven §4-10(2) etter junilov 2026; Skatteetaten/SE-FU viser fortsatt 10 mill. — avklares i operator gate 3.' },
+      { note: '14 mill.-terskel bekreftet av endringslov 23.06.2026 nr. 66 (beslutning 2026-09-13: arkivert og kontrollert mot konsolidert lovtekst). Prop. 1 LS/SE-FU viser 10 mill. fordi de er eldre enn lovendringen. Status estimated som alt annet inntil operator gate 3.' },
     ),
     rule('vat.food', { rateBp: pct(15) }, 'Merverdiavgift næringsmidler 15 pst', prov(MVA, MVA_URL, '§3', '15 pst. av omsetning, uttak og innførsel av næringsmidler', 'Vedtatt MVA-sats for mat.')),
     rule('vat.general', { rateBp: pct(25) }, 'Merverdiavgift alminnelig sats 25 pst', prov(MVA, MVA_URL, '§2', 'Merverdiavgift beregnes med 25 pst.', 'Vedtatt generell MVA-sats.')),

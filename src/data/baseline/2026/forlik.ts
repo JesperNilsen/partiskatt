@@ -200,6 +200,6 @@ export const NON_FORLIK_BASELINE_DIFFS: readonly { formulaId: FormulaId; reason:
   {
     formulaId: 'wealth.valuation',
     reason:
-      'Primærbolig 14 mill.-trinn fra skatteloven §4-10 endret lov 23.06.2026 nr. 66 — Prop. 1 LS Tabell 1.7 sier 10 mill. (ikke forlikspost).',
+      'Primærbolig 14 mill.-trinn: skatteloven §4-10 endret ved lov 23.06.2026 nr. 66 med verknad frå inntektsåret 2026 (arkivert som lovdata-endringslov-2026-06-23-66). Prop. 1 LS Tabell 1.7 sier 10 mill. fordi den er eldre enn lovendringen (ikke forlikspost).',
   },
 ];

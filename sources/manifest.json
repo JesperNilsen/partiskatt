@@ -728,5 +728,22 @@
       36
     ],
     "note": "Direct curl to roedt.no returned 429 on all attempts (default UA, --http1.1 + Referer, 10s pauses). Recovered via Wayback Machine: https://web.archive.org/web/2026/https://roedt.no/budsjett2026 (capture 20260411210058) yielded the live page and its linked PDF at /fil/0944af5c63fdf957a7d0b3b627e97533a9fc0cf9.pdf, fetched from Wayback (actual snapshot served: 20251205015616) as the archived PDF; the captured HTML page itself was also saved to sources/raw/r-alt-2026.html as corroborating evidence. Page 30 is the section header 'Rødts forslag til skatte- og avgiftsendringer...'; page 36 has the Kap/Post/Forslag/Påløpt table headed 'Skatter og avgifter'."
+  },
+  {
+    "id": "lovdata-endringslov-2026-06-23-66",
+    "party": null,
+    "title": "Lov om endringar i skatteloven - Lovdata",
+    "publisher": "Lovdata",
+    "url": "https://lovdata.no/dokument/LTI/lov/2026-06-23-66",
+    "format": "html",
+    "retrievedAt": "2026-09-13T18:28:00Z",
+    "method": "curl",
+    "sha256": "b449fa0ddc93e5c79fa6bc5f0feeaa5c9587a66460fd125d32fc5bb2151f0b93",
+    "bytes": 37350,
+    "pages": 0,
+    "rawFile": "sources/raw/lovdata-endringslov-2026-06-23-66.html",
+    "textFile": "sources/text/lovdata-endringslov-2026-06-23-66.txt",
+    "status": "archived",
+    "note": "LOV-2026-06-23-66, Endringslov til skatteloven (Prop. 95 LS, Innst. 459 L, Lovvedtak 92 (2025-2026)), kunngjort 23.06.2026. Del II endrer skatteloven § 4-10 andre ledd tredje punktum: høyverdi-terskelen for primærbolig (70% verdsettelse over terskel) heves fra 10 000 000 til 14 000 000 kroner, med verknad frå og med inntektsåret 2026 (jf. del IV). Del I endrer §§2-37, 5-15, 16-1, 19-5 med virkning straks; del III endrer §§5-42, 6-32, 12-2 med virkning fra 1. juli 2026. Matches the amendment footnote already recorded in the consolidated skatteloven § 4-10 text (lovdata-skatteloven-kap4-2026)."
   }
 ]
