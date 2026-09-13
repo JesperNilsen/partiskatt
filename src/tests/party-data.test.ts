@@ -97,9 +97,14 @@ describe('KNOWN_KNOTS', () => {
     expect(KNOWN_KNOTS).toHaveLength(4);
   });
 
-  it('K1 parties do not encode income.socialSecurity', () => {
+  it('K1 parties encode income.socialSecurity as estimated with a K1 note (decided 2026-09-13)', () => {
     for (const id of ['h', 'frp', 'sv', 'r'] as PartyId[]) {
-      expect(partyOf(id).deltas.some((d) => d.id === 'income.socialSecurity')).toBe(false);
+      const rule = partyOf(id).deltas.find((d) => d.id === 'income.socialSecurity');
+      expect(rule).toBeDefined();
+      expect(rule?.status).toBe('estimated');
+      expect(rule?.params).toMatchObject({ lowerThreshold: 150_000 });
+      expect(rule?.note).toMatch(/K1/);
+      expect(partyOf(id).unquantified.some((u) => /frikort/i.test(u.title))).toBe(false);
     }
   });
 
@@ -123,18 +128,18 @@ describe('NON_FORLIK_BASELINE_DIFFS', () => {
 
 describe('agreed-value coverage', () => {
   const ENCODED: Record<Exclude<PartyId, 'ap'>, FormulaId[]> = {
-    h: ['wealth.valuation'],
-    frp: ['income.personalAllowance', 'wealth.valuation'],
-    sv: ['income.bracketTax', 'income.personalAllowance', 'income.minimumDeductionWage', 'income.minimumDeductionPension'],
+    h: ['income.socialSecurity', 'wealth.valuation'],
+    frp: ['income.socialSecurity', 'income.personalAllowance', 'wealth.valuation'],
+    sv: ['income.socialSecurity', 'income.bracketTax', 'income.personalAllowance', 'income.minimumDeductionWage', 'income.minimumDeductionPension'],
     sp: ['income.bracketTax', 'wealth.valuation', 'vat.food'],
-    r: ['income.bracketTax', 'income.personalAllowance'],
+    r: ['income.socialSecurity', 'income.bracketTax', 'income.personalAllowance'],
     v: ['income.socialSecurity', 'income.personalAllowance', 'wealth.valuation', 'excise.kwh'],
     mdg: ['income.personalAllowance'],
     krf: ['wealth.valuation', 'benefit.childBenefit'],
   };
 
   it.each(Object.entries(ENCODED) as [PartyId, FormulaId[]][])(
-    '%s encodes exactly the agreed-value rows',
+    '%s encodes exactly the agreed-value rows plus decided knots',
     (partyId, ids) => {
       const encoded = partyOf(partyId).deltas.map((d) => d.id);
       expect(encoded.sort()).toEqual([...ids].sort());

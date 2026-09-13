@@ -9,11 +9,11 @@ Generert: 2026-09-13
 | Parti | Inntektsskatt | Formuesskatt | Moms | Særavgifter | Kontantytelser | Arbeidsgiveravgift |
 |---|---|---|---|---|---|---|
 | Ap | not-applicable | not-applicable | not-applicable | not-applicable | not-applicable | not-applicable |
-| H | not-reviewed | estimated | not-applicable | not-applicable | not-applicable | not-applicable |
-| FrP | not-reviewed | estimated | unquantified | not-applicable | not-reviewed | not-applicable |
-| SV | not-reviewed | not-reviewed | not-applicable | not-applicable | not-reviewed | not-applicable |
+| H | estimated | estimated | not-applicable | not-applicable | not-applicable | not-applicable |
+| FrP | estimated | estimated | unquantified | not-applicable | not-reviewed | not-applicable |
+| SV | estimated | not-reviewed | not-applicable | not-applicable | not-reviewed | not-applicable |
 | Sp | unquantified | estimated | estimated | not-reviewed | not-reviewed | not-applicable |
-| R | not-reviewed | not-reviewed | not-applicable | not-applicable | unquantified | not-applicable |
+| R | estimated | not-reviewed | not-applicable | not-applicable | unquantified | not-applicable |
 | V | estimated | estimated | unquantified | estimated | not-reviewed | not-applicable |
 | MDG | unquantified | not-reviewed | not-applicable | not-applicable | not-reviewed | not-applicable |
 | KrF | not-reviewed | estimated | not-reviewed | not-reviewed | estimated | not-applicable |
@@ -21,11 +21,11 @@ Generert: 2026-09-13
 ## Encoded party deltas (S7)
 
 - **Ap**: ingen deltas
-- **H**: `wealth.valuation`
-- **FrP**: `income.personalAllowance`, `wealth.valuation`
-- **SV**: `income.bracketTax`, `income.personalAllowance`, `income.minimumDeductionWage`, `income.minimumDeductionPension`
+- **H**: `income.socialSecurity`, `wealth.valuation`
+- **FrP**: `income.socialSecurity`, `income.personalAllowance`, `wealth.valuation`
+- **SV**: `income.socialSecurity`, `income.bracketTax`, `income.personalAllowance`, `income.minimumDeductionWage`, `income.minimumDeductionPension`
 - **Sp**: `income.bracketTax`, `wealth.valuation`, `vat.food`
-- **R**: `income.bracketTax`, `income.personalAllowance`
+- **R**: `income.socialSecurity`, `income.bracketTax`, `income.personalAllowance`
 - **V**: `income.socialSecurity`, `income.personalAllowance`, `wealth.valuation`, `excise.kwh`
 - **MDG**: `income.personalAllowance`
 - **KrF**: `wealth.valuation`, `benefit.childBenefit`

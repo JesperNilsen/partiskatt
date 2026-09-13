@@ -2,10 +2,24 @@ import type { PartyRuleSet } from '../../types/index.ts';
 import { partyProv } from '../sources.ts';
 import { adoptedParams, emptyParty, kr, partyRule, patchBracketTax, pct } from '../rule-helpers.ts';
 
-/** Encodable: trinnskatt sats trinn 3–5, personfradrag 143 000, minstefradrag 55 %. */
+/** Encodable: trinnskatt sats trinn 3–5, personfradrag 143 000, minstefradrag 55 %. K1 (besluttet 2026-09-13): income.socialSecurity nedre grense 150 000 kr. */
 export const SV_2026: PartyRuleSet = {
   ...emptyParty('sv'),
   deltas: [
+    partyRule(
+      'income.socialSecurity',
+      { ...adoptedParams('income.socialSecurity'), lowerThreshold: kr(150_000) },
+      'Trygdeavgift: nedre grense 150 000 kr (frikortgrense)',
+      partyProv(
+        'sv',
+        'PDF p37',
+        '150 000',
+        'K1 (besluttet 2026-09-13): frikortgrensen er nedre grense for trygdeavgift (ftrl. § 23-3), men partiet sier ikke dette eksplisitt. Absolutt 150 000 kr encodet som estimated; satser uendret.',
+        '2026-01-01',
+        'medium',
+      ),
+      { note: 'K1-frikort-trygdeavgift: encodet etter beslutning 2026-09-13; baseline-mismatch (partiene siterer 100 000 som utgangspunkt, vedtatt er 99 650).' },
+    ),
     partyRule(
       'income.bracketTax',
       patchBracketTax({
@@ -43,13 +57,5 @@ export const SV_2026: PartyRuleSet = {
     'consumption-tax': { status: 'no-change', pageOrTable: 'PDF p37', note: 'MVA-satser uendret i tabellen.' },
     employer: { status: 'no-change', pageOrTable: 'PDF p37', note: 'Arbeidsgiveravgift ikke omtalt.' },
   },
-  unquantified: [
-    {
-      category: 'direct-tax',
-      title: 'Øke frikortgrensen til 150 000 kr',
-      status: 'not-reviewed',
-      reason: 'K1: one-sided — kun claude fant forslaget.',
-      provenance: partyProv('sv', 'PDF p37', '150 000', 'Konflikt — ikke encodet.'),
-    },
-  ],
+  unquantified: [],
 };

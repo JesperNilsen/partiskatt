@@ -16,7 +16,8 @@ export const KNOWN_KNOTS: readonly KnownKnot[] = [
     title: 'Frikortgrense 150 000 kr mapped onto trygdeavgift lower threshold',
     formulaId: 'income.socialSecurity',
     parties: ['h', 'frp', 'sv', 'r'],
-    encoded: false,
+    // Decided 2026-09-13: encoded as `estimated` (frikortgrense = nedre grense trygdeavgift).
+    encoded: true,
   },
   {
     id: 'K2-krf-appendix-empty',
