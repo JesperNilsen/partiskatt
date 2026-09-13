@@ -1,0 +1,21 @@
+SSB StatBank 14100 — 14100: Utgift per husholdning per år, etter vare- og tjenestegruppe, statistikkvariabel og år
+source: Statistisk sentralbyrå updated: 2024-03-25T07:00:00Z
+units: {"Utgift": {"base": "kr", "decimals": 0}, "AndForbrUtg": {"base": "prosent", "decimals": 1}}
+Tid=2022
+
+code | label | Utgift (kr per husholdning per år) | Andel av forbruksutgift i alt (prosent)
+00 | I alt | 554585 | 100
+01 | Matvarer og alkoholfrie drikkevarer | 65751 | 11.9
+02 | Alkoholholdige drikkevarer og tobakk | 12177 | 2.2
+02.1 | Alkoholholdige drikkevarer | 8888 | 1.6
+02.3 | Tobakk | 3289 | 0.6
+04 | Bolig, elektrisitet og brensel | 195667 | 35.3
+04.5 | Elektrisitet og brensel | 36042 | 6.5
+04.5.1 | Elektrisitet inkludert nettleie (IV) | 32173 | 5.8
+07 | Transport | 80192 | 14.5
+07.2 | Drift av personlige transportmidler | 25770 | 4.6
+07.2.2 | Drivstoff og smøremidler (IV) | 10911 | 2
+07.2.2.1 | Diesel (IV) | 6230 | 1.1
+07.2.2.2 | Bensin (IV) | 4298 | 0.8
+07.3 | Passasjertransporttjenester | 9885 | 1.8
+07.3.3 | Passasjertransport med fly (T) | 4723 | 0.9
