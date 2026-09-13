@@ -52,7 +52,7 @@ export function sub(a: Kroner, b: Kroner): Kroner {
 }
 
 export function neg(a: Kroner): Kroner {
-  return -a as Kroner;
+  return (a === 0 ? 0 : -a) as Kroner;
 }
 
 export function sum(xs: Iterable<Kroner>): Kroner {

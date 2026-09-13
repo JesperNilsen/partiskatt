@@ -9,10 +9,10 @@ Autoritativ produktkontekst: `PROJECT.md`. Denne filen er fremdriftsloggen og ov
 | S0 | Repo, Vite/TS-strict/Vitest/CSS-tokens/CI/netlify.toml, privat remote | `npm run check` grønn; CI grønn | ☑ 2026-09-13 |
 | S1 | (subagent kjørte 2026-09-13 — sjekk `sources/manifest.json` + `sources/worksheets/baseline-2026.md`) Referansekilder arkivert (Lovdata-vedtak, Prop. 1 LS Tabell 1.7, Innst. 2/3 S, Skatteetaten, NAV, Lånekassen, SSB FBU) + `sources/worksheets/baseline-2026.md` | manifest med sha256 for alle; kryssjekk Lovdata↔Skatteetaten | ☑ 2026-09-13 (81ff3f9; manifest slått sammen → `sources/manifest.json`) |
 | S2 | `src/types/` + `src/engine/money.ts` | money-tester, tsc rent | ☑ 2026-09-13 (RatePerUnit = 1/10 000 kr per enhet, ikke øre) |
-| S3 | Beregningsmotor + `data/baseline/2026/adopted.ts` | invarianter + terskelmatrise + fem profiler grønne | ☐ |
+| S3 | Beregningsmotor + `data/baseline/2026/adopted.ts` | invarianter + terskelmatrise + fem profiler grønne | ◐ 2026-09-13 motor + 74 tester grønne; adopted.ts gjenstår |
 | S4 | `proposed.ts` + `forlik.ts` | forlik-diff-test passerer; Ap = 0 | ☐ |
 | S5 | Åtte partibudsjetter hentet, `pdftotext`, manifest (V og R evt. `operator`) | manifestrader for alle 9 | ☑ 2026-09-13 (alle 8 hentet; V via --http1.1+Referer, R via Wayback) |
-| S6 | Uavhengig dobbel ekstraksjon per parti (Claude-subagent + Codex) → `reconciled.md` | avstemte ark finnes; uenigheter listet | ☐ |
+| S6 | Uavhengig dobbel ekstraksjon per parti (Claude-subagent + Codex) → `reconciled.md` | avstemte ark finnes; uenigheter listet | ◐ 2026-09-13 8 claude-ark levert; codex-pass i gang; reconcile gjenstår |
 | S7 | `data/parties/*.ts` kun fra avstemte ark; `DATA_STATUS.md` generert | provenance-, anker- og baseline-tester grønne | ☐ |
 | S8 | Brukergrensesnitt mot frosset motor-API | fem profiler rendrer; brytere virker; ingen URL-tilstand | ☐ |
 | S9 | `METHODOLOGY.md`, `CORRECTIONS.md`, README, `/metode`, `/kilder` | hver antagelse i kode har et metodeavsnitt | ☐ |
@@ -35,10 +35,12 @@ Autoritativ produktkontekst: `PROJECT.md`. Denne filen er fremdriftsloggen og ov
 3. Manuell kontroll av referansesystemets totaler for de fem testprofilene mot Skatteetatens kalkulator før snapshot-verdiene fryses som `confirmed`.
 4. Offentlig repo og endelig merkenavn: begge er ett-token-endringer (`src/config/brand.ts`).
 
-## Neste økt (overlevering 2026-09-13, økt stoppet ved kontekst-tak)
-1. ☑ 2026-09-13: `manifest.baseline.json` + `manifest.parties.json` slått sammen til `sources/manifest.json` (40 rader; sha256 og bytes verifisert mot `sources/raw/` for alle 38 arkiverte filer).
-2. S6 kan starte nå: mal i `sources/worksheets/TEMPLATE.md`; tekstfiler i `sources/text/<parti>-alt-2026.txt`; `summaryTablePages` i `sources/manifest.json`. Én isolert subagent per parti → `<parti>.claude.md`; Codex via `~/.claude/bin/delegate --to codex --mode consult` → `<parti>.codex.md`; deretter `scripts/reconcile.ts`.
-3. S3 parallelt i hovedtråden: `src/engine/{formulas,income-tax,wealth-tax,consumption,benefits,employer-contribution,resolve,calculate-scenario}.ts` mot `src/types/` (frosset). Parti = `adopted` overlagt med partiets absolutte verdier (ikke `proposed ⊕ delta`), se designvalg over.
+## Neste økt (overlevering 2026-09-13 kl. 16:50, økt stoppet ved kontekst-tak)
+1. **S6 Codex-pass:** `scripts/codex-extract.zsh` (kopi av startskriptet) kjørte i bakgrunnen fra kl. ~16:35 og skriver `sources/worksheets/<parti>.codex.md` + `briefs/codex-s6/summary.txt`. Sjekk hvilke `*.codex.md` som finnes; kjør skriptet på nytt for partier som mangler (delegate: consult, effort high, timeout 1500 s; resultatfil står i «full output:»-linjen).
+2. **S6 reconcile:** skriv `scripts/reconcile.ts` som leser `<parti>.claude.md` + `<parti>.codex.md` seksjon A radvis og skriver `<parti>.reconciled.md`: enig → behold status; uenig → `not-reviewed` med begge verdiene i note. Kjente knuter: «frikortgrense 150 000» er kartlagt til `income.socialSecurity` nedre grense som `estimated` i H/FrP/SV/R (rettslig korrekt: frikortgrensen ER nedre grense for trygdeavgift); KrF-vedlegget s. 35–46 er tomt i pdftotext (25 NOT FOUND) → prøv `pdftotext -raw`/tabellmodus før S7; Venstre oppgir elavgift-endring mot dagens sats, ikke Prop. 1 LS; MDG oppgir ingen mva-satser eller G-beløp (trenger baseline fra `adopted`).
+3. **S3b (hovedtråd):** motoren er ferdig og grønn (`src/engine/*`, 74 tester mot syntetisk regelsett i `src/tests/`). Gjenstår: `src/data/baseline/2026/adopted.ts` fra `sources/worksheets/baseline-2026.md` (les arket én gang, ~23 KB), `src/data/sources.ts` (speiler `sources/manifest.json`), `src/data/parties/ap.ts` (null deltas), `src/data/index.ts` (DataBundle). Motorens API: `calculateAll(profile, toggles, data)`; `DataBundle = { proposed, adopted, parties[] }`.
+4. **S4:** `proposed.ts` + `forlik.ts` + diff-test (15 endrede regler, se S1-funn). Deretter S7 (parties/*.ts kun fra reconciled-ark; ekte `scripts/gen-data-status.ts`), S8 UI-subagent, S9 docs, S10 mobil + deploy.
+5. Operatørporter uendret: Netlify-kobling, Skatteetaten-kryssjekk av fem fixtures, offentlig repo + navn.
 
 ## S1-funn (agentrapport 2026-09-13, filene er leveransen)
 - `sources/manifest.json` (baseline-delen): 31 rader (30 arkivert, 1 blokkert: Skatteetatens `/satser/`-sider for fradrag finnes ikke; erstattet av `skatteetaten-forskuddsutskrivingen-2026` som har hele 2026-satstabellen). Særavgifter er ett Lovdata-vedtak per avgift (seks id-er). Konsolidert skatteloven kap. 4 arkivert fordi verdsettelsesreglene ikke står i skattevedtaket.
