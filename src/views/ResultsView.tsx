@@ -92,7 +92,8 @@ export function ResultsView() {
           {toggles.includeUncertain ? 'slått på' : 'av som standard'}.
         </p>
         <p>
-          <Link href="/metode">Les metode</Link> · <Link href="/kilder">Se kilder</Link>
+          <Link href="/metode">Les metode</Link> · <Link href="/kilder">Se kilder</Link> ·{' '}
+          <Link href="/rettelseslogg">Rettelseslogg</Link>
         </p>
       </section>
     </>

@@ -14,6 +14,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
             <Link href="/">Kalkulator</Link>
             <Link href="/metode">Metode</Link>
             <Link href="/kilder">Kilder</Link>
+            <Link href="/rettelseslogg">Rettelser</Link>
           </nav>
         </div>
       </header>
