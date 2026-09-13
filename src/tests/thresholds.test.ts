@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
+import { ADOPTED_2026 } from '../data/baseline/2026/adopted.ts';
 import { bracketTax, computeIncomeTax, computeWealthTax, thresholdsOf } from '../engine/index.ts';
 import { kr } from '../engine/money.ts';
 import { resolveBaseline } from '../engine/resolve.ts';
 import type { AnyRule, FormulaParams, Kroner } from '../types/index.ts';
 import { adult, wealth } from './fixtures.ts';
-import { SYNTHETIC } from './synthetic-rules.ts';
 
-const rs = resolveBaseline(SYNTHETIC);
+const rs = resolveBaseline(ADOPTED_2026);
 
 function incomeTax(wage: number): number {
   return computeIncomeTax(adult({ wageIncome: kr(wage) }), 0, rs).reduce((s, c) => s + c.amount, 0);
@@ -23,7 +23,7 @@ function grid(rules: AnyRule[]): { rule: string; t: Kroner }[] {
   return rules.flatMap((r) => thresholdsOf(r.id, r.params).map((t) => ({ rule: r.id, t })));
 }
 
-describe('threshold matrix', () => {
+describe('threshold matrix (adopted 2026)', () => {
   it('declares thresholds for every income rule that has one', () => {
     expect(grid(incomeRules).length).toBeGreaterThan(5);
   });
@@ -47,32 +47,29 @@ describe('threshold matrix', () => {
   });
 
   it('bracket tax: the marginal rate right above each threshold is the declared bracket rate', () => {
-    const { brackets } = SYNTHETIC.rules.find((r) => r.id === 'income.bracketTax')!
+    const { brackets } = ADOPTED_2026.rules.find((r) => r.id === 'income.bracketTax')!
       .params as FormulaParams['income.bracketTax'];
     for (const b of brackets) {
       const step = 1_000;
       const marginal = bracketTax(kr(b.threshold + step), rs).amount - bracketTax(kr(b.threshold), rs).amount;
       expect(Math.abs(marginal - (step * b.rateBp) / 10_000)).toBeLessThanOrEqual(1);
     }
-    // Just below the first threshold nothing is due.
     expect(bracketTax(kr(brackets[0]!.threshold - 1), rs).amount).toBe(0);
   });
 
   it('wealth tax: 1 % above the allowance, 1,1 % above tier 2, doubled thresholds for couples', () => {
-    expect(wealthTax(1_760_000)).toBe(0);
-    expect(wealthTax(1_760_000 + 100_000)).toBe(1_000);
-    expect(wealthTax(20_700_000 + 100_000) - wealthTax(20_700_000)).toBe(1_100);
-    expect(wealthTax(3_520_000, 2)).toBe(0);
-    expect(wealthTax(3_520_000 + 100_000, 2)).toBe(1_000);
+    expect(wealthTax(1_900_000)).toBe(0);
+    expect(wealthTax(1_900_000 + 100_000)).toBe(1_000);
+    expect(wealthTax(21_500_000 + 100_000) - wealthTax(21_500_000)).toBe(1_100);
+    expect(wealthTax(3_800_000, 2)).toBe(0);
+    expect(wealthTax(3_800_000 + 100_000, 2)).toBe(1_000);
   });
 
   it('social security: zero at the lower threshold, phase-in caps the full rate just above it', () => {
     const comps = (wage: number) =>
       computeIncomeTax(adult({ wageIncome: kr(wage) }), 0, rs).find((c) => c.formulaId === 'income.socialSecurity')!;
-    expect(comps(100_000).amount).toBe(0);
-    // 25 % of 1 000 above the threshold is less than 7,7 % of 101 000.
-    expect(comps(101_000).amount).toBe(250);
-    // Well above the crossover the ordinary rate applies: 7,7 % of 600 000.
-    expect(comps(600_000).amount).toBe(46_200);
+    expect(comps(99_650).amount).toBe(0);
+    expect(comps(100_650).amount).toBe(250);
+    expect(comps(600_000).amount).toBe(45_600);
   });
 });

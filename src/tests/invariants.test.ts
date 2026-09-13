@@ -6,13 +6,14 @@ import { resolveBaseline } from '../engine/resolve.ts';
 import type { DataStatus, PartyRuleSet, Toggles } from '../types/index.ts';
 import { DEFAULT_TOGGLES } from '../types/index.ts';
 import { FIXTURES } from './fixtures.ts';
-import { AP_EMPTY, SYNTHETIC, SYNTHETIC_PROPOSED, rule } from './synthetic-rules.ts';
+import { ADOPTED_2026 } from '../data/baseline/2026/adopted.ts';
+import { AP_EMPTY, SYNTHETIC_PROPOSED, rule } from './synthetic-rules.ts';
 
-const adopted = resolveBaseline(SYNTHETIC);
+const adopted = resolveBaseline(ADOPTED_2026);
 const fixtures = Object.entries(FIXTURES);
 
 function bundle(...parties: PartyRuleSet[]): DataBundle {
-  return { proposed: SYNTHETIC_PROPOSED, adopted: SYNTHETIC, parties: [AP_EMPTY, ...parties] };
+  return { proposed: SYNTHETIC_PROPOSED, adopted: ADOPTED_2026, parties: [AP_EMPTY, ...parties] };
 }
 
 describe('scenario invariants', () => {
@@ -48,7 +49,7 @@ describe('scenario invariants', () => {
 
 describe('party overlay and headline gate', () => {
   const higherAllowance = (overrides: { status?: DataStatus; uncertain?: boolean } = {}) =>
-    rule('income.personalAllowance', { amount: kr(110_000) }, { label: 'Personfradrag 110 000', ...overrides });
+    rule('income.personalAllowance', { amount: kr(124_540) }, { label: 'Personfradrag 124 540', ...overrides });
   const party = (deltas: PartyRuleSet['deltas']): PartyRuleSet => ({
     id: 'h',
     year: 2026,
@@ -67,7 +68,7 @@ describe('party overlay and headline gate', () => {
     expect(r.employerDelta).toBeNull();
     const c = r.components.find((d) => d.formulaId === 'income.generalRate');
     expect(c?.keptDelta).toBe(2_200);
-    expect(c?.inputsAlt.personfradrag).toBe(110_000);
+    expect(c?.inputsAlt.personfradrag).toBe(124_540);
   });
 
   it.each(['not-reviewed', 'unquantified', 'not-applicable'] as const)('status %s is excluded from the headline', (status) => {
@@ -113,7 +114,7 @@ describe('party overlay and headline gate', () => {
           title: 'Fjerne formuesskatt på arbeidende kapital',
           status: 'unquantified',
           reason: 'Ingen sats i dokumentet.',
-          provenance: SYNTHETIC.rules[0]!.provenance,
+          provenance: ADOPTED_2026.rules[0]!.provenance,
         },
       ],
     };
@@ -125,7 +126,7 @@ describe('party overlay and headline gate', () => {
   it('calculateAll sorts best headline first and includes every party in the bundle', () => {
     const rich = party([higherAllowance()]);
     const worse: PartyRuleSet = {
-      ...party([rule('income.personalAllowance', { amount: kr(90_000) }, { label: 'Personfradrag 90 000' })]),
+      ...party([rule('income.personalAllowance', { amount: kr(104_540) }, { label: 'Personfradrag 104 540' })]),
       id: 'frp',
     };
     const all = calculateAll(FIXTURES.medianSingle!, DEFAULT_TOGGLES, bundle(rich, worse));
