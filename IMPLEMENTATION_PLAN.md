@@ -35,12 +35,11 @@ Autoritativ produktkontekst: `PROJECT.md`. Denne filen er fremdriftsloggen og ov
 3. Manuell kontroll av referansesystemets totaler for de fem testprofilene mot Skatteetatens kalkulator før snapshot-verdiene fryses som `confirmed`.
 4. Offentlig repo og endelig merkenavn: begge er ett-token-endringer (`src/config/brand.ts`).
 
-## Neste økt (overlevering 2026-09-13 kl. 18:25)
-1. **S7 datalag: FERDIG** — `src/data/sources.ts`, `rule-helpers.ts`, `knots.ts`, `index.ts` (`DATA_BUNDLE` + `PARTY_META`), `parties/*.ts` (kun `agreed-value`-rader fra reconciler; alt `estimated`). `scripts/gen-data-status.ts` genererer `DATA_STATUS.md`. `src/tests/party-data.test.ts` (36 tester: anker, ingen `confirmed`, KNOWN_KNOTS, agreed-value-dekning). 122 tester grønne.
-2. **S8–S10 UI: FERDIG** på `feat/ui` (`17e66bc`) — kalkulator, resultater, metode/kilder/rettelseslogg, mobil-QA, deploy-dokumentasjon.
-3. **`feat/wire-data` (pågår)** — koble UI til `DATA_BUNDLE`; `/kilder`-tabell fra `gen-data-status`; behold alt `estimated`.
-4. Operatørporter: **gate 3** — Jesper kryssjekker fem fixtures mot Skatteetaten før noe settes `confirmed`; Netlify-kobling; offentlig repo + navn.
-5. **Beslutninger til Jesper:** (a) proposed barnetrygd 1 968 kr/mnd; (b) primærbolig 14 vs 10 mill. (`NON_FORLIK_BASELINE_DIFFS`); (c) **K1** — encode frikort 150k for H/FrP/SV/Rødt som `income.socialSecurity` (estimated) eller la stå ute? (d) **K3** — Venstre `excise.kwh` er encodet mot 6 øre med baseline-flagg; rebase på `proposed`?
+## Neste økt (overlevering 2026-09-13 kl. 18:55)
+1. **MVP-koden er komplett på `main`** — S0–S10 ☑. `feat/ui` og `feat/wire-data` er slått sammen (fast-forward til `cdd3ef0`) og worktrees/grener fjernet; `npm run check` grønn (typecheck, tester, reconcile-gate, data-status-gate, build).
+2. **Beslutninger tatt av Jesper 2026-09-13, alle encodet:** (a) proposed barnetrygd 1 968 kr/mnd beholdes som encodet (`estimated`, Innst. 2 S); (b) primærbolig **14 mill.** bekreftet — endringslov 23.06.2026 nr. 66 Del II, «verknad frå og med inntektsåret 2026», arkivert som `lovdata-endringslov-2026-06-23-66` (manifest 41 rader); Prop. 1 LS/SE-FU (10 mill.) er eldre enn lovendringen; (c) **K1** encodet som `income.socialSecurity` nedre grense 150 000 kr (`estimated`, K1-note) for H/FrP/SV/Rødt, `KNOWN_KNOTS` K1 `encoded: true`; (d) **K3** Venstre `excise.kwh` beholdes som absolutt 6 øre.
+3. **Operatørporter (kun Jesper):** Netlify-kobling av repoet (`netlify.toml` klar, ingen `.netlify`-katalog); **gate 3** — kryssjekk de fem fixtures i `src/tests/fixtures.ts` mot Skatteetatens kalkulator før noe settes `confirmed` (i dag er ALT `estimated`); offentlig repo + navn.
+4. **Rester:** grenen `cursor/s7-party-data-bcc3` er slått sammen og kan slettes; KrF-vedlegget pp. 35–46 er tomt i pdftotext (25 NOT FOUND) — tabellbevisst re-ekstraksjon hvis KrF-tallene skal forbedres; K2/K4 står som flaggede knuter i `RECONCILIATION.md`.
 
 ## S1-funn (agentrapport 2026-09-13, filene er leveransen)
 - `sources/manifest.json` (baseline-delen): 31 rader (30 arkivert, 1 blokkert: Skatteetatens `/satser/`-sider for fradrag finnes ikke; erstattet av `skatteetaten-forskuddsutskrivingen-2026` som har hele 2026-satstabellen). Særavgifter er ett Lovdata-vedtak per avgift (seks id-er). Konsolidert skatteloven kap. 4 arkivert fordi verdsettelsesreglene ikke står i skattevedtaket.
