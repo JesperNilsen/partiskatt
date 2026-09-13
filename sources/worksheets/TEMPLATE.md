@@ -1,6 +1,6 @@
 # Ekstraksjonsark — <PARTI> alternativt statsbudsjett 2026
 
-Source: `sources/text/<party>-alt-2026.txt` (from `sources/raw/<party>-alt-2026.pdf`, see `sources/manifest.parties.json`).
+Source: `sources/text/<party>-alt-2026.txt` (from `sources/raw/<party>-alt-2026.pdf`, see `sources/manifest.json`).
 Extractor: <claude|codex>  ·  Date: 2026-09-13
 
 ## Rules for filling this sheet (binding)

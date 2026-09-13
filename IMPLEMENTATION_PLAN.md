@@ -7,7 +7,7 @@ Autoritativ produktkontekst: `PROJECT.md`. Denne filen er fremdriftsloggen og ov
 | # | Fase | Port | Status |
 |---|------|------|--------|
 | S0 | Repo, Vite/TS-strict/Vitest/CSS-tokens/CI/netlify.toml, privat remote | `npm run check` grønn; CI grønn | ☑ 2026-09-13 |
-| S1 | (subagent kjørte 2026-09-13 — sjekk `sources/manifest.baseline.json` + `sources/worksheets/baseline-2026.md`) Referansekilder arkivert (Lovdata-vedtak, Prop. 1 LS Tabell 1.7, Innst. 2/3 S, Skatteetaten, NAV, Lånekassen, SSB FBU) + `sources/worksheets/baseline-2026.md` | manifest med sha256 for alle; kryssjekk Lovdata↔Skatteetaten | ☐ |
+| S1 | (subagent kjørte 2026-09-13 — sjekk `sources/manifest.json` + `sources/worksheets/baseline-2026.md`) Referansekilder arkivert (Lovdata-vedtak, Prop. 1 LS Tabell 1.7, Innst. 2/3 S, Skatteetaten, NAV, Lånekassen, SSB FBU) + `sources/worksheets/baseline-2026.md` | manifest med sha256 for alle; kryssjekk Lovdata↔Skatteetaten | ☑ 2026-09-13 (81ff3f9; manifest slått sammen → `sources/manifest.json`) |
 | S2 | `src/types/` + `src/engine/money.ts` | money-tester, tsc rent | ☑ 2026-09-13 (RatePerUnit = 1/10 000 kr per enhet, ikke øre) |
 | S3 | Beregningsmotor + `data/baseline/2026/adopted.ts` | invarianter + terskelmatrise + fem profiler grønne | ☐ |
 | S4 | `proposed.ts` + `forlik.ts` | forlik-diff-test passerer; Ap = 0 | ☐ |
@@ -36,12 +36,12 @@ Autoritativ produktkontekst: `PROJECT.md`. Denne filen er fremdriftsloggen og ov
 4. Offentlig repo og endelig merkenavn: begge er ett-token-endringer (`src/config/brand.ts`).
 
 ## Neste økt (overlevering 2026-09-13, økt stoppet ved kontekst-tak)
-1. Les `sources/manifest.baseline.json` og `sources/worksheets/baseline-2026.md` (S1-agentens leveranse). Slå sammen `manifest.baseline.json` + `manifest.parties.json` → `sources/manifest.json`.
-2. S6 kan starte nå: mal i `sources/worksheets/TEMPLATE.md`; tekstfiler i `sources/text/<parti>-alt-2026.txt`; `summaryTablePages` i `sources/manifest.parties.json`. Én isolert subagent per parti → `<parti>.claude.md`; Codex via `~/.claude/bin/delegate --to codex --mode consult` → `<parti>.codex.md`; deretter `scripts/reconcile.ts`.
+1. ☑ 2026-09-13: `manifest.baseline.json` + `manifest.parties.json` slått sammen til `sources/manifest.json` (40 rader; sha256 og bytes verifisert mot `sources/raw/` for alle 38 arkiverte filer).
+2. S6 kan starte nå: mal i `sources/worksheets/TEMPLATE.md`; tekstfiler i `sources/text/<parti>-alt-2026.txt`; `summaryTablePages` i `sources/manifest.json`. Én isolert subagent per parti → `<parti>.claude.md`; Codex via `~/.claude/bin/delegate --to codex --mode consult` → `<parti>.codex.md`; deretter `scripts/reconcile.ts`.
 3. S3 parallelt i hovedtråden: `src/engine/{formulas,income-tax,wealth-tax,consumption,benefits,employer-contribution,resolve,calculate-scenario}.ts` mot `src/types/` (frosset). Parti = `adopted` overlagt med partiets absolutte verdier (ikke `proposed ⊕ delta`), se designvalg over.
 
 ## S1-funn (agentrapport 2026-09-13, filene er leveransen)
-- `sources/manifest.baseline.json`: 31 rader (30 arkivert, 1 blokkert: Skatteetatens `/satser/`-sider for fradrag finnes ikke; erstattet av `skatteetaten-forskuddsutskrivingen-2026` som har hele 2026-satstabellen). Særavgifter er ett Lovdata-vedtak per avgift (seks id-er). Konsolidert skatteloven kap. 4 arkivert fordi verdsettelsesreglene ikke står i skattevedtaket.
+- `sources/manifest.json` (baseline-delen): 31 rader (30 arkivert, 1 blokkert: Skatteetatens `/satser/`-sider for fradrag finnes ikke; erstattet av `skatteetaten-forskuddsutskrivingen-2026` som har hele 2026-satstabellen). Særavgifter er ett Lovdata-vedtak per avgift (seks id-er). Konsolidert skatteloven kap. 4 arkivert fordi verdsettelsesreglene ikke står i skattevedtaket.
 - Prop. 1 LS: Tabell 1.7 på PDF-side 33–37 (trykt 31–35); Tabell 1.8 (mva/særavgifter) PDF 38–43. Innst. 2 S / 3 S / 4 L arkivert.
 - **Budsjettforlik:** flertall Ap + SV + Sp + Rødt + MDG (avtale 3. des. 2025); underliggende Ap–Sp–Rødt-forlik 29. nov. 2025 med «Skatt og avgift»-tabell i Innst. 2 S PDF s. 23–24. **15 endrede regler** (12 skatt/avgift, 3 ytelser) med Innst-id + side i `sources/worksheets/baseline-2026.md`; ni rader har vedtatt ≠ Prop. 1 LS. → grunnlag for `forlik.ts` (S4).
 - SSB: tabell **14100** (Forbruksundersøkelsen 2022, kr per husholdning per år + andel), hentet via json-stat2; koder for 00/01/02/04.5/04.5.1/07/07.2.2/diesel/bensin notert.

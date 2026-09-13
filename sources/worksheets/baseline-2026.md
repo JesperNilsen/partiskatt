@@ -1,6 +1,6 @@
 # Baseline 2026 — extraction worksheet (adopted vs. proposed)
 
-Retrieved 2026-09-13. Every value below is copied from an archived source listed in `sources/manifest.baseline.json`; text extracts live in `sources/text/`.
+Retrieved 2026-09-13. Every value below is copied from an archived source listed in `sources/manifest.json`; text extracts live in `sources/text/`.
 
 Page conventions: `PDF pN` = page index in the archived PDF; `printed N` = the page number printed on the page. Prop. 1 LS: printed = PDF − 2 (Tabell 1.7 = PDF p33–37 / printed 31–35; Tabell 1.8 = PDF p38–43 / printed 36–41). Innst. 2 S: printed = PDF − 4. Innst. 3 S: printed = PDF − 6. Innst. 4 L: printed = PDF − 4. Lovdata HTML sources are cited by § (line numbers refer to the `sources/text/*.txt` extract).
 
