@@ -15,7 +15,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "data-status": "tsx scripts/gen-data-status.ts",
-    "check": "npm run typecheck && npm run test && npm run data-status -- --check && npm run build"
+    "reconcile": "tsx scripts/reconcile.ts",
+    "check": "npm run typecheck && npm run test && npm run reconcile -- --check && npm run data-status -- --check && npm run build"
   },
   "dependencies": {
     "marked": "^14.1.2",
