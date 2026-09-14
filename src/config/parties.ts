@@ -1,5 +1,4 @@
 import type { PartyId, PartyMeta } from '../types/index.ts';
-import { PARTY_IDS } from '../types/index.ts';
 
 /**
  * Identity only — names and colours, never policy. Budget numbers live in the data layer.
@@ -83,5 +82,3 @@ export const PARTY_META: Record<PartyId, PartyMeta> = {
     inGovernment: false,
   },
 };
-
-export const ALL_PARTY_META: readonly PartyMeta[] = PARTY_IDS.map((id) => PARTY_META[id]);

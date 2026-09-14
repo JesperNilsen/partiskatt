@@ -2,7 +2,9 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DATA_STATUS_CATEGORIES, partyColumnStatus } from '../src/data/data-status.ts';
-import { DATA_BUNDLE, PARTY_META } from '../src/data/index.ts';
+import { PARTY_META } from '../src/config/parties.ts';
+import { DATA_BUNDLE } from '../src/data/index.ts';
+import { PARTY_IDS } from '../src/types/index.ts';
 import type { DataStatusCategory } from '../src/data/data-status.ts';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -16,13 +18,12 @@ function render(): string {
     '',
     'Statuser: `confirmed` (primærkilde, kontrollert) · `estimated` (rimelig anslag med dokumentert antagelse) · `unquantified` (forslaget finnes, men kan ikke tallfestes) · `not-applicable` (partiet har ikke forslag i kategorien / kategorien gjelder ikke) · `not-reviewed` (ikke gjennomgått / uttrekkene er uenige)',
     '',
-    `Generert: ${new Date().toISOString().slice(0, 10)}`,
-    '',
     '| Parti | Inntektsskatt | Formuesskatt | Moms | Særavgifter | Kontantytelser | Arbeidsgiveravgift |',
     '|---|---|---|---|---|---|---|',
   ];
 
-  for (const meta of PARTY_META) {
+  for (const id of PARTY_IDS) {
+    const meta = PARTY_META[id];
     const cells = DATA_STATUS_CATEGORIES.map((c) =>
       partyColumnStatus(meta.id, c.id as DataStatusCategory),
     );
@@ -33,7 +34,7 @@ function render(): string {
   lines.push('## Encoded party deltas (S7)');
   lines.push('');
   for (const party of DATA_BUNDLE.parties) {
-    const meta = PARTY_META.find((m) => m.id === party.id)!;
+    const meta = PARTY_META[party.id];
     if (party.deltas.length === 0) {
       lines.push(`- **${meta.shortName}**: ingen deltas`);
       continue;

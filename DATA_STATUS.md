@@ -4,8 +4,6 @@
 
 Statuser: `confirmed` (primærkilde, kontrollert) · `estimated` (rimelig anslag med dokumentert antagelse) · `unquantified` (forslaget finnes, men kan ikke tallfestes) · `not-applicable` (partiet har ikke forslag i kategorien / kategorien gjelder ikke) · `not-reviewed` (ikke gjennomgått / uttrekkene er uenige)
 
-Generert: 2026-09-13
-
 | Parti | Inntektsskatt | Formuesskatt | Moms | Særavgifter | Kontantytelser | Arbeidsgiveravgift |
 |---|---|---|---|---|---|---|
 | Ap | not-applicable | not-applicable | not-applicable | not-applicable | not-applicable | not-applicable |
