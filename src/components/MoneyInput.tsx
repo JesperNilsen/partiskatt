@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { kr } from '../engine/money.ts';
 import type { Kroner } from '../types/index.ts';
 import { formatKr } from '../utils/format.ts';
 
@@ -12,10 +13,10 @@ interface MoneyInputProps {
 
 function parseKr(raw: string): Kroner {
   const digits = raw.replace(/\s/g, '').replace(/[^\d]/g, '');
-  if (!digits) return 0 as Kroner;
+  if (!digits) return kr(0);
   const n = Number(digits);
-  if (!Number.isFinite(n) || n < 0) return 0 as Kroner;
-  return Math.min(n, 1_000_000_000) as Kroner;
+  if (!Number.isFinite(n) || n < 0) return kr(0);
+  return kr(Math.min(n, 1_000_000_000));
 }
 
 export function MoneyInput({ id, value, onChange, placeholder = '0', min = 0 }: MoneyInputProps) {
@@ -43,14 +44,14 @@ export function MoneyInput({ id, value, onChange, placeholder = '0', min = 0 }: 
         onBlur={() => {
           setFocused(false);
           const parsed = parseKr(text);
-          const next = parsed < min ? (min as Kroner) : parsed;
+          const next = parsed < min ? kr(min ?? 0) : parsed;
           onChange(next);
           setText(next === 0 ? '' : formatKr(next));
         }}
         onChange={(e) => {
           const next = parseKr(e.target.value);
           setText(e.target.value);
-          onChange(next < min ? (min as Kroner) : next);
+          onChange(next < min ? kr(min ?? 0) : next);
         }}
         aria-describedby={`${id}-suffix`}
       />
