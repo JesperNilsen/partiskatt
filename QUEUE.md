@@ -91,3 +91,87 @@ notes:
   profilene inngår ikke i den porten, men provenance-disiplinen er den samme.
 - Bakgrunn: røyktest 2026-09-13 fant at profilene er plassholdere; se
   `IMPLEMENTATION_PLAN.md` § Neste økt pkt. 4.
+
+## Q-002 · Særavgifter: fysiske mengder kan justeres i avanserte felt
+status: ready
+lane: partiskatt-main
+
+acceptance:
+Brukeren kan overstyre de fysiske mengdene som særavgiftene regnes av, ikke bare
+kronebeløpene per mva-kategori. I dag viser de avanserte feltene i
+`src/views/CalculatorView.tsx` bare `spend`; `units` (liter bensin/diesel, kWh,
+flyreiser, liter øl/vin/brennevin, sigaretter, gram snus — listen `EXCISE_GOODS`
+i `src/types/profile.ts`) settes kun av forbruksprofilen, og reduceren i
+`src/state/profile.ts` har allerede en handling for `units` som aldri sendes.
+
+1. Én tallinput per `ExciseGood` under de avanserte feltene, med norsk etikett
+   og enhetssuffiks (l, kWh, reiser, stk, gram), `inputMode="numeric"`, egen
+   `<label for>`; verdier går gjennom den eksisterende reducer-handlingen og
+   `sanitizeProfile` (ikke-negative heltall).
+2. Bytte av forbruksprofil overskriver mengdene igjen (samme oppførsel som
+   `spend` i dag); en manuelt endret mengde markerer profilen som `custom`.
+3. Komponenttest `src/components/ExciseUnitsFields.test.tsx` (jsdom, som
+   `PartyCard.test.tsx`): rendrer feltene, endrer bensinliter, og asserterer at
+   `computeScenario` gir en annen `excise.petrolLitre`-komponent etterpå.
+4. Ingen ny tilstand i URL; mobil 375 px uten horisontal scroll.
+
+verify: `npm ci && npm run check && test -f src/components/ExciseUnitsFields.test.tsx && grep -q "ExciseUnitsFields" src/views/CalculatorView.tsx`
+
+notes:
+- Funn fra Codex-gjennomgang 2026-09-14 (FIX 5). Mønster for input: `src/components/MoneyInput.tsx` og `Field.tsx`.
+- Engine-API er frosset (`src/engine/index.ts`); UI regner ingenting selv.
+
+## Q-003 · Partikort viser status og kilde per regel
+status: ready
+lane: partiskatt-main
+
+acceptance:
+Et utvidet partikort (`src/components/PartyCard.tsx`) forklarer hvor hvert tall
+kommer fra. PROJECT.md krever at status og kilde er synlig, ikke bare i
+`/kilder`.
+
+1. For hver komponent med `keptDelta !== 0` («Største årsaker» og resten bak
+   en «vis alle»-knapp): norsk statusetikett (`DATA_STATUS_LABELS` i
+   `src/utils/status-labels.ts`), kildens korttittel fra `sources/manifest.json`
+   (via `src/data/sources.ts`), `pageOrTable` og `method` fra regelens
+   provenance. Provenance hentes fra partiets regelsett i `DATA_BUNDLE`
+   (`ruleOf` i `src/engine/rule-set.ts`), ikke fra UI-konstanter.
+2. Ekskluderte regler (`result.excluded`) viser det samme, pluss grunnen som i
+   dag; ingen rå engelske enum-verdier i UI.
+3. Komponenttest `src/components/PartyCard.provenance.test.tsx`: for SV med
+   fixture `medianSingle` rendres «Anslått», kildetittelen og «PDF p37» for
+   trinnskatt-regelen.
+4. Kortet er fortsatt lesbart på 375 px; provenance ligger bak utvidelsen, ikke
+   i sammendraget.
+
+verify: `npm ci && npm run check && test -f src/components/PartyCard.provenance.test.tsx && ! grep -n "({item.status})" src/components/PartyCard.tsx`
+
+notes:
+- Funn fra Codex-gjennomgang 2026-09-14 (FIX 6). Statusetiketten for ekskluderte regler er allerede byttet til norsk (2026-09-14); resten gjenstår.
+- Kjør etter Q-002 (samme lane; begge rører kalkulator/kort-filer).
+
+## Q-004 · Provenance-tester uten stille forbikoblinger
+status: ready
+lane: partiskatt-main
+
+acceptance:
+`src/tests/party-data.test.ts` skal ikke kunne bli grønn ved å hoppe over
+tilfeller.
+
+1. `party baselineParams vs proposed`: erstatt `if (!d.baselineParams) continue;`
+   med en eksplisitt forventning — enten en allowlist over regler som SKAL bære
+   `baselineParams`, eller `expect(withBaseline).toHaveLength(N)` der N er
+   dagens faktiske antall (0 er lov, men må stå eksplisitt).
+2. Ankertesten: `pageFromProvenance` som ikke kan tolke `pageOrTable` skal feile
+   testen, ikke returnere; flersidige referanser («PDF p32; p119») må tolkes til
+   alle sidene, og ankeret må finnes på minst én av dem.
+3. `anchorOnPage`: sammenhengende frase (normalisert mellomrom/case, tall med
+   og uten tusenskille), ikke uordnet ordforekomst; kjente layout-brudd får en
+   eksplisitt allowlist med begrunnelse per oppføring.
+4. Kjør testene mot dagens data og rett data eller allowlist der de feiler —
+   aldri løsne regelen.
+
+verify: `npm ci && npm run check && ! grep -n "if (!page) return;" src/tests/party-data.test.ts && ! grep -n "if (!d.baselineParams) continue;" src/tests/party-data.test.ts`
+
+notes:
+- Funn fra Codex-gjennomgang 2026-09-14 (FIX 9). Kildetekst: `sources/text/<party>.txt` per manifest-rad (`textFile`); les i vinduer, aldri hele filen i hovedtråden.
