@@ -26,7 +26,7 @@ Kun nasjonale regler. Ingen kommunal eiendomsskatt, ingen verdsetting av offentl
 - Arbeidsgiveravgift: av som standard. Når den slås på, brukes full langsiktig incidens på arbeidstakeren som foreløpig antagelse, og beløpet vises adskilt fra direkte skatt.
 
 ## Forbruksprofil
-Standardprofilene (nøktern / typisk / høy) bygger på SSBs forbruksundersøkelse (tabell 14100). Profilen angir årlig forbruk inkl. mva per kategori og fysiske mengder for avgiftsbelagte varer. Alle verdier kan endres av brukeren.
+Standardprofilene (nøktern / typisk / høy) skal bygge på SSBs forbruksundersøkelse (tabell 14100, arkivert). Inntil den koblingen er gjort i datalaget (QUEUE.md Q-001) er profilene plassholdere av riktig størrelsesorden, og kalkulatoren sier det. Profilen angir årlig forbruk inkl. mva per kategori og fysiske mengder for avgiftsbelagte varer. Alle verdier kan endres av brukeren.
 
 ## Avrunding
 Alle beløp er hele kroner. Hver navngitt komponent avrundes én gang (halv opp, bort fra null). Summen av komponentene er per definisjon lik hovedtallet.

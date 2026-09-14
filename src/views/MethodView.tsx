@@ -96,11 +96,11 @@ export function MethodView() {
       <section>
         <h2>Forbruksprofil</h2>
         <p>
-          Standardprofilene bygger på SSBs forbruksundersøkelse (tabell 14100). Profilen angir årlig forbruk inkl. mva per
+          Standardprofilene skal bygge på SSBs forbruksundersøkelse (tabell 14100, arkivert). Profilen angir årlig forbruk inkl. mva per
           kategori og fysiske mengder for avgiftsbelagte varer. Alle verdier kan endres under avanserte felt.
         </p>
         <p className="muted">
-          Inntil SSB-data er koblet på i datalaget, kan profilene være merket som midlertidige i kalkulatoren.
+          Inntil SSB-data er koblet på i datalaget er profilene plassholdere av riktig størrelsesorden, merket som midlertidige i kalkulatoren.
         </p>
       </section>
 
