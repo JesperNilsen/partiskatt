@@ -4,16 +4,14 @@ import { headlinePhrase, monthlyPhrase } from '../utils/format.ts';
 
 interface HeadlineVerdictProps {
   top: PartyResult;
-  provisional: boolean;
 }
 
-export function HeadlineVerdict({ top, provisional }: HeadlineVerdictProps) {
+export function HeadlineVerdict({ top }: HeadlineVerdictProps) {
   const meta = PARTY_META[top.party];
   const cls = top.headline > 0 ? 'verdict verdict--gain' : top.headline < 0 ? 'verdict verdict--loss' : 'verdict';
 
   return (
     <section className={cls} aria-live="polite">
-      {provisional ? <p className="verdict__tag">Demotall — ikke ekte partipolitikk</p> : null}
       <h2 className="verdict__headline">{headlinePhrase(top.headline, meta.shortName)}</h2>
       <p className="verdict__sub">{monthlyPhrase(top.headline)}</p>
       <p className="verdict__note">

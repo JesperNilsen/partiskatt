@@ -1,6 +1,6 @@
 import { PARTY_META } from '../config/parties.ts';
+import { DATA_STATUS_LABELS } from '../utils/status-labels.ts';
 import type { PartyResult } from '../types/index.ts';
-import type { DataKind } from '../state/data-source.ts';
 import { formatSignedKr } from '../utils/format.ts';
 import { BreakdownBars } from './BreakdownBars.tsx';
 
@@ -8,7 +8,6 @@ interface PartyCardProps {
   result: PartyResult;
   rank: number;
   expanded?: boolean;
-  dataKind: DataKind;
   onToggle?: () => void;
 }
 
@@ -26,7 +25,7 @@ function topReasons(result: PartyResult, limit = 3): string[] {
     .map((c) => `${c.label}: ${formatSignedKr(c.keptDelta)} kr`);
 }
 
-export function PartyCard({ result, rank, expanded = false, dataKind, onToggle }: PartyCardProps) {
+export function PartyCard({ result, rank, expanded = false, onToggle }: PartyCardProps) {
   const meta = PARTY_META[result.party];
   const gain = result.headline > 0;
   const loss = result.headline < 0;
@@ -58,7 +57,6 @@ export function PartyCard({ result, rank, expanded = false, dataKind, onToggle }
         </div>
         <div className="party-card__amounts">
           <p className={`party-card__headline ${gain ? 'gain' : loss ? 'loss' : ''}`}>
-            {dataKind === 'provisional' ? <span className="provisional-tag" title="Demotall">demo</span> : null}
             {formatSignedKr(result.headline)} <span className="party-card__unit">kr/år</span>
           </p>
           <p className="party-card__monthly">{formatSignedKr(result.monthly)} kr/mnd</p>
@@ -110,7 +108,7 @@ export function PartyCard({ result, rank, expanded = false, dataKind, onToggle }
               <ul className="excluded-list">
                 {result.excluded.map((item) => (
                   <li key={item.title}>
-                    <strong>{item.title}</strong> ({item.status})
+                    <strong>{item.title}</strong> ({DATA_STATUS_LABELS[item.status]})
                     {item.uncertain ? ' — usikkert' : ''}: {item.reason}
                   </li>
                 ))}

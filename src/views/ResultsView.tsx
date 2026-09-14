@@ -55,7 +55,6 @@ export function ResultsView() {
   }
 
   const top = results[0];
-  const provisional = data.kind === 'provisional';
 
   return (
     <>
@@ -65,7 +64,7 @@ export function ResultsView() {
         <Link href="/" className="btn btn--ghost">Endre inndata</Link>
       </div>
 
-      {top ? <HeadlineVerdict top={top} provisional={provisional} /> : null}
+      {top ? <HeadlineVerdict top={top} /> : null}
 
       <section className="results-list" aria-label="Alle partier rangert">
         <h2 className="results-list__title">Alle ni partier</h2>
@@ -76,7 +75,7 @@ export function ResultsView() {
               <PartyCard
                 result={result}
                 rank={i + 1}
-                dataKind={data.kind}
+               
                 expanded={expanded === result.party}
                 onToggle={() => setExpanded((cur) => (cur === result.party ? null : result.party))}
               />

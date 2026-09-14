@@ -31,7 +31,6 @@ const PRIMARY_LINKS = [
 export function SourcesView() {
   const { data, dataLoading, dataError } = useApp();
   const groups = groupManifest(SOURCE_MANIFEST);
-  const provisional = data?.kind === 'provisional';
   const manifestFailed = SOURCE_MANIFEST.length === 0;
 
   return (
@@ -45,11 +44,6 @@ export function SourcesView() {
         ) : dataError && !data ? (
           <p className="lede calm" role="alert">
             Regelsettet kunne ikke lastes, men kildelisten under er uavhengig av beregningen.
-          </p>
-        ) : provisional ? (
-          <p className="lede calm">
-            Primærkildene er arkivert i prosjektet (se listen under). Tallene i kalkulatoren er fortsatt{' '}
-            <strong>demotall</strong> til partidata er avstemt og koblet på.
           </p>
         ) : (
           <p className="lede calm">
@@ -109,7 +103,7 @@ export function SourcesView() {
         {dataLoading ? (
           <p className="loading-inline" role="status">Laster …</p>
         ) : (
-          <DataStatusTable provisional={provisional || !data} />
+          <DataStatusTable />
         )}
         <p className="muted">
           Maskinlesbar versjon: <code>DATA_STATUS.md</code> i repoet (genereres av{' '}

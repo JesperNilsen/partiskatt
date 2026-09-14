@@ -2,7 +2,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { calculateAll } from '../engine/index.ts';
-import { PROVISIONAL_BUNDLE } from '../provisional/bundle.ts';
+import { DATA_BUNDLE } from '../data/index.ts';
 import { adult, profile } from '../tests/fixtures.ts';
 import { kr } from '../engine/money.ts';
 import { DEFAULT_TOGGLES } from '../types/index.ts';
@@ -13,14 +13,13 @@ describe('PartyCard', () => {
     const results = calculateAll(
       profile({ adults: [adult({ wageIncome: kr(600_000) })] }),
       DEFAULT_TOGGLES,
-      PROVISIONAL_BUNDLE,
+      DATA_BUNDLE,
     );
     const ap = results.find((r) => r.party === 'ap');
     expect(ap).toBeDefined();
     if (!ap) return;
 
-    render(<PartyCard result={ap} rank={5} dataKind="provisional" />);
+    render(<PartyCard result={ap} rank={5} />);
     expect(screen.getByText(/Referanseparti/i)).toBeTruthy();
-    expect(screen.getByText(/demo/i)).toBeTruthy();
   });
 });

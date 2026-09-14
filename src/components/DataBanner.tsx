@@ -26,16 +26,13 @@ export function DataBanner({ data, loading, error }: DataBannerProps) {
 
   if (!data) return null;
 
-  const provisional = data.kind === 'provisional';
-  const cls = provisional ? 'banner banner--provisional' : 'banner banner--beta';
-
   return (
-    <div className={cls} role="status">
+    <div className="banner banner--beta" role="status">
       <p>
         <strong>{data.headline}.</strong> {data.detail}
       </p>
       {data.warning ? <p className="banner__warn">{data.warning}</p> : null}
-      {provisional && PROFILES_ARE_PROVISIONAL ? (
+      {PROFILES_ARE_PROVISIONAL ? (
         <p className="banner__warn">Forbruksprofilene er også midlertidige — ikke fra SSB ennå.</p>
       ) : null}
     </div>

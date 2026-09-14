@@ -3,7 +3,7 @@ import { Field } from '../components/Field.tsx';
 import { MoneyInput } from '../components/MoneyInput.tsx';
 import { DataBanner } from '../components/DataBanner.tsx';
 import { BRAND } from '../config/brand.ts';
-import { CONSUMPTION_PROFILES } from '../provisional/consumption-profiles.ts';
+import { CONSUMPTION_PROFILES, PROFILES_ARE_PROVISIONAL } from '../provisional/consumption-profiles.ts';
 import { useApp } from '../state/app.tsx';
 import type { ConsumptionProfileId } from '../types/index.ts';
 import { VAT_CATEGORIES } from '../types/index.ts';
@@ -91,9 +91,9 @@ export function CalculatorView() {
             <input
               type="checkbox"
               checked={adult.isStudent}
-              onChange={(e) => dispatchProfile({ type: 'adult', index: 0, patch: { isStudent: e.target.checked } })}
+              onChange={(e) => dispatchProfile({ type: 'adult', index: 0, patch: { isStudent: e.target.checked, studyMonths: e.target.checked ? 10 : 0 } })}
             />
-            Student med inntekt fra jobb
+            Student med inntekt fra jobb (gir 10 måneder studiestøtte)
           </label>
 
           {profile.mode === 'household' && adult2 ? (
@@ -159,7 +159,7 @@ export function CalculatorView() {
               </button>
             ))}
           </div>
-          {data?.kind === 'provisional' ? (
+          {PROFILES_ARE_PROVISIONAL ? (
             <p className="provisional-note">Forbruksprofilene er midlertidige — ikke hentet fra SSB ennå.</p>
           ) : null}
         </section>
