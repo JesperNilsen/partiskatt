@@ -1,5 +1,5 @@
 import { kr } from '../engine/money.ts';
-import { consumptionFor } from '../provisional/consumption-profiles.ts';
+import { consumptionFor } from '../data/consumption-profiles.ts';
 import type {
   Adult,
   Consumption,

@@ -1,5 +1,4 @@
 import type { DataSource } from '../state/data-source.ts';
-import { PROFILES_ARE_PROVISIONAL } from '../provisional/consumption-profiles.ts';
 
 interface DataBannerProps {
   data: DataSource | null;
@@ -32,9 +31,6 @@ export function DataBanner({ data, loading, error }: DataBannerProps) {
         <strong>{data.headline}.</strong> {data.detail}
       </p>
       {data.warning ? <p className="banner__warn">{data.warning}</p> : null}
-      {PROFILES_ARE_PROVISIONAL ? (
-        <p className="banner__warn">Forbruksprofilene er også midlertidige — ikke fra SSB ennå.</p>
-      ) : null}
     </div>
   );
 }
