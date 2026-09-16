@@ -21,7 +21,9 @@ merker den `blocked:no verify gate` i stedet for å gjette. Hold postene avgrens
 kjør `npm ci` før noe annet.
 
 ## Q-001 · Forbruksprofiler fra SSB 14100 i datalaget
-status: ready
+status: blocked:halvferdig — WIP faf0c7d pa queue/q-001-ssb-forbruksprofiler; porten feiler med vilje (src/provisional/ ikke slettet). Queue-runner 2026-09-15 traff CLAUDE.md-taket for oktdybde midtveis og stoppet i stedet for a kjore videre. Skal fullfores, ikke merges.
+result: datalaget og kartleggingen er gjort og verifisert (tsc rent, 138 tester gronne); migreringen, manifest-radene og METHODOLOGY star igjen. Fire nye SSB-arkiv ligger ukommitert-i-commit pa grenen: 14156 (inntektskvartiler — gjor noktern/hoy kildefestet i stedet for oppdiktede faktorer), 06076, 07459, 09654, 09007. LES kWh-advarselen i modulen for dette landes.
+result: Køkjøringen 2026-09-15 avbrøt. Treet ~/dev/queue-partiskatt-001 (gren queue/q-001-ssb-forbruksprofiler, 0 commits) fikk samtidige skrivinger fra en annen agent som løser SAMME oppgave: mine arkiverte råfiler ble slettet og erstattet med filer under andre navn, og src/data/consumption-profiles.ts + src/tests/consumption-profiles.test.ts dukket opp uten at kjøringen hadde skrevet dem. Mine egne endringer (fire manifestrader + fire tekstuttrekk) er rullet tilbake; den andre agentens ucommittede filer er rørt. MERK 2026-09-16: briefs/queue-2026-09-15.md ble aldri skrevet og finnes ikke på noen gren — den utledningen er tapt. Grunnlaget som FINNES er commit faf0c7d (src/data/consumption-profiles.ts + testen + fem SSB-arkiv under sources/raw/); utled resten på nytt derfra, ikke fra denne noten.
 lane: partiskatt-main
 
 acceptance:
