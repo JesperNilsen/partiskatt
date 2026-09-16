@@ -26,7 +26,19 @@ Kun nasjonale regler. Ingen kommunal eiendomsskatt, ingen verdsetting av offentl
 - Arbeidsgiveravgift: av som standard. Når den slås på, brukes full langsiktig incidens på arbeidstakeren som foreløpig antagelse, og beløpet vises adskilt fra direkte skatt.
 
 ## Forbruksprofil
-Standardprofilene (nøktern / typisk / høy) skal bygge på SSBs forbruksundersøkelse (tabell 14100, arkivert). Inntil den koblingen er gjort i datalaget (QUEUE.md Q-001) er profilene plassholdere av riktig størrelsesorden, og kalkulatoren sier det. Profilen angir årlig forbruk inkl. mva per kategori og fysiske mengder for avgiftsbelagte varer. Alle verdier kan endres av brukeren.
+Standardprofilene (nøktern / typisk / høy) er utledet av SSBs forbruksundersøkelse (FBU) 2022 i `src/data/consumption-profiles.ts`. Profilen angir årlig forbruk inkl. mva per kategori og fysiske mengder for avgiftsbelagte varer. Alle verdier kan endres av brukeren — profilen er et utgangspunkt, ikke en påstand om den enkelte.
+
+**Kroner.** Tabell 14100 (`ssb-fbu-14100`, json-stat2, 510 COICOP-2018-grupper, kr per husholdning per år) kartlegges til mva-kategoriene: `food` = 01, `alcoholTobacco` = 02, `electricity` = 04.5.1, `fuel` = 07.2.2, `flights` = 07.3.3, `transportServices` = 07.3 minus fly, `exempt` = de mva-frie gruppene, `general` = gruppe 00 minus alt det andre. Kartleggingen står som data i `COICOP_MAPPING`, med en begrunnelse per kode, og en test regner den om igjen fra råfilen og feiler hvis et tall har glidd.
+
+**Fra husholdning til person.** Husholdningstallene deles på gjennomsnittshusholdningens ekvivalensfaktor, 1,4713, etter den OECD-modifiserte skalaen (1 + 0,5 per ekstra voksen + 0,3 per barn). FBU publiserer ikke sin egen husholdningssammensetning, så faktoren bygger på landstall: 2,12 personer per privathusholdning (`ssb-06076-husholdningsstorrelse-2022`) og 1 108 523 personer 0–17 år (`ssb-07459-barn-under-18-2022`). Forbehold: 07459 teller alle barn i landet, ikke bare de i privathusholdning, så faktoren blir marginalt for høy og tallene per person marginalt for lave.
+
+**Nøktern og høy er ikke oppdiktede faktorer av typisk.** De er laveste og høyeste inntektskvartil i tabell 14156 (`ssb-fbu-14156`); `typisk` er alle husholdninger i samme tabell.
+
+**Fysiske mengder** er kroner ÷ gjennomsnittspris 2022. Bensin og diesel fra `ssb-09654-drivstoffpriser-2022` (snitt av tolv månedspriser), kWh fra `ssb-09007-strompris-husholdninger-2022`. Øl, vin, brennevin, sigaretter, snus og flyreiser har **ingen offisiell kr-per-enhet** — de prisene er anslag, skrevet eksplisitt ned i `UNIT_PRICES_2022` med `sourceId: null` i stedet for gjemt i en utregning.
+
+**kWh er det svakeste tallet.** 2022 var strømstøtteåret, og SSB oppgir både 235,3 øre/kWh (inkl. mva og elavgift) og 143,9 øre/kWh etter støtte. Hvilken FBUs utgiftstall svarer til, står ikke i noen arkivert fil. 235,3 er valgt på et rimelighetsargument — 13 673 kWh per husholdning mot 22 358 — ikke på en kilde, og mengden er derfor merket som anslag. Den måler elavgiften direkte, så den skal rettes først hvis spørsmålet avklares.
+
+**Prisår: 2022-kroner brukes uendret, uten KPI-løft.** Det er et bevisst valg, ikke en forglemmelse. Profilen er et redigerbart utgangspunkt brukeren kan overstyre, og et udokumentert KPI-løft ville gitt tallene en presisjon de ikke har. Konsekvensen skal sies rett ut: mengdene (liter, kWh) er de riktige å regne særavgift av, mens kronebeløpene ligger på 2022-nivå og dermed noe under 2026-forbruk i kroner.
 
 ## Avrunding
 Alle beløp er hele kroner. Hver navngitt komponent avrundes én gang (halv opp, bort fra null). Summen av komponentene er per definisjon lik hovedtallet.
