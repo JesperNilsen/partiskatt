@@ -104,7 +104,7 @@ the `queue/` branch was deleted on origin 2026-09-24 so it no longer blocks the 
 Q-010 must fix the defect above, not re-litigate it.
 
 ## Q-002 · Særavgifter: fysiske mengder kan justeres i avanserte felt
-status: ready
+status: blocked:sprint 2026-09-25 (docs/sprint-2026-09.md)
 lane: partiskatt-main
 
 acceptance:
@@ -133,7 +133,7 @@ notes:
 - Engine-API er frosset (`src/engine/index.ts`); UI regner ingenting selv.
 
 ## Q-003 · Partikort viser status og kilde per regel
-status: ready
+status: blocked:sprint 2026-09-25 (docs/sprint-2026-09.md)
 lane: partiskatt-main
 
 acceptance:
@@ -162,7 +162,7 @@ notes:
 - Kjør etter Q-002 (samme lane; begge rører kalkulator/kort-filer).
 
 ## Q-004 · Provenance-tester uten stille forbikoblinger
-status: ready
+status: blocked:sprint 2026-09-25 (docs/sprint-2026-09.md)
 lane: partiskatt-main
 
 acceptance:
@@ -188,7 +188,7 @@ notes:
 - Funn fra Codex-gjennomgang 2026-09-14 (FIX 9). Kildetekst: `sources/text/<party>.txt` per manifest-rad (`textFile`); les i vinduer, aldri hele filen i hovedtråden.
 
 ## Q-005 · Motortest: minstefradrag med både lønn og pensjon
-status: ready
+status: blocked:sprint 2026-09-25 (docs/sprint-2026-09.md)
 lane: partiskatt-main
 
 acceptance:
@@ -222,7 +222,7 @@ notes:
   partikort-filene.
 
 ## Q-006 · Motortest: utvidet barnetrygd for enslig forsørger
-status: ready
+status: blocked:sprint 2026-09-25 (docs/sprint-2026-09.md)
 lane: partiskatt-main
 
 acceptance:
@@ -249,7 +249,7 @@ notes:
 - Kolliderer ikke med Q-001→Q-003.
 
 ## Q-007 · Motortest: gjeldsfordeling i formuesskatten over flere klasser
-status: ready
+status: blocked:sprint 2026-09-25 (docs/sprint-2026-09.md)
 lane: partiskatt-main
 
 acceptance:
@@ -279,7 +279,7 @@ notes:
 - Kolliderer ikke med Q-001→Q-003.
 
 ## Q-008 · Integritetssjekk av sha256/bytes i kildemanifestet
-status: ready
+status: blocked:sprint 2026-09-25 (docs/sprint-2026-09.md)
 lane: partiskatt-main
 
 acceptance:
@@ -309,7 +309,7 @@ notes:
 - Kolliderer ikke med Q-001→Q-003.
 
 ## Q-009 · data-status.ts: ingen stille bortfall av uklassifiserte forbruksavgifter
-status: ready
+status: blocked:sprint 2026-09-25 (docs/sprint-2026-09.md)
 lane: partiskatt-main
 
 acceptance:
@@ -339,7 +339,7 @@ notes:
 - Kolliderer ikke med Q-001→Q-003.
 
 ## Q-010 · Forbruksprofiler: `flightOther`-frø og landing av Q-001-grenen
-status: ready
+status: blocked:sprint 2026-09-25 (docs/sprint-2026-09.md)
 lane: partiskatt-main
 
 acceptance:
