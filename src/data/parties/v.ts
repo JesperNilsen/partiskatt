@@ -12,8 +12,8 @@ export const V_2026: PartyRuleSet = {
       'Trygdeavgift: nedre grense 150 000 kr',
       partyProv(
         'v',
-        'PDF p32; p119',
-        'frikortgrensen til 150 000 kroner',
+        'PDF p32–33; p119',
+        'Øke frikortgrensen til 150.000 kroner',
         'K1: Venstre kobler frikort til trygdeavgift (p32 prosa). Tabell p119: «Øke frikortgrensen til 150.000 kroner». Satser uendret.',
         '2026-01-01',
         'medium',
@@ -40,7 +40,7 @@ export const V_2026: PartyRuleSet = {
       partyProv(
         'v',
         'PDF p122',
-        '6 øre/kWh',
+        'året til 6 øre kWh',
         'K3: partiet måler endringen mot dagens sats, ikke Prop. 1 LS. Absolutt 6 øre/kWh encodet som agreed-value.',
         '2026-01-01',
         'medium',
@@ -57,7 +57,7 @@ export const V_2026: PartyRuleSet = {
       title: 'MVA strøm (fritak bortfaller)',
       status: 'unquantified',
       reason: 'agreed-proposal DERIVE — resulterende MVA-sats ikke oppgitt.',
-      provenance: partyProv('v', 'PDF p120', 'strøm', 'Ikke encodet som vat.electricity.'),
+      provenance: partyProv('v', 'PDF p120', 'Avvikle fritaket for mva', 'Ikke encodet som vat.electricity.'),
     },
   ],
 };

@@ -42,7 +42,7 @@ export const SP_2026: PartyRuleSet = {
       title: 'Trygdeavgift (DERIVE)',
       status: 'unquantified',
       reason: 'agreed-proposal — ingen absolutte satser i dokumentet.',
-      provenance: partyProv('sp', 'PDF p8', 'trygdeavgift', 'Ikke encodet.'),
+      provenance: partyProv('sp', 'PDF p8', 'Redusere trygdeavgiften på lønn/trygd og næring med 0,1 pst.', 'Ikke encodet.'),
     },
   ],
 };

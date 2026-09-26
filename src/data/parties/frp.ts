@@ -52,7 +52,7 @@ export const FRP_2026: PartyRuleSet = {
       title: 'Halvere matmoms (virkning fra 1. april)',
       status: 'unquantified',
       reason: 'agreed-proposal DERIVE — baseline ikke oppgitt i dokumentet.',
-      provenance: partyProv('frp', 'PDF p46', 'matmoms', 'Ikke encodet som vat.food-sats.'),
+      provenance: partyProv('frp', 'PDF p46', 'Merverdiavgift mat, halveres 1. april', 'Ikke encodet som vat.food-sats.'),
     },
   ],
 };
