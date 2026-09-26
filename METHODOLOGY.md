@@ -58,3 +58,6 @@ Hver regel har status (`confirmed`, `estimated`, `unquantified`, `not-applicable
 
 ## Personvern
 All beregning skjer lokalt i nettleseren. Ingen økonomiske brukerdata sendes eller lagres.
+
+---
+Denne metodeteksten er lisensiert CC BY 4.0 — se [`LICENSE-DATA.md`](./LICENSE-DATA.md).

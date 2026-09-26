@@ -2,24 +2,45 @@
 
 Kalkulator som viser hvor mange kroner mer eller mindre en person eller husholdning anslagsvis ville sittet igjen med under hvert stortingspartis alternative statsbudsjett for 2026, målt mot det vedtatte 2026-systemet.
 
-- Produktkontekst: `PROJECT.md` (autoritativ)
-- Plan og fremdrift: `IMPLEMENTATION_PLAN.md`
-- Datadekning per parti og kategori: `DATA_STATUS.md` (generert)
-- Metode: `/metode` · Kilder: `/kilder` · Rettelser: `/rettelseslogg` (speiler `METHODOLOGY.md` og `CORRECTIONS.md`)
-- Kilder: `sources/manifest.json` + `src/data/sources.ts`
+## Metode (kort)
 
-All beregning skjer i nettleseren. Ingen backend, ingen innlogging, ingen analyse.
+Referansen er det vedtatte 2026-systemet (Stortingets vedtak via Lovdata), ikke regjeringens opprinnelige forslag. Hvert opposisjonsparti overlegger bare de endringene partiet faktisk foreslår; alt annet følger referansen. Full metode, inkludert hva som inngår i hovedtallet og hvordan avrunding fungerer: `METHODOLOGY.md` / `/metode`.
+
+**Statusmodell:** hver regel har status `confirmed`, `estimated`, `unquantified`, `not-applicable` eller `not-reviewed`. I dag er alt i produksjon `estimated` eller svakere — ingen regel er `confirmed` før den er kryssjekket mot Skatteetatens skattekalkulator per operatørport 3 (`docs/gate-3.md`). Bare `confirmed` og `estimated` teller i hovedtallet. Datadekning per parti og kategori: `DATA_STATUS.md` (generert, aldri redigert for hånd).
+
+## Kilder
+
+- `/kilder` i appen (speiler `sources/manifest.json` og `src/data/sources.ts`) — hver tallverdi kan spores til en arkivert kilde eller er et eksplisitt anslag (`ANSLAG`, `sourceId: null`).
+- `docs/rights.md` — hva de underliggende kildene (offentlige dokumenter, partienes alternative budsjett, egne tekstuttrekk/arbeidsark) faktisk tillater ved republisering, og den åpne beslutningen om hva av `sources/` som skal følge en offentlig repo.
+
+## Personvern
+
+All beregning skjer i nettleseren. Ingen backend, ingen innlogging, ingen analyse — ingenting forlater enheten. Dette er ikke bare en påstand: `netlify.toml` setter `Content-Security-Policy` med `connect-src 'none'`, så nettleseren selv nekter appen å gjøre nettverkskall etter at siden er lastet.
+
+## Lisens
+
+- Kode: MIT (`LICENSE`).
+- Metodetekst, dokumentasjon og de kodede tallene i `src/data/`: CC BY 4.0 (`LICENSE-DATA.md`).
+- Tredjepartsfiler i `sources/` (rå PDF/HTML/CSV og tekstuttrekk/arbeidsark avledet fra dem) er **ikke** dekket av noen av disse lisensene og forblir under sine opprinnelige eiere sine vilkår — se `docs/rights.md`.
+
+## Utviklerkommandoer
 
 ```bash
+export PATH="$HOME/.local/node24/bin:$PATH"   # ingen global node/npm; se WORKSPACE.md
 npm ci
-npm run check   # typecheck + tester + datastatus + produksjonsbygg
-npm run dev     # http://127.0.0.1:4721
+npm run dev             # http://127.0.0.1:4893  (Vite dev-server, streng port)
+npm run check           # typecheck + tester + reconcile --check + data-status --check + build
+npm run gate3:sheet     # arbeidsark for operatørport 3, se docs/gate-3.md
 ```
 
-## Netlify-deploy (operatør)
+`npm run preview` (etter `npm run build`) serveres på `http://127.0.0.1:4722`. Begge porter er `strictPort` i `vite.config.ts` — de feiler i stedet for å falle over på en annen port hvis de er i bruk.
 
-1. Koble GitHub-repoet til et nytt Netlify-site (byggeinnstillinger leses fra `netlify.toml`).
-2. Sett produksjonsbranch til `main` når UI og datalag er merget.
-3. `npm run check` kjører automatisk ved deploy (`build.command`); publiseringsmappe er `dist/`.
-4. SPA-ruting og sikkerhetsheadere er konfigurert i `netlify.toml` — ingen ekstra steg.
-5. Verifiser mobilvisning (375/390 px) og at beta-banner, metode, kilder og rettelseslogg er tilgjengelige.
+## Deploy
+
+Se `docs/deploy.md` for Netlify-oppsett og sjekklisten før repoet/siten går offentlig.
+
+## Andre dokumenter
+
+- Produktkontekst: `PROJECT.md` (autoritativ)
+- Plan og fremdrift: `IMPLEMENTATION_PLAN.md`
+- Rettelser: `/rettelseslogg` (speiler `CORRECTIONS.md`)
