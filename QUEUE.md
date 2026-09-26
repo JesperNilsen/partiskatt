@@ -104,7 +104,8 @@ the `queue/` branch was deleted on origin 2026-09-24 so it no longer blocks the 
 Q-010 must fix the defect above, not re-litigate it.
 
 ## Q-002 · Særavgifter: fysiske mengder kan justeres i avanserte felt
-status: blocked:sprint 2026-09-25 (docs/sprint-2026-09.md)
+status: done
+result: Sprint 2026-09 lane L8, merged to main at aa02cb9 2026-09-26. ExciseUnitsFields: ti fysiske mengder med én desimal (avvik fra 'heltall' etter sprintplanen), pluss formuesfelt for sekundærbolig og annen formue; ærlige brytere beregnet fra lastede data. 420 tester + 15 e2e grønne.
 lane: partiskatt-main
 
 acceptance:
