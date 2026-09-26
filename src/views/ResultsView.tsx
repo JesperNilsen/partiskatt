@@ -4,6 +4,7 @@ import { DataBanner } from '../components/DataBanner.tsx';
 import { HeadlineVerdict } from '../components/HeadlineVerdict.tsx';
 import { PartyCard } from '../components/PartyCard.tsx';
 import { useApp } from '../state/app.tsx';
+import { toggleEffects, toggleSummary } from '../state/toggle-effects.ts';
 import type { PartyId } from '../types/index.ts';
 
 export function ResultsView() {
@@ -87,8 +88,8 @@ export function ResultsView() {
       <section className="card card--calm">
         <h2>Kilder og antagelser</h2>
         <p>
-          Hovedtallet består av direkte skatt, moms/særavgifter og direkte kontantytelser. Usikre forslag er{' '}
-          {toggles.includeUncertain ? 'slått på' : 'av som standard'}.
+          Hovedtallet består av direkte skatt, moms/særavgifter og direkte kontantytelser.{' '}
+          {toggleSummary(toggleEffects(data.bundle), toggles)}
         </p>
         <p>
           <Link href="/metode">Les metode</Link> · <Link href="/kilder">Se kilder</Link> ·{' '}

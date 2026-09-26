@@ -97,7 +97,9 @@ export function MethodView() {
         <h2>Forbruksprofil</h2>
         <p>
           Standardprofilene er utledet av SSBs forbruksundersøkelse 2022 (tabell 14100, arkivert). Profilen angir årlig forbruk inkl. mva per
-          kategori og fysiske mengder for avgiftsbelagte varer. Alle verdier kan endres under avanserte felt.
+          kategori og fysiske mengder for avgiftsbelagte varer.
+          Under avanserte felt kan du endre kronene i alle åtte kategorier og alle ti fysiske mengder (med én desimal); da blir
+          profilen egendefinert.
         </p>
         <p>
           Husholdningstallene er delt på gjennomsnittshusholdningen etter den OECD-modifiserte ekvivalensskalaen (1 + 0,5 per ekstra voksen

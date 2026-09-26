@@ -26,7 +26,7 @@ Kun nasjonale regler. Ingen kommunal eiendomsskatt, ingen verdsetting av offentl
 - Arbeidsgiveravgift: av som standard. Når den slås på, brukes full langsiktig incidens på arbeidstakeren som foreløpig antagelse, og beløpet vises adskilt fra direkte skatt.
 
 ## Forbruksprofil
-Standardprofilene (nøktern / typisk / høy) er utledet av SSBs forbruksundersøkelse (FBU) 2022 i `src/data/consumption-profiles.ts`. Profilen angir årlig forbruk inkl. mva per kategori og fysiske mengder for avgiftsbelagte varer. Alle verdier kan endres av brukeren — profilen er et utgangspunkt, ikke en påstand om den enkelte.
+Standardprofilene (nøktern / typisk / høy) er utledet av SSBs forbruksundersøkelse (FBU) 2022 i `src/data/consumption-profiles.ts`. Profilen angir årlig forbruk inkl. mva per kategori og fysiske mengder for avgiftsbelagte varer. Under avanserte felt kan brukeren endre kronene i alle åtte kategorier og alle ti fysiske mengder (med én desimal); en endring gjør profilen egendefinert. Profilen er et utgangspunkt, ikke en påstand om den enkelte.
 
 **Kroner.** Tabell 14100 (`ssb-fbu-14100`, json-stat2, 510 COICOP-2018-grupper, kr per husholdning per år) kartlegges til mva-kategoriene: `food` = 01, `alcoholTobacco` = 02, `electricity` = 04.5.1, `fuel` = 07.2.2, `flights` = 07.3.3, `transportServices` = 07.3 minus fly, `exempt` = de mva-frie gruppene (04.1, 04.2, 06, 10, 12), `general` = 03, 05, 08, 09, 11, 13 og restene av 04 og 07, summert fra sine egne koder og ikke som en residual. Derfor er kontrollsummen mot gruppe 00 en påstand som kan feile, og den er testet. Kartleggingen står som data i `COICOP_MAPPING`, med en begrunnelse per kode, og en test regner den om igjen fra råfilen og feiler hvis et tall har glidd.
 

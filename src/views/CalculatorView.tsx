@@ -2,6 +2,8 @@ import { useLocation } from 'wouter';
 import { Field } from '../components/Field.tsx';
 import { MoneyInput } from '../components/MoneyInput.tsx';
 import { DataBanner } from '../components/DataBanner.tsx';
+import { ExciseUnitsFields } from '../components/ExciseUnitsFields.tsx';
+import { ScenarioToggles } from '../components/ScenarioToggles.tsx';
 import { BRAND } from '../config/brand.ts';
 import { CONSUMPTION_PROFILES } from '../data/consumption-profiles.ts';
 import { useApp } from '../state/app.tsx';
@@ -181,6 +183,13 @@ export function CalculatorView() {
                   onChange={(v) => dispatchProfile({ type: 'wealth', patch: { primaryHomeValue: v } })}
                 />
               </Field>
+              <Field label="Sekundærbolig (markedsverdi)" id="wealth-secondary">
+                <MoneyInput
+                  id="wealth-secondary"
+                  value={profile.wealth.secondaryHomeValue}
+                  onChange={(v) => dispatchProfile({ type: 'wealth', patch: { secondaryHomeValue: v } })}
+                />
+              </Field>
               <Field label="Gjeld" id="wealth-debt">
                 <MoneyInput
                   id="wealth-debt"
@@ -200,6 +209,14 @@ export function CalculatorView() {
                   id="wealth-shares"
                   value={profile.wealth.listedShares}
                   onChange={(v) => dispatchProfile({ type: 'wealth', patch: { listedShares: v } })}
+                />
+              </Field>
+
+              <Field label="Annen skattepliktig formue" id="wealth-other">
+                <MoneyInput
+                  id="wealth-other"
+                  value={profile.wealth.otherTaxableWealth}
+                  onChange={(v) => dispatchProfile({ type: 'wealth', patch: { otherTaxableWealth: v } })}
                 />
               </Field>
 
@@ -230,23 +247,13 @@ export function CalculatorView() {
                 </Field>
               ))}
 
+              <ExciseUnitsFields
+                units={profile.consumption.units}
+                onChange={(good, value) => dispatchProfile({ type: 'units', good, value })}
+              />
+
               <h3>Scenario-brytere</h3>
-              <label className="checkbox">
-                <input
-                  type="checkbox"
-                  checked={toggles.includeUncertain}
-                  onChange={(e) => setToggles((t) => ({ ...t, includeUncertain: e.target.checked }))}
-                />
-                Ta med usikre forslag (av som standard)
-              </label>
-              <label className="checkbox">
-                <input
-                  type="checkbox"
-                  checked={toggles.includeEmployerContribution}
-                  onChange={(e) => setToggles((t) => ({ ...t, includeEmployerContribution: e.target.checked }))}
-                />
-                Vis arbeidsgiveravgift (påvirker ikke standardrangering)
-              </label>
+              <ScenarioToggles bundle={data?.bundle ?? null} toggles={toggles} setToggles={setToggles} />
               <p className="field__hint">
                 Arbeidsgiveravgift betales av arbeidsgiveren. Vi bruker full langsiktig incidens på arbeidstakeren som foreløpig antagelse.
               </p>

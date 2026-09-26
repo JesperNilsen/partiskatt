@@ -113,7 +113,7 @@ export function PartyCard({ result, rank, expanded = false, onToggle }: PartyCar
 
       {result.employerDelta !== null ? (
         <p className="party-card__employer">
-          Arbeidsgiveravgift (utvidet scenario): {formatSignedKr(result.employerDelta)} kr/år
+          Arbeidsgiveravgift, utvidet scenario (ikke med i tallet over): {formatSignedKr(result.employerDelta)} kr/år
         </p>
       ) : null}
 
