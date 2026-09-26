@@ -16,6 +16,7 @@
     "test:watch": "vitest",
     "data-status": "tsx scripts/gen-data-status.ts",
     "reconcile": "tsx scripts/reconcile.ts",
+    "gate3:sheet": "tsx scripts/gate3-sheet.ts",
     "check": "npm run typecheck && npm run test && npm run reconcile -- --check && npm run data-status -- --check && npm run build"
   },
   "dependencies": {
