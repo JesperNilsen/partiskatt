@@ -1,6 +1,7 @@
 import { PARTY_META } from '../config/parties.ts';
 import { Link } from 'wouter';
 import type { PartyResult } from '../types/index.ts';
+import { kr } from '../engine/money.ts';
 import { formatSignedKr } from '../utils/format.ts';
 import { BreakdownBars } from './BreakdownBars.tsx';
 import { partyRuleRows, sourceLine, type RuleRow } from './rule-provenance.ts';
@@ -19,12 +20,15 @@ const GROUP_LABELS = {
   benefit: 'Kontantytelser',
 } as const;
 
-function topReasons(result: PartyResult, limit = 3): string[] {
-  return result.components
-    .filter((c) => c.keptDelta !== 0)
-    .sort((a, b) => Math.abs(b.keptDelta) - Math.abs(a.keptDelta))
+/** Largest effects, with per-adult components of the same kind summed into one line. */
+export function topReasons(result: PartyResult, limit = 3): string[] {
+  const byLabel = new Map<string, number>();
+  for (const c of result.components) byLabel.set(c.label, (byLabel.get(c.label) ?? 0) + c.keptDelta);
+  return [...byLabel]
+    .filter(([, delta]) => delta !== 0)
+    .sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]))
     .slice(0, limit)
-    .map((c) => `${c.label}: ${formatSignedKr(c.keptDelta)} kr`);
+    .map(([label, delta]) => `${label}: ${formatSignedKr(kr(delta))} kr`);
 }
 
 /** One rule: title, status as text, and the source document + page(s) from its provenance. */
