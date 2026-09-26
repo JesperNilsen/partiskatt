@@ -162,7 +162,8 @@ notes:
 - Kjør etter Q-002 (samme lane; begge rører kalkulator/kort-filer).
 
 ## Q-004 · Provenance-tester uten stille forbikoblinger
-status: blocked:sprint 2026-09-25 (docs/sprint-2026-09.md)
+status: done
+result: Sprint 2026-09 lane L4, merged to main at 4186988 2026-09-26. party-data.test.ts: page-count invariant, whole-phrase anchors, multi-page refs, unquantified provenance checked; 5 real provenance defects fixed (frp, sp, v); one self-checking allowlist entry for KrF image-only pp. 35-46 (L10a removes it). 147 tests.
 lane: partiskatt-main
 
 acceptance:
