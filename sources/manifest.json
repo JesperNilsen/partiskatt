@@ -444,7 +444,7 @@
   {
     "id": "lanekassen-endringer-2025-2026",
     "party": null,
-    "title": "",
+    "title": "Endringer for elever og studenter studieåret 2025-2026",
     "publisher": "Lånekassen",
     "url": "https://lanekassen.no/nb-NO/laresteder/nyheter/endringer-i-lanekassens-regler-2025-2026/",
     "format": "html",
@@ -461,7 +461,7 @@
   {
     "id": "lanekassen-satser-2026-2027",
     "party": null,
-    "title": "",
+    "title": "Nye satser for studieåret 2026-2027",
     "publisher": "Lånekassen",
     "url": "https://lanekassen.no/nb-NO/laresteder/nyheter/forskriftene-for-2026-2027-er-klare/",
     "format": "html",
@@ -846,7 +846,7 @@
     "rawFile": "sources/raw/ssb-09007-strompris-husholdninger-2022.json",
     "textFile": null,
     "status": "archived",
-    "note": "StatBank 09007 (POST json-stat2; 10 ContentsCode, Tid 2022). Brukt kode: KraftOgNettIA = 235,3 øre/kWh (kraft + nettleie inkl. mva og elavgift), som gjør FBUs 04.5.1 om til kWh. ADVARSEL, utdypet i consumption-profiles.ts: 2022 var strømstøtteåret, og tabellen oppgir også 143,9 øre/kWh etter støtte. Valget mellom de to endrer kWh med ~60 % (13 673 mot 22 358 kWh per husholdning). 235,3 er valgt på et rimelighetsargument, ikke en kilde — derfor er kWh merket som anslag (KWH_IS_ESTIMATED). Arkivert av køkjøringen 2026-09-15, som avbrøt før manifestraden ble skrevet; raden er ført 2026-09-16 og retrievedAt er filens mtime, ikke et loggført hentetidspunkt."
+    "note": "StatBank 09007 (POST json-stat2; 10 ContentsCode, Tid 2022). Brukes IKKE lenger til kWh: siden lane L11 (2026-09-26) er kWh målt, 14 964 kWh per husholdning fra SSB-tabell 10572 (ssb-10572-energibruk-husholdninger-2022; KWH_PER_HOUSEHOLD_2022 i consumption-profiles.ts). Før det ble FBUs 04.5.1 gjort om til kWh med koden KraftOgNettIA = 235,3 øre/kWh (kraft + nettleie inkl. mva og elavgift, før strømstøtte), som ga 13 673 kWh per husholdning og var merket som anslag. Tabellen oppgir også 143,9 øre/kWh etter støtte (22 358 kWh). Beholdt som arkiv fordi METHODOLOGY.md og consumption-profiles.ts bruker den til å forklare hvorfor kroner ÷ pris ble forlatt. Arkivert av køkjøringen 2026-09-15, som avbrøt før manifestraden ble skrevet; raden er ført 2026-09-16 og retrievedAt er filens mtime, ikke et loggført hentetidspunkt."
   },
   {
     "id": "ssb-10572-energibruk-husholdninger-2022",
