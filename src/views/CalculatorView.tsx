@@ -3,7 +3,7 @@ import { Field } from '../components/Field.tsx';
 import { MoneyInput } from '../components/MoneyInput.tsx';
 import { DataBanner } from '../components/DataBanner.tsx';
 import { BRAND } from '../config/brand.ts';
-import { CONSUMPTION_PROFILES, PROFILES_ARE_PROVISIONAL } from '../provisional/consumption-profiles.ts';
+import { CONSUMPTION_PROFILES } from '../data/consumption-profiles.ts';
 import { useApp } from '../state/app.tsx';
 import type { ConsumptionProfileId } from '../types/index.ts';
 import { VAT_CATEGORIES } from '../types/index.ts';
@@ -159,9 +159,6 @@ export function CalculatorView() {
               </button>
             ))}
           </div>
-          {PROFILES_ARE_PROVISIONAL ? (
-            <p className="provisional-note">Forbruksprofilene er midlertidige — ikke hentet fra SSB ennå.</p>
-          ) : null}
         </section>
 
         <section className="card">

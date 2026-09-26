@@ -96,11 +96,25 @@ export function MethodView() {
       <section>
         <h2>Forbruksprofil</h2>
         <p>
-          Standardprofilene skal bygge på SSBs forbruksundersøkelse (tabell 14100, arkivert). Profilen angir årlig forbruk inkl. mva per
+          Standardprofilene er utledet av SSBs forbruksundersøkelse 2022 (tabell 14100, arkivert). Profilen angir årlig forbruk inkl. mva per
           kategori og fysiske mengder for avgiftsbelagte varer. Alle verdier kan endres under avanserte felt.
         </p>
+        <p>
+          Husholdningstallene er delt på gjennomsnittshusholdningen etter den OECD-modifiserte ekvivalensskalaen (1 + 0,5 per ekstra voksen
+          + 0,3 per barn). «Nøkternt» og «Høyt» er ikke påslag på «Typisk», men laveste og høyeste inntektskvartil i SSB-tabell 14156.
+          Mengdene (liter, kWh, reiser) er kroner delt på gjennomsnittsprisen for 2022.
+        </p>
+        <p>
+          Flypassasjeravgiften har to satser, så flykronene deles: 20 prosent regnes som reiser utenfor Europa og resten som
+          Europa-reiser, med anslåtte 1 500 kr per avreise i Europa og 7 500 kr per avreise utenfor. Kronene deles, de legges ikke
+          til. Mengden er et <em>forventet</em> antall reiser per år, ikke et helt antall: «Høyt» med to voksne og to barn får 0,252
+          forventede avreiser utenfor Europa i året, altså 88 kr i avgift. Derfor rundes mengder ikke til hele enheter — det er
+          avrundingen som ellers gjør en fjerdedels reise til ingen avgift.
+        </p>
         <p className="muted">
-          Inntil SSB-data er koblet på i datalaget er profilene plassholdere av riktig størrelsesorden, merket som midlertidige i kalkulatoren.
+          Beløpene står i 2022-kroner uten KPI-løft, og prisene på øl, vin, brennevin, sigaretter, snus og flyreiser er anslag — det finnes
+          ingen offisiell kroner-per-enhet for dem. Strømforbruket i kWh er det mest usikre tallet, fordi strømstøtten i 2022 gjør det uklart
+          hvilken kWh-pris utgiften svarer til. Utledningen og forbeholdene står i sin helhet i metodedokumentet og under «Kilder».
         </p>
       </section>
 
