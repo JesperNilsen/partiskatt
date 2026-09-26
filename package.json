@@ -2,6 +2,7 @@
   "name": "partiskatt",
   "private": true,
   "version": "0.1.0",
+  "license": "MIT",
   "type": "module",
   "description": "Hvor mye mer eller mindre sitter du igjen med under hvert partis alternative statsbudsjett 2026?",
   "engines": {
