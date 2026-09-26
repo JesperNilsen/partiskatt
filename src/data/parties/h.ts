@@ -4,6 +4,8 @@ import { adoptedParams, emptyParty, kr, krPerUnit, partyRule, patchWealthValuati
 
 /**
  * Encodable: wealth.valuation — aksjer og driftsmidler 60 pst. K1 (besluttet 2026-09-13): income.socialSecurity nedre grense 150 000 kr.
+ * L13 (2026-09-26): trygdeavgift lønn 7,7 pst. (regjeringens kutt reversert, utledet mot Prop. 1 LS); jobbfradrag og
+ * pensjonsfradrag er ikke tallfestet (utforming ikke oppgitt).
  * L10b (beslutning 2, 2026-09-25): bunnfradrag +100 000, tobakksavgift +15 pst og prisjustert barnetrygd utledet mot Prop. 1 LS.
  */
 export const H_2026: PartyRuleSet = {
@@ -11,17 +13,20 @@ export const H_2026: PartyRuleSet = {
   deltas: [
     partyRule(
       'income.socialSecurity',
-      { ...adoptedParams('income.socialSecurity'), lowerThreshold: kr(150_000) },
-      'Trygdeavgift: nedre grense 150 000 kr (frikortgrense)',
+      { ...adoptedParams('income.socialSecurity'), wageRateBp: pct(7.7), lowerThreshold: kr(150_000) },
+      'Trygdeavgift: lønn 7,7 pst. (regjeringens kutt reverseres); nedre grense 150 000 kr (frikortgrense)',
       partyProv(
         'h',
         'PDF p17',
-        'Øke frikortgrensen til 150 000 kr',
-        'Beslutning 2026-09-13: frikortgrensen er i praksis nedre grense for trygdeavgift (ftrl. § 23-3), men partiet sier ikke dette eksplisitt. Nedre grense satt til 150 000 kr; satsene er uendret.',
+        'Omprioritere reduksjon i trygdeavgiften',
+        'Skattetabellen s. 17: «Omprioritere reduksjon i trygdeavgiften», +2 345 mill. kr. Regjeringen foreslår å redusere trygdeavgiften på lønn/trygd og næring fra 7,7 til 7,6 pst. (Prop. 1 LS tabell 1.7, PDF s. 33), med proveny −2 345 mill. kr (tabell 1.1, PDF s. 21); Høyre reverserer hele kuttet: 7,6 + 0,1 = 7,7 pst. på lønn. Pensjonssatsen (5,1 pst.) er ikke endret av regjeringen og er uendret. Frikortgrensen 150 000 kr (s. 17, «Øke frikortgrensen til 150 000 kr for alle»), beslutning 2026-09-13: frikortgrensen er i praksis nedre grense for trygdeavgift (ftrl. § 23-3), men partiet sier ikke dette eksplisitt.',
         '2026-01-01',
         'medium',
       ),
-      { note: 'K1-frikort-trygdeavgift: encodet etter beslutning 2026-09-13; baseline-mismatch (partiene siterer 100 000 som utgangspunkt, vedtatt er 99 650).' },
+      {
+        baselineParams: proposedParams('income.socialSecurity'),
+        note: 'K1-frikort-trygdeavgift: nedre grense 150 000 kr encodet etter beslutning 2026-09-13; baseline-mismatch (partiene siterer 100 000 som utgangspunkt, vedtatt er 99 650). Utledet (beslutning 2): Prop. 1 LS lønn 7,6 pst + 0,1 pp (regjeringens kutt reversert, +2 345 mill. = Prop. 1 LS tabell 1.1) = 7,7 pst; pensjon 5,1 pst uendret.',
+      },
     ),
     partyRule(
       'wealth.netWealthTax',
@@ -96,6 +101,22 @@ export const H_2026: PartyRuleSet = {
     employer: { status: 'no-change', pageOrTable: 'PDF p17', note: 'Arbeidsgiveravgift ikke omtalt.' },
   },
   unquantified: [
+    {
+      category: 'direct-tax',
+      title: 'Jobbfradrag som gir 4 300 kr lavere skatt for folk i arbeid',
+      status: 'unquantified',
+      reason:
+        'Partiet oppgir bare skattelettelsen (4 300 kr) og provenyet (−12 370 mill. kr), ikke hvordan fradraget virker: om det er et fradrag i inntekten eller i skatten, hvem som regnes som «i arbeid» (lønn, næring, trygd), eller om det trappes opp eller ned med inntekten. Et arbeidsfradrag kan utformes på flere måter, blant annet målrettet mot lave inntekter (Prop. 1 LS kap. 4, PDF s. 89), så en flat sum for alle kan ikke antas.',
+      provenance: partyProv('h', 'PDF p17', 'Arbeidsfradrag (4300 kr)', 'Skattetabellen s. 17 (−12 370 mill. kr); omtale s. 5.'),
+    },
+    {
+      category: 'direct-tax',
+      title: 'Nytt pensjonsfradrag som gir 2 000 kr lavere skatt',
+      status: 'unquantified',
+      reason:
+        'Partiet oppgir bare lettelsen (2 000 kr i året) og provenyet (−1 830 mill. kr), ikke hvem som får fradraget, om det gjelder all pensjon eller bare alderspensjon, eller om det trappes ned med inntekten slik dagens skattefradrag for pensjonsinntekt gjør.',
+      provenance: partyProv('h', 'PDF p17', 'Nytt pensjonsfradrag (2000 kr)', 'Skattetabellen s. 17 (−1 830 mill. kr); omtale s. 5.'),
+    },
     {
       category: 'direct-tax',
       title: 'Fagforeningsfradraget settes til 2021-nivå',

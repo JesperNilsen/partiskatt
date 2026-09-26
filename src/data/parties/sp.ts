@@ -1,42 +1,37 @@
-import type { Bracket, FormulaParams, PartyRuleSet } from '../../types/index.ts';
+import type { PartyRuleSet } from '../../types/index.ts';
 import { partyProv } from '../sources.ts';
 import {
   emptyParty,
   kr,
   krPerUnit,
   partyRule,
+  patchBracketTax,
   patchWealthValuation,
   pct,
   proposedParams,
 } from '../rule-helpers.ts';
 
 
-type Trinn = 1 | 2 | 3 | 4 | 5;
-/** Prop. 1 LS brackets (the baseline the party wrote against) with individual trinn patched. */
-function patchProposedBrackets(patches: Partial<Record<Trinn, Partial<Bracket>>>): FormulaParams['income.bracketTax'] {
-  const { brackets } = proposedParams('income.bracketTax');
-  return { brackets: brackets.map((b, i) => ({ ...b, ...patches[(i + 1) as Trinn] })) };
-}
-
 /**
- * Encodable: trinnskatt trinn 4 terskel 960 000; boliggrense 10,21 mill.; matmoms 10 %;
+ * Encodable: trinnskatt trinn 4 terskel 960 000; matmoms 10 %;
  * bunnfradrag formuesskatt 2 mill.; flypassasjeravgift lav sats 50 kr.
  * L10b (beslutning 2, 2026-09-25): trygdeavgift lønn −0,1 pp og driftsmidler +10 pp rabatt utledet mot Prop. 1 LS.
+ * L13 (2026-09-26): trinn 4–5-satser og boliggrense står som vedtatt (partiet endrer dem ikke mot vedtatt lov).
  */
 export const SP_2026: PartyRuleSet = {
   ...emptyParty('sp'),
   deltas: [
     partyRule(
       'income.bracketTax',
-      patchProposedBrackets({ 4: { threshold: kr(960_000) } }),
+      patchBracketTax({ 4: { threshold: kr(960_000) } }),
       'Trinnskatt trinn 4: innslagspunkt 960 000 kr',
       partyProv(
         'sp',
         'PDF p8',
         '960 000',
-        'Innslagspunktet for «nye trinn 4» står i skattetabellen. Satsen er ikke oppgitt, så regjeringens sats er beholdt. Sammenslåingen med trinn 5 er ikke tallfestet, se egen linje.',
+        'Innslagspunktet for «nye trinn 4» står i skattetabellen. Satsen er ikke oppgitt, så vedtatt sats (16,8 pst.) er beholdt; trinn 5 står som vedtatt (17,8 pst.). Sammenslåingen med trinn 5 er ikke tallfestet, se egen linje.',
       ),
-      { note: 'no-baseline-quoted. Trinn 5 (sammenslått med trinn 4) står som unquantified.' },
+      { note: 'no-baseline-quoted. Trinn 5 (sammenslått med trinn 4) står som unquantified. Satsene trinn 4–5 er vedtatt 16,8 / 17,8 pst. (L13: var Prop. 1 LS 16,7 / 17,7 pst.).' },
     ),
     partyRule(
       'income.socialSecurity',
@@ -71,17 +66,17 @@ export const SP_2026: PartyRuleSet = {
     ),
     partyRule(
       'wealth.valuation',
-      patchWealthValuation({ primaryHomeHighValueThreshold: kr(10_210_000), otherBp: pct(60) }),
-      'Verdsettelsesgrense boliger 10,21 mill. kr; driftsmidler verdsettes til 60 pst.',
+      patchWealthValuation({ otherBp: pct(60) }),
+      'Driftsmidler verdsettes til 60 pst.; boliggrensen står som vedtatt (14 mill. kr)',
       partyProv(
         'sp',
         'PDF p8',
         'Øke rabatten for driftsmidler i formueskatten med 10 prosentpoeng',
-        'Skattetabellen s. 8: boliggrensen prisjusteres fra 10 til 10,21 mill. kr, og rabatten for driftsmidler økes med 10 prosentpoeng. Regjeringen foreslår at driftsmidler verdsettes til 70 pst. (30 pst. rabatt; Prop. 1 LS s. 36); 40 pst. rabatt gir 60 pst.',
+        'Skattetabellen s. 8: boliggrensen prisjusteres fra 10 til 10,21 mill. kr (−55 mill. kr), og rabatten for driftsmidler økes med 10 prosentpoeng. Regjeringen foreslår at driftsmidler verdsettes til 70 pst. (30 pst. rabatt; Prop. 1 LS s. 36); 40 pst. rabatt gir 60 pst. Boliggrensen: vedtatt lov (endringslov 23.06.2026 nr. 66) har 14 mill. kr, altså høyere enn Sp-forslaget på 10,21 mill. kr; Sp-forslaget er en lettelse mot regjeringens 10 mill. og ville blitt en skatteøkning mot vedtatt lov, så grensen står som vedtatt.',
       ),
       {
         baselineParams: proposedParams('wealth.valuation'),
-        note: 'Boliggrense 10,21 mill. er partiets tall; driftsmidler utledet (beslutning 2): 100 − (30 + 10) = 60 pst.',
+        note: 'Driftsmidler utledet (beslutning 2): 100 − (30 + 10) = 60 pst. Boliggrense: Sp prisjusterer Prop. 1 LS-grensen 10 → 10,21 mill. kr (lettelse), men vedtatt lov har allerede 14 mill. kr (endringslov 23.06.2026 nr. 66), så grensen står som vedtatt; å kode 10,21 mill. ville snudd fortegnet (L13).',
       },
     ),
     partyRule(
@@ -119,7 +114,7 @@ export const SP_2026: PartyRuleSet = {
       title: 'Trinnskatt: trinn 4 og 5 slås sammen',
       status: 'unquantified',
       reason:
-        'Partiet oppgir ikke satsen for det sammenslåtte trinnet. Bare det nye innslagspunktet (960 000 kr) er regnet inn; trinn 5 står som i regjeringens forslag.',
+        'Partiet oppgir ikke satsen for det sammenslåtte trinnet (+1 681 mill. kr). Bare det nye innslagspunktet (960 000 kr) er regnet inn; trinn 4 og 5 har vedtatte satser (16,8 / 17,8 pst.).',
       provenance: partyProv('sp', 'PDF p8', 'Slå sammen trinn 4 og 5 i trinnskatten', 'Skattetabellen s. 8.'),
     },
     {

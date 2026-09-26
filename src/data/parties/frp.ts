@@ -1,4 +1,4 @@
-import type { Bracket, FormulaParams, PartyRuleSet } from '../../types/index.ts';
+import type { PartyRuleSet } from '../../types/index.ts';
 import { partyProv } from '../sources.ts';
 import {
   adoptedParams,
@@ -6,18 +6,12 @@ import {
   kr,
   krPerUnit,
   partyRule,
+  patchBracketTax,
   patchWealthValuation,
   pct,
   proposedParams,
 } from '../rule-helpers.ts';
 
-
-type Trinn = 1 | 2 | 3 | 4 | 5;
-/** Prop. 1 LS brackets (the baseline the party wrote against) with individual trinn patched. */
-function patchProposedBrackets(patches: Partial<Record<Trinn, Partial<Bracket>>>): FormulaParams['income.bracketTax'] {
-  const { brackets } = proposedParams('income.bracketTax');
-  return { brackets: brackets.map((b, i) => ({ ...b, ...patches[(i + 1) as Trinn] })) };
-}
 
 /**
  * Encodable: personfradrag 127 850; sekundærbolig 80 %; formuesskatt 0,8 % over 3/6 mill.
@@ -44,17 +38,17 @@ export const FRP_2026: PartyRuleSet = {
     ),
     partyRule(
       'income.bracketTax',
-      patchProposedBrackets({ 1: { rateBp: pct(0) }, 2: { rateBp: pct(3.5) } }),
+      patchBracketTax({ 1: { rateBp: pct(0) }, 2: { rateBp: pct(3.5) } }),
       'Trinnskatt: trinn 1 fjernes, trinn 2 senkes til 3,5 pst.',
       partyProv(
         'frp',
         'PDF p46',
         'Redusere trinnskatten i 2. trinn med 0,5 prosentpoeng.',
-        'Skattetabellen s. 46: «Fjerne trinnskatt trinn 1» og «Redusere trinnskatten i 2. trinn med 0,5 prosentpoeng.» Partiet oppgir ingen satser, så de er regnet ut fra regjeringens forslag (Prop. 1 LS tabell 1.7, s. 33): trinn 1 1,7 pst. → 0 pst.; trinn 2 4,0 − 0,5 = 3,5 pst. Innslagspunktene er uendret.',
+        'Skattetabellen s. 46: «Fjerne trinnskatt trinn 1» og «Redusere trinnskatten i 2. trinn med 0,5 prosentpoeng.» Partiet oppgir ingen satser, så de er regnet ut fra regjeringens forslag (Prop. 1 LS tabell 1.7, s. 33): trinn 1 1,7 pst. → 0 pst.; trinn 2 4,0 − 0,5 = 3,5 pst. Innslagspunktene er uendret. Trinn 3–5 er ikke omtalt og står som vedtatt (trinn 4–5 16,8 / 17,8 pst. etter budsjettforliket).',
       ),
       {
         baselineParams: proposedParams('income.bracketTax'),
-        note: 'Utledet (beslutning 2): trinn 1 sats 0; trinn 2 = Prop. 1 LS 4,0 pst − 0,5 pp = 3,5 pst.',
+        note: 'Utledet (beslutning 2): trinn 1 sats 0; trinn 2 = Prop. 1 LS 4,0 pst − 0,5 pp = 3,5 pst. Trinn 3–5 uberørt = vedtatt (L13: var Prop. 1 LS 16,7 / 17,7 pst.).',
       },
     ),
     partyRule(

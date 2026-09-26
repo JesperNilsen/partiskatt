@@ -150,6 +150,7 @@ describe('party baselineParams vs proposed', () => {
    * Prop. 1 LS (decision 2, L10b) and the explicit values whose quoted baseline is Prop. 1 LS.
    */
   const WITH_BASELINE_PARAMS: readonly string[] = [
+    'h:income.socialSecurity',
     'h:wealth.netWealthTax',
     'h:excise.cigarette',
     'h:benefit.childBenefit',
@@ -360,8 +361,9 @@ describe('derived party rules (decision 2) reproduce their arithmetic from Prop.
     if (!d) throw new Error(`${party} has no ${id}`);
     return d.params as FormulaParams[F];
   };
+  // L13: trinn a party does not touch stay at ADOPTED values (trinn 4–5 16,8 / 17,8, not Prop. 1 LS 16,7 / 17,7).
   const brackets = (patch: Record<number, number>) =>
-    P('income.bracketTax').brackets.map((b, i) => (i in patch ? { ...b, rateBp: patch[i]! } : b));
+    A('income.bracketTax').brackets.map((b, i) => (i in patch ? { ...b, rateBp: patch[i]! } : b));
   const ss = P('income.socialSecurity');
   const nw = P('wealth.netWealthTax');
   const val = P('wealth.valuation');
@@ -382,6 +384,7 @@ describe('derived party rules (decision 2) reproduce their arithmetic from Prop.
       return { ratePerUnit: krPerUnit(3.0 / 2 + 3.79) };
     }],
     ['sp income.socialSecurity: lønn − 0,1 pp', () => enc('sp', 'income.socialSecurity'), () => ({ ...ss, wageRateBp: ss.wageRateBp - 10 })],
+    ['h income.socialSecurity: regjeringens kutt reverseres (+ 0,1 pp), frikortgrense 150 000 (K1)', () => enc('h', 'income.socialSecurity'), () => ({ ...ss, wageRateBp: ss.wageRateBp + 10, lowerThreshold: 150_000 })],
     ['mdg income.socialSecurity: regjeringens kutt reverseres (+ 0,1 pp)', () => enc('mdg', 'income.socialSecurity'), () => ({ ...ss, wageRateBp: ss.wageRateBp + 10 })],
     ['h wealth.netWealthTax: bunnfradrag + 100 000, ektepar dobbelt', () => enc('h', 'wealth.netWealthTax'), () => {
       expect(nw.couple.allowance).toBe(2 * nw.single.allowance);
@@ -389,7 +392,8 @@ describe('derived party rules (decision 2) reproduce their arithmetic from Prop.
       return { ...nw, single: { ...nw.single, allowance: single }, couple: { ...nw.couple, allowance: 2 * single } };
     }],
     ['v wealth.netWealthTax: trinn 1 − 0,1 pp', () => enc('v', 'wealth.netWealthTax'), () => ({ ...nw, tier1RateBp: nw.tier1RateBp - 10 })],
-    ['sp wealth.valuation: driftsmidler + 10 pp rabatt', () => enc('sp', 'wealth.valuation'), () => ({ ...val, primaryHomeHighValueThreshold: 10_210_000, otherBp: val.otherBp - 1000 })],
+    // L13: Sp's 10,21 mill. home limit is below adopted law (14 mill.), so the adopted limit stands.
+    ['sp wealth.valuation: driftsmidler + 10 pp rabatt, boliggrense vedtatt', () => enc('sp', 'wealth.valuation'), () => ({ ...val, primaryHomeHighValueThreshold: A('wealth.valuation').primaryHomeHighValueThreshold, otherBp: val.otherBp - 1000 })],
     ['r wealth.valuation: rabatter fjernet (Tabell 3)', () => enc('r', 'wealth.valuation'), () => ({ ...val, primaryHomeHighValueBp: 10_000, listedSharesBp: 10_000, otherBp: 10_000 })],
     ['sv wealth.valuation: rabatter fjernet', () => enc('sv', 'wealth.valuation'), () => ({ ...val, primaryHomeHighValueBp: 10_000, listedSharesBp: 10_000, otherBp: 10_000 })],
     ['h excise.cigarette: + 15 pst', () => enc('h', 'excise.cigarette'), () => ({ ratePerUnit: Math.round(P('excise.cigarette').ratePerUnit * 1.15) })],
