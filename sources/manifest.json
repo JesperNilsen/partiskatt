@@ -730,6 +730,23 @@
     "note": "Direct curl to roedt.no returned 429 on all attempts (default UA, --http1.1 + Referer, 10s pauses). Recovered via Wayback Machine: https://web.archive.org/web/2026/https://roedt.no/budsjett2026 (capture 20260411210058) yielded the live page and its linked PDF at /fil/0944af5c63fdf957a7d0b3b627e97533a9fc0cf9.pdf, fetched from Wayback (actual snapshot served: 20251205015616) as the archived PDF; the captured HTML page itself was also saved to sources/raw/r-alt-2026.html as corroborating evidence. Page 30 is the section header 'Rødts forslag til skatte- og avgiftsendringer...'; page 36 has the Kap/Post/Forslag/Påløpt table headed 'Skatter og avgifter'."
   },
   {
+    "id": "r-alt-2026-html",
+    "party": null,
+    "title": "Alternativt budsjett for 2026 (Rødt) — Wayback-arkivert HTML-landingsside (korroborerende bevis for r-alt-2026)",
+    "publisher": "Rødt",
+    "url": "https://web.archive.org/web/20260411210058/https://roedt.no/budsjett2026",
+    "format": "html",
+    "retrievedAt": "2026-04-11T21:00:58Z",
+    "method": "curl",
+    "sha256": "f8f0deabfa20acba08ac809da294cc3e2f9ea03781ba70102421b8c381959762",
+    "bytes": 243553,
+    "pages": 0,
+    "rawFile": "sources/raw/r-alt-2026.html",
+    "textFile": null,
+    "status": "archived",
+    "note": "Added 2026-09-26 to close a manifest gap: this raw file existed on disk (referenced in r-alt-2026's own note as 'corroborating evidence') but had no manifest row until now, so the file<->manifest reverse-integrity check had nothing to verify it against. retrievedAt here is NOT a recorded retrieval timestamp from this project's own fetch log — none exists for this file. It is the Wayback Machine capture timestamp read off the rewrite banner embedded in the HTML itself (`web.archive.org/web/20260411210058/...`), i.e. an embedded date extracted from the file's own content, not an independently logged retrieval event. sha256/bytes computed 2026-09-26 directly from the committed file."
+  },
+  {
     "id": "lovdata-endringslov-2026-06-23-66",
     "party": null,
     "title": "Lov om endringar i skatteloven - Lovdata",
