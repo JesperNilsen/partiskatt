@@ -56,9 +56,12 @@ describe('untouched parameters stay at adopted values (L13)', () => {
     expect(kept('sp', home, 'wealth.netWealthTax')).toBe(1_000);
   });
 
-  it('H lists jobbfradrag and pensjonsfradrag as unquantified proposals', () => {
+  it('H lists pensjonsfradrag as unquantified; jobbfradrag is encoded (uncertain) instead (L14)', () => {
     const titles = partyOf('h').unquantified.map((u) => u.title);
-    expect(titles.some((t) => /jobbfradrag/i.test(t))).toBe(true);
+    expect(titles.some((t) => /jobbfradrag/i.test(t))).toBe(false);
     expect(titles.some((t) => /pensjonsfradrag/i.test(t))).toBe(true);
+    const job = partyOf('h').deltas.find((d) => d.id === 'income.workTaxCredit');
+    expect(job?.uncertain).toBe(true);
+    expect(job?.params).toEqual({ amountPerWorker: 4_300 });
   });
 });

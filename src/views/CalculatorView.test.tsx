@@ -66,7 +66,7 @@ describe('CalculatorView: wealth fields the engine already models', () => {
 
   it('the calculator wires the loaded data into the toggles', async () => {
     renderCalculator();
-    expect(await screen.findByText(/Gjelder 3 regler merket usikre/)).toBeTruthy();
+    expect(await screen.findByText(/Gjelder 4 regler merket usikre/)).toBeTruthy();
     expect((screen.getByLabelText(/Ta med usikre forslag/) as HTMLInputElement).disabled).toBe(false);
   });
 

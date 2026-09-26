@@ -131,7 +131,12 @@ describe('uncertain party rules', () => {
    * Plausible but assumption-dependent values (Codex review of L10b, 2026-09-26): kept out of the
    * headline unless «usikre forslag» is on. One delta per formula, so the whole rule is uncertain.
    */
-  const UNCERTAIN: readonly string[] = ['frp:wealth.netWealthTax', 'h:benefit.childBenefit', 'sv:benefit.childBenefit'];
+  const UNCERTAIN: readonly string[] = [
+    'frp:wealth.netWealthTax',
+    'h:benefit.childBenefit',
+    'h:income.workTaxCredit',
+    'sv:benefit.childBenefit',
+  ];
 
   it('exactly the listed rules are uncertain, each stating its assumption in Norwegian', () => {
     const flagged = DATA_BUNDLE.parties.flatMap((party) =>
@@ -328,7 +333,7 @@ describe('NON_FORLIK_BASELINE_DIFFS', () => {
 
 describe('agreed-value coverage', () => {
   const ENCODED: Record<Exclude<PartyId, 'ap'>, FormulaId[]> = {
-    h: ['income.socialSecurity', 'wealth.netWealthTax', 'wealth.valuation', 'excise.cigarette', 'benefit.childBenefit'],
+    h: ['income.socialSecurity', 'income.workTaxCredit', 'wealth.netWealthTax', 'wealth.valuation', 'excise.cigarette', 'benefit.childBenefit'],
     frp: ['income.socialSecurity', 'income.bracketTax', 'income.personalAllowance', 'income.unionFeeDeduction', 'wealth.netWealthTax', 'wealth.valuation', 'vat.food', 'excise.petrolLitre', 'excise.dieselLitre'],
     sv: ['income.socialSecurity', 'income.bracketTax', 'income.personalAllowance', 'income.minimumDeductionWage', 'income.minimumDeductionPension', 'wealth.netWealthTax', 'wealth.valuation', 'excise.petrolLitre', 'excise.dieselLitre', 'excise.flightEurope', 'excise.flightOther', 'benefit.childBenefit', 'benefit.studentSupport'],
     sp: ['income.bracketTax', 'income.socialSecurity', 'wealth.netWealthTax', 'wealth.valuation', 'vat.food', 'excise.flightEurope'],

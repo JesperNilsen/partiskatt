@@ -6,6 +6,7 @@ import { adoptedParams, emptyParty, kr, krPerUnit, partyRule, patchWealthValuati
  * Encodable: wealth.valuation — aksjer og driftsmidler 60 pst. K1 (besluttet 2026-09-13): income.socialSecurity nedre grense 150 000 kr.
  * L13 (2026-09-26): trygdeavgift lønn 7,7 pst. (regjeringens kutt reversert, utledet mot Prop. 1 LS); jobbfradrag og
  * pensjonsfradrag er ikke tallfestet (utforming ikke oppgitt).
+ * L14 (beslutning Jesper 2026-09-26): jobbfradraget encodet som flat skattereduksjon 4 300 kr per person i arbeid, `uncertain`.
  * L10b (beslutning 2, 2026-09-25): bunnfradrag +100 000, tobakksavgift +15 pst og prisjustert barnetrygd utledet mot Prop. 1 LS.
  */
 export const H_2026: PartyRuleSet = {
@@ -26,6 +27,23 @@ export const H_2026: PartyRuleSet = {
       {
         baselineParams: proposedParams('income.socialSecurity'),
         note: 'K1-frikort-trygdeavgift: nedre grense 150 000 kr encodet etter beslutning 2026-09-13; baseline-mismatch (partiene siterer 100 000 som utgangspunkt, vedtatt er 99 650). Utledet (beslutning 2): Prop. 1 LS lønn 7,6 pst + 0,1 pp (regjeringens kutt reversert, +2 345 mill. = Prop. 1 LS tabell 1.1) = 7,7 pst; pensjon 5,1 pst uendret.',
+      },
+    ),
+    partyRule(
+      'income.workTaxCredit',
+      { amountPerWorker: kr(4_300) },
+      'Jobbfradrag: 4 300 kr lavere skatt per person i arbeid (antatt flat)',
+      partyProv(
+        'h',
+        'PDF p5; p17',
+        '4300 kroner lavere skatt for folk i arbeid',
+        'Usikkert: Partiet oppgir bare skattelettelsen og provenyet, ikke hvordan fradraget virker; det er antatt en flat skattereduksjon på 4 300 kr per person i arbeid. S. 5: «Høyre foreslår derfor et jobbfradrag, som vil gi 4300 kroner lavere skatt for folk i arbeid.» Skattetabellen s. 17: «Arbeidsfradrag (4300 kr)», −12 370 mill. kr. Kilden sier ikke hvem som regnes som i arbeid eller om fradraget trappes av.',
+        '2026-01-01',
+        'low',
+      ),
+      {
+        uncertain: true,
+        note: 'Usikkert (beslutning Jesper 2026-09-26): antatt flat 4 300 kr per person i arbeid; kilden sier ikke hvem som regnes som i arbeid eller om det trappes av. «I arbeid» = har lønnsinntekt over 0 (ikke bare pensjon, ikke null inntekt). Fradraget gis i personens skatt på alminnelig inntekt, trinnskatt og trygdeavgift og kan ikke gjøre skatten negativ. Partiet sier ikke om det er et fradrag i inntekten eller i skatten, eller om det er målrettet mot lave inntekter slik et arbeidsfradrag kan utformes (Prop. 1 LS kap. 4, PDF s. 89); s. 5 kaller det «første trinn i innføringen av et større fradrag». Regjeringens «Forsøk med jobbfradrag» (+500 mill., s. 17) er en annen ordning og er ikke modellert.',
       },
     ),
     partyRule(
@@ -101,14 +119,6 @@ export const H_2026: PartyRuleSet = {
     employer: { status: 'no-change', pageOrTable: 'PDF p17', note: 'Arbeidsgiveravgift ikke omtalt.' },
   },
   unquantified: [
-    {
-      category: 'direct-tax',
-      title: 'Jobbfradrag som gir 4 300 kr lavere skatt for folk i arbeid',
-      status: 'unquantified',
-      reason:
-        'Partiet oppgir bare skattelettelsen (4 300 kr) og provenyet (−12 370 mill. kr), ikke hvordan fradraget virker: om det er et fradrag i inntekten eller i skatten, hvem som regnes som «i arbeid» (lønn, næring, trygd), eller om det trappes opp eller ned med inntekten. Et arbeidsfradrag kan utformes på flere måter, blant annet målrettet mot lave inntekter (Prop. 1 LS kap. 4, PDF s. 89), så en flat sum for alle kan ikke antas.',
-      provenance: partyProv('h', 'PDF p17', 'Arbeidsfradrag (4300 kr)', 'Skattetabellen s. 17 (−12 370 mill. kr); omtale s. 5.'),
-    },
     {
       category: 'direct-tax',
       title: 'Nytt pensjonsfradrag som gir 2 000 kr lavere skatt',

@@ -36,7 +36,7 @@ for (const viewport of [
     test('open panel: no horizontal scroll, axe clean, toggle notes visible', async ({ page }) => {
       await page.goto('/');
       await openAdvanced(page);
-      await expect(page.getByText(/Gjelder 3 regler merket usikre/)).toBeVisible();
+      await expect(page.getByText(/Gjelder 4 regler merket usikre/)).toBeVisible();
       await expect(page.getByLabel(/Vis arbeidsgiveravgift/)).toBeDisabled();
       await expect(page.getByText(/Ingen partier i datagrunnlaget endrer arbeidsgiveravgiften/)).toBeVisible();
       await expectNoHorizontalScroll(page);

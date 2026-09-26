@@ -19,7 +19,7 @@ Statuser: `confirmed` (primærkilde, kontrollert) · `estimated` (rimelig anslag
 ## Encoded party deltas (S7)
 
 - **Ap**: ingen deltas
-- **H**: `income.socialSecurity`, `wealth.netWealthTax`, `wealth.valuation`, `excise.cigarette`, `benefit.childBenefit`
+- **H**: `income.socialSecurity`, `income.workTaxCredit`, `wealth.netWealthTax`, `wealth.valuation`, `excise.cigarette`, `benefit.childBenefit`
 - **FrP**: `income.socialSecurity`, `income.bracketTax`, `income.personalAllowance`, `income.unionFeeDeduction`, `wealth.netWealthTax`, `wealth.valuation`, `vat.food`, `excise.petrolLitre`, `excise.dieselLitre`
 - **SV**: `income.socialSecurity`, `income.bracketTax`, `income.personalAllowance`, `income.minimumDeductionWage`, `income.minimumDeductionPension`, `wealth.netWealthTax`, `wealth.valuation`, `excise.petrolLitre`, `excise.dieselLitre`, `excise.flightEurope`, `excise.flightOther`, `benefit.childBenefit`, `benefit.studentSupport`
 - **Sp**: `income.bracketTax`, `income.socialSecurity`, `wealth.netWealthTax`, `wealth.valuation`, `vat.food`, `excise.flightEurope`

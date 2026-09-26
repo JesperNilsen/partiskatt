@@ -156,6 +156,12 @@ export function MethodView() {
           antagelsen, kilden og hvorfor forslaget er usikkert.
         </p>
         <p>
+          Eksempel: Høyres jobbfradrag skal gi «4300 kroner lavere skatt for folk i arbeid», men partiet sier ikke hvem som
+          regnes som i arbeid eller om fradraget trappes av. Kalkulatoren antar en flat skattereduksjon på 4 300 kr per
+          voksen med lønnsinntekt, trukket fra skatt på alminnelig inntekt, trinnskatt og trygdeavgift, aldri så skatten
+          blir negativ. Forslaget er merket usikkert.
+        </p>
+        <p>
           Full oversikt per parti og kategori: <Link href="/kilder">datastatus under Kilder</Link>.
         </p>
       </section>

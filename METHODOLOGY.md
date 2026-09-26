@@ -59,6 +59,8 @@ Alle beløp er hele kroner. Hver navngitt komponent avrundes én gang (halv opp,
 ## Usikkerhet
 Hver regel har status (`confirmed`, `estimated`, `unquantified`, `not-applicable`, `not-reviewed`). Bare `confirmed` og `estimated` inngår i hovedtallet. Forslag merket usikre (`uncertain: true`) er av som standard og kan slås på under «Mulige endringer». Full dekning per parti og kategori: `DATA_STATUS.md`.
 
+**Høyres jobbfradrag (usikkert, antatt flat).** Høyre foreslår et jobbfradrag «som vil gi 4300 kroner lavere skatt for folk i arbeid» (proveny −12 370 mill. kr), men sier ikke hvem som regnes som i arbeid, om det er et fradrag i inntekten eller i skatten, eller om det trappes av. Kalkulatoren antar en flat skattereduksjon på 4 300 kr per voksen med lønnsinntekt over null (ikke ren pensjon, ikke null inntekt). Reduksjonen trekkes fra personens skatt på alminnelig inntekt, trinnskatt og trygdeavgift — de samme skattene dagens skattefradrag for pensjonsinntekt gis i — og kan ikke gjøre skatten negativ. Den vises som egen linje («Jobbfradrag (H), antatt flat») og er merket usikker, så den bare telles når usikre forslag er slått på. Gjeldende rett har ikke et slikt fradrag, så vedtatt og foreslått budsjett har 0 kr.
+
 ## Personvern
 All beregning skjer lokalt i nettleseren. Ingen økonomiske brukerdata sendes eller lagres.
 

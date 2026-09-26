@@ -84,11 +84,12 @@ describe('ScenarioToggles: disabled with a reason only when no loaded rule is af
 describe('ScenarioToggles with the loaded data (DATA_BUNDLE)', () => {
   const effects = toggleEffects(DATA_BUNDLE);
 
-  it('«usikre forslag» is enabled: FrP, H and SV each carry an uncertain rule', () => {
+  it('«usikre forslag» is enabled: H (two), FrP and SV carry uncertain rules', () => {
     const { uncertain } = renderToggles(DATA_BUNDLE);
     expect(uncertain.disabled).toBe(false);
     expect(effects.includeUncertain.parties).toEqual(['h', 'frp', 'sv']);
-    expect(effects.includeUncertain.ruleCount).toBe(3);
+    // H: child benefit (L10b) and jobbfradrag (L14); FrP: wealth tax; SV: child benefit.
+    expect(effects.includeUncertain.ruleCount).toBe(4);
   });
 
   it('the enabled uncertain toggle really moves a result', () => {
@@ -100,18 +101,21 @@ describe('ScenarioToggles with the loaded data (DATA_BUNDLE)', () => {
     });
     const off = calculateAll(rich, DEFAULT_TOGGLES, DATA_BUNDLE);
     const on = calculateAll(rich, { ...DEFAULT_TOGGLES, includeUncertain: true }, DATA_BUNDLE);
-    // Every listed party gets its uncertain rule applied when the toggle is on …
+    // Every listed party gets each of its uncertain rules applied when the toggle is on …
     for (const id of effects.includeUncertain.parties) {
       const a = off.find((r) => r.party === id)!;
       const b = on.find((r) => r.party === id)!;
-      expect(b.appliedRuleCount, `${id} applies one more rule`).toBe(a.appliedRuleCount + 1);
+      const uncertain = DATA_BUNDLE.parties.find((p) => p.id === id)!.deltas.filter((d) => d.uncertain).length;
+      expect(b.appliedRuleCount, `${id} applies its uncertain rules`).toBe(a.appliedRuleCount + uncertain);
     }
-    // … and at least one headline moves. (H's uncertain child-benefit rule equals the adopted
-    // rate, so H's number does not move; FrP's wealth tax and SV's child benefit do.)
+    // … and the headlines move. (H's uncertain child-benefit rule equals the adopted rate, but its
+    // jobbfradrag gives each of the two working adults 4 300 kr; FrP's wealth tax and SV's child benefit move too.)
     const moved = effects.includeUncertain.parties.filter(
       (id) => off.find((r) => r.party === id)!.headline !== on.find((r) => r.party === id)!.headline,
     );
-    expect(moved).toEqual(['frp', 'sv']);
+    expect(moved).toEqual(['h', 'frp', 'sv']);
+    const h = (rs: typeof on) => rs.find((r) => r.party === 'h')!.headline;
+    expect(h(on) - h(off)).toBe(8_600);
   });
 
   it('«arbeidsgiveravgift» follows the data: disabled iff no party changes employer.contribution', () => {
@@ -124,7 +128,7 @@ describe('ScenarioToggles with the loaded data (DATA_BUNDLE)', () => {
 
   it('the results-page sentence matches the effects', () => {
     expect(toggleSummary(effects, DEFAULT_TOGGLES)).toBe(
-      'Usikre forslag (3 regler) er av som standard og ikke regnet med. Ingen partier endrer arbeidsgiveravgiften.',
+      'Usikre forslag (4 regler) er av som standard og ikke regnet med. Ingen partier endrer arbeidsgiveravgiften.',
     );
     const none = toggleEffects(bundle([plainDelta]));
     expect(toggleSummary(none, DEFAULT_TOGGLES)).toBe(
