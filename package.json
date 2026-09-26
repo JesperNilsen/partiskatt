@@ -18,7 +18,8 @@
     "data-status": "tsx scripts/gen-data-status.ts",
     "reconcile": "tsx scripts/reconcile.ts",
     "gate3:sheet": "tsx scripts/gate3-sheet.ts",
-    "check": "npm run typecheck && npm run test && npm run reconcile -- --check && npm run data-status -- --check && npm run build"
+    "check": "npm run typecheck && npm run test && npm run reconcile -- --check && npm run data-status -- --check && npm run build",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "marked": "^14.1.2",
@@ -27,6 +28,8 @@
     "wouter": "^3.3.5"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.63.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@types/node": "^22.10.1",
