@@ -1,8 +1,10 @@
 import { PARTY_META } from '../config/parties.ts';
-import { DATA_STATUS_LABELS } from '../utils/status-labels.ts';
+import { Link } from 'wouter';
 import type { PartyResult } from '../types/index.ts';
 import { formatSignedKr } from '../utils/format.ts';
 import { BreakdownBars } from './BreakdownBars.tsx';
+import { partyRuleRows, sourceLine, type RuleRow } from './rule-provenance.ts';
+import { StatusBadge } from './StatusBadge.tsx';
 
 interface PartyCardProps {
   result: PartyResult;
@@ -25,6 +27,37 @@ function topReasons(result: PartyResult, limit = 3): string[] {
     .map((c) => `${c.label}: ${formatSignedKr(c.keptDelta)} kr`);
 }
 
+/** One rule: title, status as text, and the source document + page(s) from its provenance. */
+function RuleProvenanceItem({ row }: { row: RuleRow }) {
+  const src = row.provenance ? sourceLine(row.provenance) : null;
+  return (
+    <li className="rule-row">
+      <div className="rule-row__head">
+        <strong className="rule-row__title">{row.title}</strong> <StatusBadge status={row.status} />
+        {row.uncertain ? <span className="rule-row__flag"> Usikkert</span> : null}
+      </div>
+      {row.reason ? <p className="rule-row__reason">{row.reason}</p> : null}
+      {src && row.provenance ? (
+        <>
+          <p className="rule-row__source">
+            Kilde:{' '}
+            <a href={src.url} rel="noopener noreferrer" title={src.fullTitle}>
+              {src.title}
+            </a>
+            , <span className="rule-row__pages">{src.pages}</span>
+          </p>
+          <details className="rule-row__method">
+            <summary>Slik er tallet hentet</summary>
+            <p>{row.provenance.method}</p>
+          </details>
+        </>
+      ) : (
+        <p className="rule-row__source">Kilde mangler i datagrunnlaget.</p>
+      )}
+    </li>
+  );
+}
+
 export function PartyCard({ result, rank, expanded = false, onToggle }: PartyCardProps) {
   const meta = PARTY_META[result.party];
   const gain = result.headline > 0;
@@ -32,6 +65,7 @@ export function PartyCard({ result, rank, expanded = false, onToggle }: PartyCar
   const neutral = result.headline === 0;
   const deltaCls = gain ? 'party-card--gain' : loss ? 'party-card--loss' : 'party-card--neutral';
   const isReference = meta.inGovernment && neutral;
+  const rules = expanded ? partyRuleRows(result) : null;
 
   return (
     <article
@@ -84,11 +118,11 @@ export function PartyCard({ result, rank, expanded = false, onToggle }: PartyCar
 
       {onToggle ? (
         <button type="button" className="btn btn--ghost party-card__toggle" onClick={onToggle} aria-expanded={expanded}>
-          {expanded ? 'Skjul detaljer' : 'Vis årsaker og utelatte forslag'}
+          {expanded ? 'Skjul detaljer' : 'Vis årsaker, kilder og utelatte forslag'}
         </button>
       ) : null}
 
-      {expanded ? (
+      {rules ? (
         <div className="party-card__details">
           {topReasons(result).length > 0 ? (
             <section>
@@ -102,21 +136,29 @@ export function PartyCard({ result, rank, expanded = false, onToggle }: PartyCar
           ) : (
             <p>Ingen beregnede endringer mot referansen.</p>
           )}
-          {result.excluded.length > 0 ? (
+          {rules.applied.length > 0 ? (
             <section>
-              <h4>Ikke medregnet i hovedtallet</h4>
-              <ul className="excluded-list">
-                {result.excluded.map((item) => (
-                  <li key={item.title}>
-                    <strong>{item.title}</strong> ({DATA_STATUS_LABELS[item.status]})
-                    {item.uncertain ? ' — usikkert' : ''}: {item.reason}
-                  </li>
+              <h4 id={`party-${result.party}-rules`}>Regelendringer i beregningen</h4>
+              <ul className="rule-list" aria-labelledby={`party-${result.party}-rules`}>
+                {rules.applied.map((row) => (
+                  <RuleProvenanceItem key={row.key} row={row} />
+                ))}
+              </ul>
+            </section>
+          ) : null}
+          {rules.excluded.length > 0 ? (
+            <section>
+              <h4 id={`party-${result.party}-excluded`}>Ikke medregnet i hovedtallet</h4>
+              <ul className="rule-list excluded-list" aria-labelledby={`party-${result.party}-excluded`}>
+                {rules.excluded.map((row) => (
+                  <RuleProvenanceItem key={row.key} row={row} />
                 ))}
               </ul>
             </section>
           ) : null}
           <p className="party-card__meta">
-            {result.appliedRuleCount} regel{result.appliedRuleCount === 1 ? '' : 'er'} inngår i beregningen.
+            {result.appliedRuleCount} regel{result.appliedRuleCount === 1 ? '' : 'er'} inngår i beregningen. Alle
+            dokumentene og arkivstatus: <Link href="/kilder">Kilder</Link>.
           </p>
         </div>
       ) : null}

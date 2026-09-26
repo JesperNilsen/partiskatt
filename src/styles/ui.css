@@ -252,6 +252,20 @@ input[type='number'], select {
 .party-card__details h4 { margin: 0 0 var(--sp-2); font-size: var(--fs-sm); }
 .party-card__details ul { margin: 0 0 var(--sp-3); padding-left: 1.1rem; }
 .excluded-list li { margin-bottom: var(--sp-2); }
+.party-card__details .rule-list { list-style: none; padding-left: 0; }
+.rule-row {
+  margin-bottom: var(--sp-3);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.rule-row__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--sp-1) var(--sp-2); }
+.rule-row__title { min-width: 0; }
+.rule-row__flag { color: var(--ink-2); font-size: var(--fs-xs); font-weight: 600; }
+.rule-row__reason, .rule-row__source { margin: var(--sp-1) 0 0; }
+.rule-row__source { color: var(--ink-2); }
+.rule-row__method { margin-top: var(--sp-1); color: var(--ink-3); }
+.rule-row__method summary { cursor: pointer; }
+.rule-row__method p { margin: var(--sp-1) 0 0; }
 .party-card__meta { color: var(--ink-3); margin: 0; }
 
 .empty-state, .loading-state, .error-state {
