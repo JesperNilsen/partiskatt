@@ -11,8 +11,8 @@ Statuser: `confirmed` (primærkilde, kontrollert) · `estimated` (rimelig anslag
 | FrP | estimated | unquantified | estimated | estimated | unquantified | not-applicable |
 | SV | unquantified | unquantified | not-applicable | unquantified | unquantified | not-applicable |
 | Sp | unquantified | estimated | estimated | unquantified | unquantified | not-applicable |
-| R | estimated | unquantified | unquantified | unquantified | unquantified | not-applicable |
-| V | estimated | estimated | unquantified | unquantified | unquantified | not-applicable |
+| R | unquantified | unquantified | unquantified | unquantified | unquantified | not-applicable |
+| V | unquantified | estimated | unquantified | unquantified | unquantified | not-applicable |
 | MDG | estimated | unquantified | unquantified | unquantified | unquantified | not-applicable |
 | KrF | unquantified | unquantified | unquantified | unquantified | estimated | not-applicable |
 

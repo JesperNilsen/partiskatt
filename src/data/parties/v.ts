@@ -91,6 +91,22 @@ export const V_2026: PartyRuleSet = {
   },
   unquantified: [
     {
+      category: 'direct-tax',
+      title: 'Forbrukslån og kredittkortgjeld unntas fra rentefradraget',
+      status: 'unquantified',
+      reason:
+        'Kalkulatoren har én post for renteutgifter og skiller ikke renter på forbrukslån og kredittkort fra renter på boliglån.',
+      provenance: partyProv('v', 'PDF p117', 'Unnta forbrukslån og', 'Tabellen s. 117 (+1 900 mill. kr).'),
+    },
+    {
+      category: 'direct-tax',
+      title: 'Reisefradraget reduseres',
+      status: 'unquantified',
+      reason:
+        'Kalkulatoren har ikke reisefradrag, og dokumentet oppgir ingen nye satser, bare at fradraget justeres som i Solberg-regjeringens forslag for 2022.',
+      provenance: partyProv('v', 'PDF p117', 'Redusert reisefradrag', 'Tabellen s. 117 (+800 mill. kr).'),
+    },
+    {
       category: 'consumption-tax',
       title: 'Mva på strøm i Nord-Norge: fritaket avvikles',
       status: 'unquantified',

@@ -140,6 +140,19 @@ export const R_2026: PartyRuleSet = {
   },
   unquantified: [
     {
+      category: 'direct-tax',
+      title: 'Rentefradrag bare for renter på de første 8 mill. kr av lån (per person)',
+      status: 'unquantified',
+      reason:
+        'Kalkulatoren gir fradrag for oppgitte renteutgifter, men vet ikke hvor stor del av dem som gjelder lån over 8 mill. kr, og kan derfor ikke avkorte fradraget.',
+      provenance: partyProv(
+        'r',
+        'PDF p30',
+        'Vi begrenser skattefradrag på renter til å kun gjelde',
+        'Omtale s. 30: fradraget gjelder bare renter på de første 8 mill. kr av lån (60 G), per person.',
+      ),
+    },
+    {
       category: 'wealth-tax',
       title: 'Formuesskatt: nytt trinn 3 med 1,6 pst. over 100 mill. kr',
       status: 'unquantified',
