@@ -35,7 +35,10 @@ export function SourceManifestSection({ title, entries, emptyMessage }: SourceMa
               <h3 className="source-list__title">
                 {entry.url ? (
                   <a href={entry.url} rel="noopener noreferrer">
-                    {entry.title}
+                    {/* Manifest title can be blank (e.g. two Lånekassen entries)
+                        — fall back to the publisher so the link always has an
+                        accessible name instead of rendering empty. */}
+                    {entry.title || entry.publisher || entry.url}
                   </a>
                 ) : (
                   entry.title

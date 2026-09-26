@@ -5,7 +5,10 @@
   --paper-2: #f1ede3;
   --ink: #141210;
   --ink-2: #4a453d;
-  --ink-3: #7a7468;
+  /* WCAG 2 AA needs >=4.5:1 for normal text; #7a7468 only cleared ~4.0-4.4:1
+     against the paper/badge backgrounds this token is used on (L12 axe scan,
+     2026-09-26). Darkened to keep the same muted hue with margin to spare. */
+  --ink-3: #665f54;
   --line: #d9d3c5;
 
   --gain: #0f7b46;
