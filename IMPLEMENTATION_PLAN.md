@@ -33,7 +33,7 @@ Autoritativ produktkontekst: `PROJECT.md`. Denne filen er fremdriftsloggen og ov
 1. Venstre- og Rødt-dokumenter dersom nettleserhenting også feiler: legg filen i `sources/raw/` og kjør `scripts/fetch-sources.sh --local`.
 2. Koble GitHub-repoet til et nytt Netlify-site (byggeinnstillinger leses fra `netlify.toml`).
 3. Manuell kontroll av referansesystemets totaler for de fem testprofilene mot Skatteetatens kalkulator før snapshot-verdiene fryses som `confirmed`.
-4. Offentlig repo og endelig merkenavn: begge er ett-token-endringer (`src/config/brand.ts`).
+4. Offentlig repo og endelig merkenavn: begge er ett-token-endringer (`src/config/brand.ts`). **2026-09-27: repoet skal være offentlig (ikke vippet ennå); merkenavnet er fortsatt åpent.**
 
 ## Neste økt (overlevering 2026-09-26, etter sprint 2026-09)
 1. **Sprint 2026-09 ferdig** (`docs/sprint-2026-09.md`): alle 13 baner + L13 slått sammen, `main` = origin, ingen sprint-worktrees/-grener. `npm run check` 433 tester + `npm run e2e` 15 grønne; begge CI-jobbene (check + e2e) grønne på origin. QUEUE Q-001…Q-010 `done`.
