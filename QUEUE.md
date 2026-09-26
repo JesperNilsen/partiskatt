@@ -284,7 +284,8 @@ notes:
 - Kolliderer ikke med Q-001→Q-003.
 
 ## Q-008 · Integritetssjekk av sha256/bytes i kildemanifestet
-status: blocked:sprint 2026-09-25 (docs/sprint-2026-09.md)
+status: done
+result: Sprint 2026-09 lane L3, merged to main at 29bd8dc 2026-09-26. src/content/manifest-integrity.test.ts: sha256+bytes per archived row, missing file red, reverse check sources/raw -> manifest; r-alt-2026.html row added (retrievedAt = Wayback capture time from the file, labelled as such; party null).
 lane: partiskatt-main
 
 acceptance:
@@ -314,7 +315,8 @@ notes:
 - Kolliderer ikke med Q-001→Q-003.
 
 ## Q-009 · data-status.ts: ingen stille bortfall av uklassifiserte forbruksavgifter
-status: blocked:sprint 2026-09-25 (docs/sprint-2026-09.md)
+status: done
+result: Sprint 2026-09 lane L3, merged to main at 29bd8dc 2026-09-26. classifyConsumptionTaxTitle throws on zero or double pattern match (named rule no-silent-classification), synthetic-title tests in src/data/data-status.test.ts.
 lane: partiskatt-main
 
 acceptance:
