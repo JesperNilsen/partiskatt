@@ -847,5 +847,39 @@
     "textFile": null,
     "status": "archived",
     "note": "StatBank 09007 (POST json-stat2; 10 ContentsCode, Tid 2022). Brukt kode: KraftOgNettIA = 235,3 øre/kWh (kraft + nettleie inkl. mva og elavgift), som gjør FBUs 04.5.1 om til kWh. ADVARSEL, utdypet i consumption-profiles.ts: 2022 var strømstøtteåret, og tabellen oppgir også 143,9 øre/kWh etter støtte. Valget mellom de to endrer kWh med ~60 % (13 673 mot 22 358 kWh per husholdning). 235,3 er valgt på et rimelighetsargument, ikke en kilde — derfor er kWh merket som anslag (KWH_IS_ESTIMATED). Arkivert av køkjøringen 2026-09-15, som avbrøt før manifestraden ble skrevet; raden er ført 2026-09-16 og retrievedAt er filens mtime, ikke et loggført hentetidspunkt."
+  },
+  {
+    "id": "ssb-10572-energibruk-husholdninger-2022",
+    "party": null,
+    "title": "10572: Gjennomsnittlig energiforbruk per husholdning, etter energibærer, statistikkvariabel og år (2022)",
+    "publisher": "SSB",
+    "url": "https://data.ssb.no/api/v0/no/table/10572",
+    "format": "json",
+    "retrievedAt": "2026-09-26T19:04:46Z",
+    "method": "curl",
+    "sha256": "c57aec91c04dcb79c66d951ddb4413ab4f12654b30ca69ff6d8c322f46313102",
+    "bytes": 2391,
+    "pages": 0,
+    "rawFile": "sources/raw/ssb-10572-energibruk-husholdninger-2022.json",
+    "textFile": null,
+    "status": "archived",
+    "note": "StatBank 10572 data (POST json-stat2; query: Energibaerer 0/0.01/1.1/3.0/2.02/4-5, ContentsCode Forbruk+ForbrukSpes, Tid 2022). Enhet: kWh per husholdning per år. Brukt celle: Energibaerer 1.1 Elektrisitet x Forbruk x 2022 = 14 964 kWh (KWH_PER_HOUSEHOLD_2022 i consumption-profiles.ts). Utvalget er FBU 2022 (3 507 husholdninger), 80 % med Elhub-målerdata; bolig uten fritidsbolig, inkl. elbillading hjemme (se ssb-energibruk-husholdningene-2022). Tabellen sist oppdatert hos SSB 2025-07-23. Arkivert av lane L11."
+  },
+  {
+    "id": "ssb-energibruk-husholdningene-2022",
+    "party": null,
+    "title": "Energibruk i husholdningene – SSB (statistikkside med «Om statistikken», 2022-undersøkelsen)",
+    "publisher": "SSB",
+    "url": "https://www.ssb.no/energi-og-industri/energi/statistikk/energibruk-i-husholdningene",
+    "format": "html",
+    "retrievedAt": "2026-09-26T19:04:52Z",
+    "method": "curl",
+    "sha256": "ca2ca03f92b1c0ad647a5e349e2b615b886517cab73286cbbf822ccdb561fcec",
+    "bytes": 303833,
+    "pages": 0,
+    "rawFile": "sources/raw/ssb-energibruk-husholdningene-2022.html",
+    "textFile": "sources/text/ssb-energibruk-husholdningene-2022.txt",
+    "status": "archived",
+    "note": "Kilden for strømstøtte-spørsmålet (L11 a). Tekstfil l. 413: der Elhub mangler, brukes FBU-husholdningens egenoppgitte strømkostnad for siste måned, regnet om til kWh med en pris der «strømstøtte er trukket i fra» — SSB behandler altså FBU 2022-utgiften til strøm som etter støtte. Samme linje: 2 813 husholdninger (80 %) har Elhub-data. l. 408: 2022 spurte bare om utgift siste måned. «Om statistikken» sist oppdatert 24. juli 2025. Tekstfilen er en tag-strippet utskrift av HTML-en (python re + html.unescape)."
   }
 ]

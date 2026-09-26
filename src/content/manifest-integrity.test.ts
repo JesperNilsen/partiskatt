@@ -28,9 +28,10 @@ const ARCHIVED_WITH_FILE = ENTRIES.filter((e) => e.status === 'archived' && !!e.
 describe('sources/manifest.json sha256/bytes integrity', () => {
   it('has archived rows with raw files to verify (sanity check on the fixture itself)', () => {
     // Measured 2026-09-16 at 39; +1 for the r-alt-2026.html row and +5 for the
-    // SSB FBU 2022 tables (Q-010), both 2026-09-26. Bump this when a source is
+    // SSB FBU 2022 tables (Q-010), both 2026-09-26; +2 for SSB 10572 and the
+    // Energibruk i husholdningene page (lane L11, 2026-09-26). Bump this when a source is
     // archived; a drop means a row was deleted.
-    expect(ARCHIVED_WITH_FILE.length).toBe(45);
+    expect(ARCHIVED_WITH_FILE.length).toBe(47);
   });
 
   for (const entry of ARCHIVED_WITH_FILE) {

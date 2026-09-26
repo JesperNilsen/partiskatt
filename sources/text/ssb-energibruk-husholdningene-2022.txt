@@ -1,0 +1,565 @@
+
+Energibruk i husholdningene  –  SSB
+Hopp til innhold
+Svare på undersøkelse?
+Forskning
+English
+Meny
+Arbeid, lønn og utdanning
+Arbeid og lønn
+Inntekt og forbruk
+Utdanning
+Befolkning og bolig
+Befolkning
+Bygg, bolig og eiendom
+Innvandring og innvandrere
+Helse og samfunn
+Helse
+Kultur og fritid
+Sosiale forhold og kriminalitet
+Svalbard
+Valg
+Miljø og transport
+Natur og miljø
+Transport og reiseliv
+Næringsliv og teknologi
+Energi og industri
+Jord, skog, jakt og fiskeri
+Teknologi og innovasjon
+Varehandel og tjenesteyting
+Bedrifter, foretak og regnskap
+Økonomi
+Bank og finansmarked
+Nasjonalregnskap og konjunkturer
+Offentlig sektor
+Priser og prisindekser
+Utenriksøkonomi
+Svare på undersøkelse?
+Forskning
+English
+2e113025-0ff1-415a-ba80-0a7a207d59a9
+2e113025-0ff1-415a-ba80-0a7a207d59a9
+statistikk
+2025-07-23T08:00:00.000Z
+no
+Energi og industri
+energi, strømforbruk, energisparing, boligoppvarming, varmepumper, energivarer (for eksempel elektrisitet, fyringsolje, parafin), oppvarmingsutstyr (for eksempel peis, elektrisk ovn, varmepumpe)
+Statistikken viser gjennomsnittlig energiforbruk per husholdning.
+Energi
+Forsiden
+ / 
+Energi og industri
+ / 
+Energi
+ / 
+Energibruk i husholdningene
+Statistikk innhold
+Statistikk om
+Energibruk i husholdningene
+Formålet med statistikken er å presentere tall for gjennomsnittlig energiforbruk per husholdning for ulike husholdningsgrupper og hustyper og å se på hvordan dette utvikler seg over tid. Statistikken gir også informasjon om oppvarmingsutstyr i husholdningene.
+Oppdatert:
+23. juli 2025
+Neste oppdatering:
+Foreløpig ikke fastsatt
+Endret:
+24. juli 2025 08:00
+To nye statistikkbanktabell (14580 og 14578) ble publisert.
+Lukk
+Utvalgte tall fra denne statistikken
+Tabell 1
+Energibruk per husholdning, totalt og per m² boligareal. kWh
+Energibruk per husholdning, totalt og per m² boligareal. kWh
+Last ned tabell som ...
+Last ned tabell som ...
+Energibruk per husholdning, totalt og per m² boligareal. kWh
+1
+Totalt energiforbruk (kWh)
+Prosentvis endring
+Spesifikt energiforbruk (kWh per m² boligareal)
+Prosentvis endring
+2012
+2022
+2012 - 2022
+2012
+2022
+2012 - 2022
+I alt
+20 230
+17 518
+-13,4
+185
+154
+-16,8
+Elektrisitet
+16 044
+14 964
+-6,7
+149
+131
+-12,1
+Olje og parafin
+698
+0
+-100,0
+6
+0
+-100,0
+Ved, pellets og vedbriketter
+2
+3 204
+2 066
+-35,5
+27
+15
+-44,4
+1
+Forbruk av fjernvarme og gass er inkludert i den totale energibruken, men er ikke vist eksplisitt her. Tall for dette finnes imidlertid i statistikkbanken, blant annet tabell 10572.
+2
+For 2022 benyttes en faktor for energiinnhold i ved på 4,3 kWh/kilo, mens denne faktoren tidligere har vært 4,67 kWh/kilo. Reell nedgang i bruk av ved fra 2012 til 2022 blir cirka 30 % for totalt forbruk, og 38 % for spesifikt forbruk dersom man tar hensyn til endret faktor.
+Last ned tabell som ...
+Last ned tabell som ...
+Standardtegn i tabeller
+Kilde
+Statistikkbanken kildetabell 10572
+Tabell 2
+Energibruk per husholdning etter energiprodukt. kWh tilført energi
+Energibruk per husholdning etter energiprodukt. kWh tilført energi
+Last ned tabell som ...
+Last ned tabell som ...
+Energibruk per husholdning etter energiprodukt. kWh tilført energi
+1994
+1995
+2001
+2004
+2006
+2009
+2012
+2022
+I alt
+1
+23 525
+23 633
+22 399
+21 143
+21 644
+20 415
+20 230
+17 518
+Elektrisitet
+18 436
+18 537
+17 779
+15 991
+16 240
+15 977
+16 044
+14 964
+Olje og parafin
+1 718
+1 908
+1 217
+1 562
+1 411
+845
+698
+0
+Ved, pellets og vedbriketter
+2
+3 274
+3 105
+3 331
+3 504
+3 853
+3 407
+3 204
+2 066
+1
+Tall for bruk av fjernvarme og gass er inkludert i "I alt" og finnes også i statistikkbank-tabell 10572
+2
+Frem til og med 2009 undersøkelsen inkluderes også noe forbruk av kull og koks under kategorien «ved, pellets og vedbriketter".
+Last ned tabell som ...
+Last ned tabell som ...
+Standardtegn i tabeller
+Kilde
+Statistikkbanken kildetabell 10572
+Tabell 3
+Energibruk per m² boligareal, etter energiprodukt. kWh tilført energi. Tidsserie.
+Energibruk per m² boligareal, etter energiprodukt. kWh tilført energi. Tidsserie.
+Last ned tabell som ...
+Last ned tabell som ...
+Energibruk per m² boligareal, etter energiprodukt. kWh tilført energi. Tidsserie.
+1994
+1995
+2001
+2004
+2006
+2009
+2012
+2022
+I alt
+1
+212
+211
+203
+186
+190
+181
+185
+154
+Elektrisitet
+169
+169
+164
+145
+147
+146
+149
+131
+Olje og parafin
+15
+15
+11
+13
+12
+7
+6
+0
+Ved, pellets og vedbriketter
+2
+27
+26
+28
+27
+30
+27
+27
+15
+1
+Tall for bruk av fjernvarme og gass er inkludert i "I alt" og finnes også i statistikkbank-tabell 10572
+2
+Frem til og med 2009 undersøkelsen inkluderes også noe forbruk av kull og koks under kategorien «ved, pellets og vedbriketter".
+Last ned tabell som ...
+Last ned tabell som ...
+Standardtegn i tabeller
+Kilde
+Statistikkbanken kildetabell 10572
+Vis alle
+Se alle tall fra denne statistikken
+Vi har flere tall for denne statistikken i Statistikkbanken. Lag figurer og tabeller med tallene du trenger.
+Om statistikken
+Informasjonen under «Om statistikken» ble sist oppdatert 24. juli 2025.
+Definisjoner
+Administrative opplysninger
+Bakgrunn
+Produksjon
+Nøyaktighet og pålitelighet
+Relevant dokumentasjon
+Definisjoner
+Definisjoner av viktige begrep og variabler
+Inntekt: Opplysningene er hentet fra ligningsregistrene og selvangivelsesregisteret. Inntekt er beregnet som pensjonsgivende inntekt - utlignet skatt + fradrag i skatt.
+Husholdning. Til en husholdning regnes alle som er fast bosatt i samme bolig og som spiser minst ett måltid sammen daglig. Personer som er fast bosatt i boligen, men som er midlertidig fraværende f.eks. på grunn av skolegang, ferie, sykehusopphold, militærtjeneste e.l. regnes med..
+Standard klassifikasjoner
+Regionene ble frem til og med 2012-undersøkelsen  delt inn som følgende:
+Oslo
+Akershus
+Hedmark og Oppland
+Sørøst-landet
+ (Østfold, Buskerud, Vestfold og Telemark)
+Agder og Rogaland
+ (Aust-Agder, Vest-Agder, Rogaland)
+Vestlandet
+ (Hordaland, Sogn og Fjordane, Møre og Romsdal)
+Trøndelag
+ (Sør-Trøndelag og Vest-Trøndelag)
+Nord-Norge
+ (Nordland, Troms og Finnmark)
+I statistikken for 2022 publiseres det tall både for fylke og landsdel gjeldende for 2022
+Standard for fylkesinndeling (alle versjoner) finnes her:
+https://www.ssb.no/klass/klassifikasjoner/127
+Landsdeler som brukes for 2022 er følgende :
+Oslo og Viken
+ (2020-2024)
+Innlandet
+ (2020-2024)
+Agder og Sør-Østlandet
+ (2020-2024)  Agder, Vestfold og Telemark
+Vestlandet
+ (2020-2024)   Rogaland, Vestland, Møre og Romsdal
+Trøndelag
+ (2020-2024)
+Nord-Norge
+ (2020-2024) (Nordland og Troms og Finnmark)
+Uoppgitt landsdel
+  (ikke i bruk)
+Landsdel er basert på nuts2 gjeldende for 2022
+https://www.ssb.no/klass/klassifikasjoner/508/koder
+Inndeling på hustyper er følgende:
+Våningshus (på gårdsbruk)
+Enebolig
+Rekkehus/tomannsbolig mv. (rekke- og kjedehus, to-, tre, firemannsbolig mv.)
+Blokk mv. (store hus med mange boliger og kombinert bolig- og næringsbygg)
+Ulike boligtyper er nærmere beskrevet her under punkt 1 Bolig:  https://www.ssb.no/klass/klassifikasjoner/31
+Måleenhet
+Energibrukstallene måles i kWh
+Administrative opplysninger
+Navn og emne
+Navn: Energibruk i husholdningene
+Emne: Energi og industri
+Neste oppdatering
+Foreløpig ikke fastsatt
+Ansvarlig seksjon
+Seksjon for energi-, miljø- og transportstatistikk
+Regionalt nivå
+Det publiseres tall på nasjonalt nivå, og for ulike landsdeler i Norge. For 2022 publiseres det også tall på fylkesnivå.
+Hyppighet og aktualitet
+Undersøkelsen gjelder for år, og den gjennomføres med visse mellomrom, i år der SSB også gjennomfører
+Forbruksundersøkelsen
+. Den har vært gjennomført for årene 1993, 1994, 1995, 2001, 2004, 2006, 2012 og 2022. Undersøkelsen publiseres vanligvis 1,5 til 2 år etter referanseperioden, men for 2023 var det 2,5 år etter referanseperioden grunnet nye metoder og datakilder, deriblant strømforbruksdata fra Elhub.
+Internasjonal rapportering
+Ingen
+Lagring og anvendelse av grunnlagsmaterialet
+SSB lagrer innsamlede og reviderte data på en sikker måte, i tråd med gjeldende lovverk for databehandling.
+Anonymiserte filer fra selve forbruksundersøkelsen er allerede tilgjengelige for forskere og studenter gjennom
+Sikt – Kunnskapssektorens tjenesteleverandør
+. I denne undersøkelsen om energibruk per husholdning er det også koblet på enkelte andre opplysninger. Det gjelder for eksempel noen flere boligvariable, i tillegg til opplysninger fra Elhub, strømpriser, temperaturdata mv. Dette datasettet, påkoblet de andre tilleggsopplysningene, vil etter planen også bli tilgjengelig på SIKT.
+Kvalitetssikring
+Systemet for
+kvalitetssikring av norsk offisiell statistikk
+ er basert på kvalitetskrav i
+statistikkloven
+ og
+Retningslinjer for europeisk statistikk
+. I
+den årlige rapporten om kvalitet i offisiell statistikk
+ vurderes etterlevelsen av kvalitetskravene for all offisiell statistikk samlet sett.
+Nasjonalt program for offisiell statistikk
+ setter rammene for hvilke områder SSB og andre offentlige myndigheter skal produsere statistikk om. Programmet definerer og avgrenser offisiell statistikk.
+Utfyllende informasjon om systemet for kvalitet i offisiell statistikk finnes på
+ssb.no
+.
+Bakgrunn
+Formål og historie
+Formålet med statistikken er å presentere tall for gjennomsnittlig energiforbruk per husholdning for ulike husholdningsgrupper og hustyper og å se på hvordan dette utvikler seg over tid. Dette gir et bilde av hvilke faktorer som påvirker husholdningenes energibruk. Statistikken gir også informasjon om oppvarmingsutstyr i husholdninger. For enkelte årganger er det laget statistikk for kombinasjoner av oppvarmingsutstyr i boliger, noe som gir en indikasjon på energifleksibiliteten i husholdningene, dvs. mulighetene for å veksle mellom ulike energibærere. Ved at man har en rekke relevante opplysninger og bakgrunnsinformasjon om husholdningene i tillegg til energibruken kan man studere ulike sammenhenger, som for eksempel hvordan energibruken varierer mellom ulike hustyper og regioner, og effekten av varmepumpe. Spørsmålene som stilles i undersøkelsen kan variere noe fra gang til gang avhengig av hva man ønsker om å analysere.
+Undersøkelsen ble første gang foretatt for 1993. Deretter er den gjennomført for årene 1994, 1995, 2001, 2004, 2006, 2009, 2012 og 2022. Det er også foretatt en lignende undersøkelse om energibruk per husholdning for 1990, men det ble da benyttet andre kilder og metoder slik at resultatene ikke er helt sammenlignbare. Den gangen ble det også foretatt en analyse av strømforbruk etter formål, det vil si hvor stor andel av strømforbruket som går til matlaging, oppvarming osv. Dette er også gjort i forbindelse med denne undersøkelsen, for 2001 og 2006. Forskningsavdelingen i SSB, gruppe for energi- og miljøøkonomi, har vært ansvarlige for disse beregningene.
+For tidligere årganger enn 2022 ble det benyttet et eget tilleggsskjema for energi. Denne ekstra skjemaet er tidligere blitt finansiert av NVE, Enova og/eller  Energidepartementet
+Brukere og bruksområder
+Statistikken kan blant annet brukes som bakgrunnsinformasjon i energiutredninger i departementer og innen forskning der det er relevant å vite hvordan energibruken varierer mellom husholdningstyper. Noen viktige brukere er Enova, NVE (Norges vassdrags- og energidirektorat) og Kommunal- og Regionaldepartementet. For 2001, 2004, 2009, 2012 og 2022 ble husholdningene også spurt om de hadde gjennomført tiltak for å spare energi, for eksempel etterisolering av boligen, for å kunne si noe om omfanget og effekten av dette blant husholdninger. For 2009 var det spesielt fokus på varmepumper og det ble da hentet inn ekstra opplysninger i forhold til dette.
+Det er også en del generell interesse for resultater fra denne undersøkelsen i media og allmenheten.
+Likebehandling av brukere
+Ingen eksterne brukere har tilgang til statistikk før statistikken er publisert kl. 08.00 på ssb.no etter varsling minst tre måneder før i
+statistikkalenderen
+.
+ Dette er et av de viktigste prinsippene i SSB for å sikre
+lik behandling av brukerne
+.
+Sammenheng med annen statistikk
+I SSBs
+årlige energibalanse
+ publiseres totaltall for energibruk i husholdninger i Norge samlet. Kilden for tallene for  strømforbruk i husholdninger i energibalansen er den
+årlig elektrisitetsstatistikken
+ i SSB. I energibalanse-tabell
+13929
+ beregnes energibruk per husholdning ved å dele på antall husholdninger.  I prinsippet burde tall fra undersøkelsen om energibruk per husholdning, ganget opp med antall husholdninger, stemme noenlunde overens med tallet som fremkommer i energibalansen. Det gjør det også nokså bra, men ikke helt. Det skyldes at det er ulike metodikk og datakilder som ligger til grunn. I rapport 2005/41: "Energibruk i husholdninger 1930-2004 og forbruk etter husholdningstype"  (siste avsnitt kapittel 4) er det foretatt en sammenligning av resultater fra denne undersøkelsen og data fra energibalansen for årene 1993, 1994, 1995 og 2001. I utvalgsundersøkelsen er det særlig vanskelig å fange opp bruk av fjernvarme, siden verken husholdningene eller fjernvarmeverkene har god informasjon om fjernvarmeforbruket for enkelthusholdninger, derfor kan dette bli underestimert.
+Lovhjemmel
+Innsamlingen fra husholdningene er frivillig. Frem til og med tall for 2012 er data for strømforbruk og kontraktstype fra husholdningenes elektrisitetsverk innhentet med hjemmel i statistikkloven §2-2 og 2-3. (det er den tidligere statistikkloven) For 2022 er det benyttet data fra Elhub som hentes inn og benyttes i forbindelse med årlig og månedlig elektrisitetsstatistikk.
+Denne statistikken hentes inn, bearbeides og formidles med hjemmel i
+lov av 21. juni 2019 nr. 32 om offisiell statistikk og Statistisk sentralbyrå (statistikkloven, lovdata.no)
+.
+EØS-referanse
+Ingen
+Tidsperiode
+I statistikkbanken foreligger det sammenlignbare tall for ulike årganger fra 1993 til 2022.
+Produksjon
+Omfang
+Statistikken er basert på en utvalgsundersøkelse der husholdningen er statistisk enhet. Husholdningene defineres som kosthusholdninger, det vil si at husholdningen består av personer som har felles adresse og matbudsjett.
+Se også om statistikken "Produksjon" til
+forbruksundersøkelsen
+ , som da er hovedkilden til denne undersøkelsen.
+Datakilder og utvalg
+Datakildene er den årlige forbruksundersøkelsen og tilkoblede opplysninger fra inntektsregisteret. Forbruksundersøkelsen ble for 1993-1995, 2001, 2004, 2006, 2009 og 2012 supplert med tilleggsspørsmål om energibruk og oppvarmingsutstyr for å gi bedre grunnlag for statistikk og analyser av energiforbruket for husholdninger. For 2022 er spørsmål om energi og oppvarmingsutstyr integrert i hovedskjemaet til  forbruksundersøkelsen.
+For årene frem til 2012 så er data for strømforbruk innhentet fra husholdningenes elektrisitetsverk, for de husholdningene som har gitt tillatelse til dette. For 2022 er det koblet på strømforbruksdata fra
+Elhub
+ . Disse dataene er hentet inn i forbindelse med SSB's årlige og månedlige elektrisitetsstatistikk. Koblingen mot husholdninger i forbruksundersøkelsen er gjort ved hjelp av personnummer og / eller boligadresse.
+For 2009 hentet man inn ekstra data fra elverkene for husholdninger som hadde varmepumper. I tillegg til å hente inn strømforbruk for 2009 hentet man inn strømforbruket i anskaffelsesåret, og for året før og etter anskaffelsen av varmepumpen.
+Forbruksundersøkelsen var tidligere basert på besøksintervjuer og føring av utgiftshefter i et representativt utvalg på 2200 husholdninger. For 2004 var det et frafall på ca. 48 prosent, og nettoutvalget utgjorde 1148 husholdninger. Tabeller med kombinasjoner av oppvarmingsutstyr ble basert på data fra alle husholdningene i nettoutvalget, mens energiforbruket ble beregnet på grunnlag av opplysninger fra 1091 husholdninger.
+For 2006 er tabeller for oppvarmingsutstyr basert på opplysninger fra 1027 husholdninger, mens tall for energibruk er basert på svar fra 1010 husholdninger. Dette omfatter hhv 47 og 46 prosent av bruttoutvalget.
+For 2009 er tabeller for oppvarmingsutstyr basert på data fra 1155 husholdninger, mens tallene for energibruk er basert på svar fra 1131 husholdninger. Det tilsvarer henholdsvis 53 og 51 prosent av bruttoutvalget.
+For undersøkelsen i 2012 ble utvalget tredoblet i forhold til tidligere. Bruttoutvalget utgjorde om lag 7000 husholdninger, og nettoutvalget som beregningene for energibruk er basert på utgjorde 3221 husholdninger. Utvalget som beregningene av oppvarmingsutstyr er basert på utgjorde 3346 husholdninger. Dette tilsvarer henholdsvis 46 og 48 prosent av bruttoutvalget.
+Undersøkelsen for 2022 er basert på svar fra 3507 husholdninger. Til denne undersøkelsen ble det trukket et utvalg på 12000 husholdninger, derav 11905 i målpopulasjonen. Dermed ble svarprosenten kun 29,5 prosent av bruttoutvalget. Nedgang i svarprosent har sammenheng med omlegging fra telefon/besøksassistert intervju og håndskrevne hefter for daglige kjøp til selvadministrert webskjema og digital rapportering av kjøp i app. Det ble tatt høyde for antatt nedgang i svarprosent ved å ha et høyere bruttoutvalg.
+Frafallet skyldes at husholdningene ikke svarer, eller at opplysningene som er oppgitt ikke er gode, eller fullstendige nok til å kunne brukes i beregningene. Husholdninger som ikke har oppgitt nok opplysninger til at energiforbruket kan beregnes, eller som ikke har oppgitt nok bakgrunnsinformasjon om f.eks. areal, byggeår osv. på boligen, er tatt ut fra energiberegningene for en del årganger. For 2022 er hele nettoutvalget på 3507 husholdninger benyttet i energiberegningene.
+Se også "Om statistikken" til forbruksundersøkelsen:
+http://www.ssb.no/fbu
+  .  For 2022 er denne undersøkelsen dokumentert i et eget
+dokumentasjonsnotat
+Datainnsamling, editering og beregninger
+Det er benyttet besøksintervju ved bruk av PC-basert spørreskjema CAPI (Computer Assisted Personal Interview) og føringshefter for private forbruksutgifter i en 14-dagersperiode. Data fra elektrisitetsverkene er i ettertid innhentet i papirskjema, eller elektronisk, for husholdninger som har gitt tillatelse til dette, frem til og med 2012. For 2022 så ble elektrisitetsforbruk fra Elhub koblet på ved hjelp av boligadresse eller personnummer.
+Forbruksundersøkelsen ble gjennomført hvert år i perioden 1974-2009, men deretter gikk man over til mer sporadiske undersøkelser. Det ble gjennomført en undersøkelse for 2012, deretter ble neste undersøkelse gjennomført for 2022.  Tilleggsskjemaet om energi er kun tatt med for år hvor det skal foretas energiundersøkelser.
+For 2022 var spørsmålene om energi og oppvarmingsutstyr  integrert i hovedskjemaet til forbruksundersøkelsen.
+Med
+editering
+ mener vi kontroll, gransking og endring av data.
+Se "Om statistikken" til forbruksundersøkelsen:
+http://www.ssb.no/fbu
+ for mer informasjon om revisjon av data fra forbruksundersøkelsen. Når det gjelder kontroller av innrapportert energibruk og oppvarmingsutstyr er det lagt inn en del automatiske kontroller i dataprogrammene som skal avdekke avvikende tall. Noe rettes maskinelt i dataprogrammene mens andre ting må rettes manuelt. Hvis energidataene for en husholdning er for mangelfulle til at energiforbruket kan beregnes, tas husholdningen ut fra energiberegningene.
+For 2004 ga 92 prosent av husholdningene i nettoutvalget SSB tillatelse til å innhente data fra elektrisitetsverket deres. SSB har innhentet strømforbruket fra nettleverandøren mens informasjon om kontraktstype er innhentet fra kraftleverandøren. Disse dataene er innhentet med hjemmel i statistikkloven, derfor er det lite frafall i besvarelsen fra elverkene. I noen tilfeller har imidlertid ikke elverket funnet strømforbruket til abonnenten, for eksempel fordi det er oppgitt feil abonnentnavn eller fordi skjemaet er sendt ut til feil elverk. Derfor har vi likevel ikke informasjon om strømforbruket for alle i utvalget som har gitt tillatelse til å innhente dette. For 81 prosent av husholdningene som er inkludert i energiberegningene i 2004 er tallet for strømforbruk fra elverket brukt direkte. Noen av energiverkene har oppgitt forbruket for bare deler av året, f.eks. for 10 måneder, og i disse tilfellene er forbruket regnet om til årsforbruk på grunnlag av en forbruksprofil som viser gjennomsnittlig strømforbruk i husholdninger per måned. Totalt sett er strømforbruket til ca. 90 prosent av husholdningene basert på opplysninger fra elektrisitetsverkene for 2004, når også disse som har fått omregnet forbruk til årsforbruk regnes med.
+For 2006 ga ca. 90 prosent av husholdningene tillatelse til at strømforbruket ble innhentet fra el-verket. Vi har fått inn opplysninger fra elverket for de fleste av disse, men måtte også for 2006 gjøre visse justeringer av dette, der hvor elverket f.eks. hadde oppgitt for forbruk for en annen periode enn for kalenderåret 2006. I tilfeller hvor informasjon fra elverket mangler, er strømutgiftene som husholdningen selv har oppgitt, benyttet som datakilde for strømforbruk.
+For 2009 ga 1000 husholdninger, eller om lag 88 prosent av husholdningene i nettoutvalget tillatelse til at vi hentet inn strømforbruket fra nettleverandøren deres, mens for 2012 ga 2865 husholdninger tillatelse til at vi hentet inn strømforbruket deres fra elverket, noe som tilsvarer 86 prosent av utvalget.
+For øvrige husholdninger, og i tilfeller hvor vi av andre ulike grunner ikke har mottatt informasjon fra elverket, har vi benyttet data for husholdningenes strømutgifter der disse foreligger. Hvis det ikke finnes gode nok opplysninger til å beregne husholdningens energiforbruk, så er de tatt ut av utvalget for beregningen av energibruk.
+I hovedskjemaet til forbruksundersøkelsen innhentes det opplysninger om utgiftene husholdningene har hatt og hvor mye de har anskaffet av ved, fjernvarme, bioolje, gass,  fyringsolje (frem til og med 2012) og parafin (frem til og med 2012) de siste 12 månedene til både bolig og fritidshus. For strøm ble det frem til 2012 kun spurt om utgifter, men for 2012 ble det også spurt om mengde i kWh. I 2022 er det igjen kun spurt om utgifter, og da kun for den siste måneden. For 2022 er det kun hentet inn tall for utgifter til de ulike energivarene, bortsett fra for ved som er hogget selv der husholdningen ikke kan oppgi en verdi på dette. Her er det hentet inn tall for mengde i sekker osv.
+For husholdninger hvor vi ikke har informasjon om strømforbruket fra elverket, beregnes dette på grunnlag av husholdningenes utgifter til elektrisitet de siste 12 månedene, eller vi har benyttet strømforbruket de har oppgitt i kWh (for 2012-undersøkelsen). For 2022 ble utgifter for siste måned omregnet til utgifter for året.
+Utgiften, og egenrapportert strømforbruk er imidlertid en mindre pålitelig kilde enn data fra elverket, og i tilfeller der dette har sett ut til å være helt galt, og hvor annen informasjon om husholdningenes energibruk mangler, er husholdningen tatt ut fra energiberegningene. På grunn av at intervjutidspunktene for husholdningene er spredd utover kalenderåret, vil forbruket for disse husholdningene fordele seg over to år (både 2011 og 2012 for 2012-undersøkelsen). Dette gjelder også forbruk av ved, olje og parafin som er basert på data for anskaffelser eller utgiften til disse energivarene de siste 12 månedene. For 2022 er det spurt om utgifter per år til andre energivarer enn elektrisitet, som for eksempel fjernvarme, gass eller bioolje. Dette er regnet om til forbruk ved å dele på prisen for den aktuelle energivaren.
+For å beregne forbruk ut fra utgiften, har vi delt beløpet på en gjennomsnittspris for energivaren for den aktuelle perioden (gjennomsnittspris 2011-2012 for 2012 -undersøkelsen). Forbruk / utgifter til energibruk i fritidshus, som det gis opplysninger om i tilleggsskjemaet for energi, er ikke tatt med i beregningene av energibruk, siden energiundersøkelsen kun skal omfatte energibruken i faste boliger.
+Statistikk for kombinasjoner av oppvarmingsutstyr er basert på opplysninger som er gitt i tilleggsskjemaet for energi. I noen tilfeller har det ikke vært samsvar mellom oppgitt energiforbruk og oppvarmingsutstyr, dvs. at de f.eks. oppgir mye bruk av ved, men uten å ha oppgitt noen form for vedovn. Vi har i disse tilfellene antatt at noe av utstyret er uteglemt, og har derfor korrigert utstyret slik at det stemmer overens med forbruket. For 2022 så er denne konsistensen i større grad sikret ved at man spør om utgifter til energi basert på svarene som er gitt for hva slags oppvarmingsutstyr de har.
+For 2022 så er strømforbruket for 2813 husholdninger , altså 80 prosent, basert på tall fra Elhub. Dersom ikke opplysninger fra Elhub finnes, eller der dette er usikkert, som f.eks. der husholdningen ikke har egen strømmåler, eller der man ikke greier å identifisere husholdningen i Elhub, så  brukes egenoppgitte kostnader til strøm, oppgitt for siste måned. Dette er regnet om til årlig utgift til strøm ved bruk av en forbruksprofil (basert på hvordan forbruk og kostnader i gjennomsnitt varierer gjennom året) . Årlig strømforbruk er deretter beregnet ved å dele på en veid strømpris for husholdningen gjennom året. Det er også benyttet informasjon om husholdningstypen, som boligareal, boligtype mv. for å kontrollere beregningene av strømutgifter og forbruk. Spotpriser for strøm per måned er koblet på den enkelte husholdning, basert på informasjon om bosted. For å regne om til total strømpris for husholdningen er avgifter og nettleie lagt til, mens strømstøtte er trukket i fra.
+Sesongjustering
+Ikke relevant
+Konfidensialitet
+Intervjuere og alle som arbeider i Statistisk sentralbyrå har taushetsplikt.
+SSB har utnevnt eget personvernombud
+.
+SSB offentliggjør ikke tall som medfører fare for avsløring av enkeltopplysninger om personer eller husholdninger.
+Data som legges ut på SIKT vil være anonymisert på en slik måte at ingen husholdninger kan gjenkjennes.
+Mer informasjon finner du i avsnittet ‘Konfidensialitet’ på SSBs side om
+metoder i offisiell statistikk
+.
+Sammenlignbarhet over tid og sted
+I forbindelse med at det ble skrevet en rapport om resultatene fra disse undersøkelsene i 2005, ble det foretatt en tilbakegående revisjon, der man benyttet samme metodikk for å frafallskorrigere data fra tidligere undersøkelser (1993,1994,1995 og 2001), for å få sammenlignbare resultater over tid. Se Rapport 2005 /41 vedlegg B for nærmere beskrivelse.
+For årene 1993, 1994 og 1995 ble det opprinnelig benyttet en annen metode og andre datakilder for å frafallskorrigere, fordi man den gang ikke hadde tilgang til de samme opplysningene som ved 2001-undersøkelsen. Resultatene man den gang fikk for årene 1993-1995 er beskrevet i en egen rapport fra 1999. Dette viser noe avvikende resultater fra det som senere er presentert. For 2001 ble det også opprinnelig korrigert for areal ved frafallskorrigeringen, og dette ble presentert i en Dagens statistikk-melding. Dette gikk man senere bort fra, fordi det viste seg at definisjon av boligareal avvek noe fra forbruksundersøkelsen og FoB, som ble benyttet som "fasit" for rette fordelinger.
+For 2006 er forbruk av ved og parafin i fritidshus inkludert i husholdningenes energiforbruk, mens dette er trukket ut for andre årganger, (strømforbruk i fritidshus er ikke med for noen årganger). For å få en sammenlignbar utvikling mellom 2004 og 2006 ble 2004-tallene beregnet på nytt, der forbruk av ved og parafin i fritidshus også var inkludert. Tidsserietabellene viser dermed to sett av tall for 2004, både med og uten forbruk av ved og parafin i fritidshus inkludert. Disse tallene kan man finne i publiseringen av 2006-undersøkelsen.
+For 2022 ble det benyttet en annen faktor for å regne om forbruk av ved fra kilo til kWh enn tidligere. Det skyldes at faktoren for ved ble endret i Energibalansen fra og med publiseringsåret 2025 og bakover i tid.  Faktoren for ved brukt i undersøkelsen for 2022 er på 4,3 kWh/kilo, mens denne faktoren tidligere var 4,67 kWh/kilo. Dermed blir vedforbruket ca. 8 prosent lavere enn ved bruk av den gamle faktoren. Vedforbruk i tidligere årganger av undersøkelsen er ikke regnet om med ny faktor.
+Nøyaktighet og pålitelighet
+Feilkilder og usikkerhet
+I skjemaet som husholdningene fyller ut til forbruksundersøkelsen spørres det etter bruk/ utgifter til anskaffet mengde energi, og ikke faktisk forbruk. Siden ved, olje og parafin ikke nødvendig brukes samme år som det anskaffes, kan det beregnede forbruket avvike fra det faktiske forbruket. Vi har antatt at dette jevner seg ut mellom husholdningene, og at det derfor ikke har noen betydning for det totale gjennomsnittsforbruket. Dette kan imidlertid slå skjevt ut i enkelte tabeller hvor energibruk er beregnet på grunnlag av et lite antall husholdninger. Feil kan også oppstå som følge av at husholdningen ikke husker, eller har fakturaer osv. som viser hvor mye de har anskaffet av ulike energivarer de siste 12 månedene. Det kan også oppstå punsjefeil ved registreringen, eller feil i den optiske lesningen selv om det er lagt inn en del maskinelle rutiner som skal avdekke en del feil.
+Husholdninger med felles sentralfyr som betaler for energi gjennom husleien, kjenner som regel ikke sitt energiforbruk da de ofte ikke har egen måler for energiforbruket, eller måleren dekker bare deler av forbruket. For disse husholdningene er det gjort egne beregninger basert på bl.a. oppgitte utgifter til energi i husleia for de som kjenner dette beløpet, og forbruket er fordelt på elektrisitet og olje. For de som oppgir at de bruker fjernvarme, er energiutgiftene i husleia omregnet til fjernvarmeforbruk. For 2022 er det spurt om utgifter til fjernvarme sentralfyr per år, og da er disse opplysningene benyttet til å beregne fjernvarmeforbruket. For en del av disse er oppvarming inkludert i husleia, og da kan beløpet til fjernvarme-utgifter være et anslag hvis ikke fjernvarme fremkommer av husleia/fellesutgifter, men noen husholdninger har også egen fjernvarmeregning
+Forbruk av fjernvarme er slått sammen med gass i tabellene. Tidligere var det få husholdninger i utvalget som brukte dette, og de kjente vanligvis ikke sitt eget forbruk. Fjernvarmeverket kan vanligvis heller ikke oppgi dette til en enkelthusholdning, fordi det ofte går til felles sentralfyr i borettslag. Beregningene av dette forbruket er derfor usikkert.
+Frafall i besvarelsen, enten ved at husholdningen ikke vil svare, eller at de tas ut fra utvalget på grunn av ufullstendige opplysninger, medfører at fordelingen på ulike husholdningskategorier i utvalget blir feil. For 2004 var det et frafall på 48 prosent. For 2006 var frafallet 53 prosent, når man også regner med besvarelser som var så dårlig utfylt at skjemaene ikke kunne brukes til statistikkformål. For 2009 var frafallet på om lag 47 prosent, mens for 2012 var frafallet, var henholdsvis 54 og 52 prosent for energi- og utstyrsberegningene. For 2022 var frafallet på 70,5 prosent.
+Frafallskorrigeringen er gjort ved å korrigere for husholdningsstørrelse (hhv. 1,2,3,4 og over 4 personer) og hustype; hhv. 1) enebolig/våningshus 2) rekkehus/tomannsbolig og 3) blokk mv. Kilden for riktige fordelinger er Folke- og boligtellingene, 1990 og 2001 og familie- og husholdningsstatistikk kombinert med boligregister. Sistnevnte undersøkelse startet opp årlig fra og med 2005. Fordelingen for 2004 er interpolert på grunnlag av FoB for 2001 og husholdningsstatistikken for 2005, mens for 2006, 2009 og 2012-undersøkelsen er familie- og husholdningsstatistikken brukt direkte.
+For 2022 er frafallsvektene som er beregnet til, og brukt i selve Forbruksundersøkelsen også tatt i bruk i energiberegningene siden vi har brukt samme utvalg. Vi har også beregnet vekter på samme måte som for tidligere årganger, og disse gir lignende resultater. Vi har likevel valgt å bruke vektene beregnet til Forbruksundersøkelsen, siden de tar hensyn til flere variable, og siden ikke resultatene blir noe særlig annerledes. Dette vil dermed ikke medføre et brudd i tidsserien i forhold til tidligere undersøkelser
+Det er særlig enpersonhusholdinger som er underrepresentert i utvalget, slik at disse får en særlig stor vekt. Det skyldes også trekkemetoden som innebærer at det er større sjanse for at store husholdninger med flere personer kommer med i utvalget, enn små.
+Selv om resultatene fra undersøkelsen er frafallskorrigert og utvalget opprinnelig ble trukket som et mest mulig representativt utvalg, kan det fortsatt forekomme skjevheter, som gjør at resultatene ikke er helt representative. Man kan ikke korrigere for alle faktorer ved frafallskorrigering, og det er derfor kun korrigert for det som er viktigst for energibruken. Skjevheter i regional fordeling, kjønn osv, kan fortsatt påvirke resultatene, selv om frafallskorrigeringen som er foretatt delvis også korrigerer for slike faktorer. F.eks. er det en sammenheng mellom alder og husholdningsstørrelse, slik at å korrigere for husholdningsstørrelse også kan bidra til å korrigere for skjevheter i aldersfordeling.
+Andre feil som kan forekomme, er for eksempel hvis elverkene ikke har reelle måleravlesninger for de aktuelle husholdningene, og derfor oppgir stipulerte forbrukstall i stedet. Normalt vil data fra elverkene gi langt bedre opplysninger enn det husholdningen selv kan oppgi for strømforbruk eller utgifter.
+For 2022 er strømforbrukstall fra Elhub brukt som kilde, og det er koblet på via personnummer eller adresse. Her kan koblingsproblemer gjøre at Elhub ikke alltid kan brukes, slik at det er bedre å bruke oppgitte utgifter til strøm som kilde til strømforbruk.
+Revisjon
+Revisjon er planlagt endring av tall som alt er publisert, for eksempel ved publisering av endelige tall der det tidligere har vært publisert foreløpige tall. Se også
+SSBs prinsipper for revisjon.
+Dette har ikke vært relevant for denne undersøkelsen.
+Kvalitetsvurdering
+Ikke relevant
+Relevant dokumentasjon
+https://www.ssb.no/energi-og-industri/artikler-og-publikasjoner/energibruk-i-husholdninger-1930-2004-og-forbruk-etter-husholdningstype
+Kontakt
+Ann Christin Bøeng
+ann.christin.boeng@ssb.no
+40 81 13 58
+Relatert innhold
+Analyser, artikler og publikasjoner
+Artikkel / 23. juli 2025
+Vi bruker mindre energi
+En undersøkelse for 2022 viser at energibruken per husholdning var rundt 13 prosent lavere enn i 2012. Størst var endringen for fossile fyringsoljer, som har opphørt som følge av forbud fra 2020. Betydelig økning i bruk av varmepumper har også bidratt til at vi bruker mindre ved
+Artikkel / 19. desember 2025
+Hva er gjennomsnittlig strømforbruk i husholdningene?
+I gjennomsnitt brukte en norsk husholdning rundt 14 700 kWh strøm i 2024, og om lag 17 200 kWh energi totalt sett, men det er store variasjoner i energibruken i ulike boligtyper.
+Artikkel / 21. desember 2022
+Varmepumper reduserer utgiftene til strømavhengige nordmenn
+Nordmenn er mer avhengig av strøm enn de fleste andre europeere. Mens over 80 prosent av energien vi bruker i boliger i Norge er strøm, så er denne andelen kun rundt 25 prosent i gjennomsnitt i EU.
+Artikkel / 14. juli 2014
+Stadig flere anskaffer varmepumpe
+I 2012 hadde 27 prosent av husholdningene varmepumpe, 9 prosentpoeng mer enn i 2009. Det er særlig husholdninger i eneboliger og våningshus som investerer i varmepumpe. Statistikken viser også en nedadgående trend i energibruken per husholdning.
+Samfunnsspeilet 4/2014
+På verdenstoppen i bruk av strøm
+Norske husholdninger ligger på verdenstoppen, etter Kuwait, i bruk av elektrisk strøm. I 2012 brukte hver husholdning i Norge i gjennomsnitt 20 230 kWh energi til bolig­formål. Dette er 3 prosent mindre enn ved forrige tilsvarende undersøkelse i 2009, temperaturforskjellene tatt i betraktning. Nesten 80 prosent av energiforbruket vårt er strøm, og mye går til oppvarming av bolig, viser tall for 2012.
+Notater 2014/45
+Kartlegging av oppvarmingsutstyr i husholdningene
+I dette notatet gir vi først en oversikt over dagens beholdning av oppvarmingsutstyr og endringene i disse i perioden 1993 til 2012.
+Vis færre
+Relatert statistikk
+Produksjon og forbruk av energi, energibalanse og energiregnskap
+Statistikken dekker tilgang, transformasjon og forbruk av alle energiprodukter i Norge.
+Boforhold, levekårsundersøkelsen
+Statistikken kartlegger boforhold som eierskap, bomiljø, boligtype, -standard og -økonomi.
+Vis alle
+Faktasider
+Strøm
+Vindkraft
+Solkraft
+Olje og energi
+Vis alle (6)
+Bunnmeny
+Til toppen
+Verktøy
+Statistikkbanken
+Kalkulatorer
+Kartportal
+Metadata
+API-er
+Tjenester
+Biblioteket
+Statistikk på oppdrag
+Data til forskning
+Kurs og seminarer
+SSB skole
+Veiledning for forsøk
+Publikasjoner
+Publiseringsarkiv
+Konjunkturtendensene
+SSB innsikt
+Dette er Norge
+Historisk statistikk
+Norske folketeljingar
+Bærekraftsmålene
+Om SSB
+SSBs virksomhet
+Kvalitet i offisiell statistikk
+Statistikkprogrammet
+Forskning
+Svare på undersøkelse?
+Tilgjengelighet
+SSB feirer 150 år
+Kontakt
+Kontakt oss
+For pressen
+Jobb i SSB
+Nyhetsbrev
+Verktøy
+Verktøy
+Statistikkbanken
+Kalkulatorer
+Kartportal
+Metadata
+API-er
+Tjenester
+Tjenester
+Biblioteket
+Statistikk på oppdrag
+Data til forskning
+Kurs og seminarer
+SSB skole
+Veiledning for forsøk
+Publikasjoner
+Publikasjoner
+Publiseringsarkiv
+Konjunkturtendensene
+SSB innsikt
+Dette er Norge
+Historisk statistikk
+Norske folketeljingar
+Bærekraftsmålene
+Om SSB
+Om SSB
+SSBs virksomhet
+Kvalitet i offisiell statistikk
+Statistikkprogrammet
+Forskning
+Svare på undersøkelse?
+Tilgjengelighet
+SSB feirer 150 år
+Kontakt
+Kontakt
+Kontakt oss
+For pressen
+Jobb i SSB
+Nyhetsbrev
+Personvern og informasjonskapsler
+Endre samtykke for informasjonskapsler
+© Statistisk sentralbyrå
+© Statistisk sentralbyrå
