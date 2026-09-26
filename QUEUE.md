@@ -189,7 +189,8 @@ notes:
 - Funn fra Codex-gjennomgang 2026-09-14 (FIX 9). Kildetekst: `sources/text/<party>.txt` per manifest-rad (`textFile`); les i vinduer, aldri hele filen i hovedtråden.
 
 ## Q-005 · Motortest: minstefradrag med både lønn og pensjon
-status: blocked:sprint 2026-09-25 (docs/sprint-2026-09.md)
+status: done
+result: Sprint 2026-09 lane L2, merged to main at 4c727ca 2026-09-26. src/engine/income-tax.test.ts: minstefradrag 46000/75400/95700 + trygdeavgift cases. Codex PASS.
 lane: partiskatt-main
 
 acceptance:
@@ -223,7 +224,8 @@ notes:
   partikort-filene.
 
 ## Q-006 · Motortest: utvidet barnetrygd for enslig forsørger
-status: blocked:sprint 2026-09-25 (docs/sprint-2026-09.md)
+status: done
+result: Sprint 2026-09 lane L2, merged to main at 4c727ca 2026-09-26. src/engine/benefits.test.ts: single parent [4,10] = 79 152 (full-year decision 2026-09-25); anti-vacuity turns this and profiles.test.ts red. Codex PASS.
 lane: partiskatt-main
 
 acceptance:
@@ -250,7 +252,8 @@ notes:
 - Kolliderer ikke med Q-001→Q-003.
 
 ## Q-007 · Motortest: gjeldsfordeling i formuesskatten over flere klasser
-status: blocked:sprint 2026-09-25 (docs/sprint-2026-09.md)
+status: done
+result: Sprint 2026-09 lane L2, merged to main at 4c727ca 2026-09-26. src/engine/wealth-tax.test.ts: gjeldsreduksjon 738 461, nettoformue 4 638 461, skatt 27 385. The queue's suggested mutation (secondaryHome applies) is inert because secondaryHomeBp = 100 %; listedShares used instead (Codex agrees). Codex PASS.
 lane: partiskatt-main
 
 acceptance:
