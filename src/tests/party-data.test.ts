@@ -2,11 +2,12 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { DATA_BUNDLE, PROPOSED_2026, partyOf, sourceOf } from '../data/index.ts';
+import { ADOPTED_2026, DATA_BUNDLE, PROPOSED_2026, partyOf, sourceOf } from '../data/index.ts';
+import { krPerUnit } from '../engine/money.ts';
 import { KNOWN_KNOTS } from '../data/knots.ts';
 import { NON_FORLIK_BASELINE_DIFFS } from '../data/baseline/2026/forlik.ts';
 import { anchorInText, normalizeForAnchor, parsePageRefs } from '../data/provenance.ts';
-import type { AnyRule, FormulaId, PartyId } from '../types/index.ts';
+import type { AnyRule, FormulaId, FormulaParams, PartyId } from '../types/index.ts';
 import { PARTY_IDS } from '../types/index.ts';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -126,8 +127,41 @@ describe('party rule status — operator gate 3', () => {
 });
 
 describe('party baselineParams vs proposed', () => {
-  /** Rules that carry `baselineParams`, as `party:formulaId`. Explicitly none today. */
-  const WITH_BASELINE_PARAMS: readonly string[] = [];
+  /**
+   * Rules that carry `baselineParams`, as `party:formulaId`: the relative proposals derived against
+   * Prop. 1 LS (decision 2, L10b) and the explicit values whose quoted baseline is Prop. 1 LS.
+   */
+  const WITH_BASELINE_PARAMS: readonly string[] = [
+    'h:wealth.netWealthTax',
+    'h:excise.cigarette',
+    'h:benefit.childBenefit',
+    'frp:income.bracketTax',
+    'frp:income.unionFeeDeduction',
+    'frp:vat.food',
+    'frp:excise.petrolLitre',
+    'frp:excise.dieselLitre',
+    'sv:wealth.netWealthTax',
+    'sv:wealth.valuation',
+    'sv:excise.petrolLitre',
+    'sv:excise.dieselLitre',
+    'sv:excise.flightEurope',
+    'sv:excise.flightOther',
+    'sv:benefit.childBenefit',
+    'sp:income.socialSecurity',
+    'sp:wealth.netWealthTax',
+    'sp:wealth.valuation',
+    'sp:excise.flightEurope',
+    'r:wealth.netWealthTax',
+    'r:wealth.valuation',
+    'r:benefit.childBenefit',
+    'r:benefit.studentSupport',
+    'v:wealth.netWealthTax',
+    'v:excise.cigarette',
+    'mdg:income.socialSecurity',
+    'mdg:wealth.netWealthTax',
+    'mdg:excise.petrolLitre',
+    'mdg:excise.dieselLitre',
+  ];
 
   it('exactly the listed rules carry baselineParams, each deep-equal to proposed', () => {
     const withBaseline = DATA_BUNDLE.parties.flatMap((party) =>
@@ -275,13 +309,13 @@ describe('NON_FORLIK_BASELINE_DIFFS', () => {
 
 describe('agreed-value coverage', () => {
   const ENCODED: Record<Exclude<PartyId, 'ap'>, FormulaId[]> = {
-    h: ['income.socialSecurity', 'wealth.valuation'],
-    frp: ['income.socialSecurity', 'income.personalAllowance', 'wealth.valuation'],
-    sv: ['income.socialSecurity', 'income.bracketTax', 'income.personalAllowance', 'income.minimumDeductionWage', 'income.minimumDeductionPension'],
-    sp: ['income.bracketTax', 'wealth.valuation', 'vat.food'],
-    r: ['income.socialSecurity', 'income.bracketTax', 'income.personalAllowance'],
-    v: ['income.socialSecurity', 'income.personalAllowance', 'wealth.valuation', 'excise.kwh'],
-    mdg: ['income.personalAllowance'],
+    h: ['income.socialSecurity', 'wealth.netWealthTax', 'wealth.valuation', 'excise.cigarette', 'benefit.childBenefit'],
+    frp: ['income.socialSecurity', 'income.bracketTax', 'income.personalAllowance', 'income.unionFeeDeduction', 'wealth.netWealthTax', 'wealth.valuation', 'vat.food', 'excise.petrolLitre', 'excise.dieselLitre'],
+    sv: ['income.socialSecurity', 'income.bracketTax', 'income.personalAllowance', 'income.minimumDeductionWage', 'income.minimumDeductionPension', 'wealth.netWealthTax', 'wealth.valuation', 'excise.petrolLitre', 'excise.dieselLitre', 'excise.flightEurope', 'excise.flightOther', 'benefit.childBenefit', 'benefit.studentSupport'],
+    sp: ['income.bracketTax', 'income.socialSecurity', 'wealth.netWealthTax', 'wealth.valuation', 'vat.food', 'excise.flightEurope'],
+    r: ['income.socialSecurity', 'income.bracketTax', 'income.personalAllowance', 'wealth.netWealthTax', 'wealth.valuation', 'benefit.childBenefit', 'benefit.studentSupport'],
+    v: ['income.socialSecurity', 'income.personalAllowance', 'wealth.netWealthTax', 'wealth.valuation', 'excise.kwh', 'excise.cigarette'],
+    mdg: ['income.personalAllowance', 'income.socialSecurity', 'wealth.netWealthTax', 'excise.petrolLitre', 'excise.dieselLitre'],
     krf: ['wealth.valuation', 'benefit.childBenefit', 'excise.cigarette', 'excise.snusGram'],
   };
 
@@ -292,4 +326,81 @@ describe('agreed-value coverage', () => {
       expect(encoded.sort()).toEqual([...ids].sort());
     },
   );
+});
+
+/**
+ * Decision 2 (2026-09-25): a relative proposal is encoded only where the arithmetic against Prop. 1 LS
+ * is unambiguous. Each case recomputes the encoded value from the `proposed` baseline, so a changed
+ * baseline or a mistyped number fails here. Constants are the party's own change (page in the rule's
+ * provenance) or a Prop. 1 LS component that is pinned to the baseline in the same case.
+ */
+describe('derived party rules (decision 2) reproduce their arithmetic from Prop. 1 LS', () => {
+  const P = <F extends FormulaId>(id: F) => ruleOf(PROPOSED_2026, id).params as FormulaParams[F];
+  const A = <F extends FormulaId>(id: F) => ruleOf(ADOPTED_2026, id).params as FormulaParams[F];
+  const enc = <F extends FormulaId>(party: PartyId, id: F) => {
+    const d = partyOf(party).deltas.find((x) => x.id === id);
+    if (!d) throw new Error(`${party} has no ${id}`);
+    return d.params as FormulaParams[F];
+  };
+  const brackets = (patch: Record<number, number>) =>
+    P('income.bracketTax').brackets.map((b, i) => (i in patch ? { ...b, rateBp: patch[i]! } : b));
+  const ss = P('income.socialSecurity');
+  const nw = P('wealth.netWealthTax');
+  const val = P('wealth.valuation');
+  const cb = P('benefit.childBenefit');
+  // The price-indexed child benefit (1 968 → 2 012, 2 516 → 2 572) is the adopted rate from 1.2.2026.
+  const cbIndexed = A('benefit.childBenefit');
+
+  const CASES: [string, () => unknown, () => unknown][] = [
+    ['frp income.bracketTax: trinn 1 fjernes, trinn 2 − 0,5 pp', () => enc('frp', 'income.bracketTax'), () => ({ brackets: brackets({ 0: 0, 1: P('income.bracketTax').brackets[1]!.rateBp - 50 }) })],
+    ['frp income.unionFeeDeduction: fjernes', () => enc('frp', 'income.unionFeeDeduction'), () => ({ max: 0 })],
+    ['frp vat.food: halveres', () => enc('frp', 'vat.food'), () => ({ rateBp: P('vat.food').rateBp / 2 })],
+    ['frp excise.petrolLitre: veibruk 4,25 ÷ 2 + CO2 2025 3,25', () => enc('frp', 'excise.petrolLitre'), () => {
+      expect(krPerUnit(4.25 + 3.8)).toBe(P('excise.petrolLitre').ratePerUnit);
+      return { ratePerUnit: krPerUnit(4.25 / 2 + 3.25) };
+    }],
+    ['frp excise.dieselLitre: veibruk 3,00 ÷ 2 + CO2 2025 3,79', () => enc('frp', 'excise.dieselLitre'), () => {
+      expect(krPerUnit(3.0 + 4.42)).toBe(P('excise.dieselLitre').ratePerUnit);
+      return { ratePerUnit: krPerUnit(3.0 / 2 + 3.79) };
+    }],
+    ['sp income.socialSecurity: lønn − 0,1 pp', () => enc('sp', 'income.socialSecurity'), () => ({ ...ss, wageRateBp: ss.wageRateBp - 10 })],
+    ['mdg income.socialSecurity: regjeringens kutt reverseres (+ 0,1 pp)', () => enc('mdg', 'income.socialSecurity'), () => ({ ...ss, wageRateBp: ss.wageRateBp + 10 })],
+    ['h wealth.netWealthTax: bunnfradrag + 100 000, ektepar dobbelt', () => enc('h', 'wealth.netWealthTax'), () => {
+      expect(nw.couple.allowance).toBe(2 * nw.single.allowance);
+      const single = nw.single.allowance + 100_000;
+      return { ...nw, single: { ...nw.single, allowance: single }, couple: { ...nw.couple, allowance: 2 * single } };
+    }],
+    ['v wealth.netWealthTax: trinn 1 − 0,1 pp', () => enc('v', 'wealth.netWealthTax'), () => ({ ...nw, tier1RateBp: nw.tier1RateBp - 10 })],
+    ['sp wealth.valuation: driftsmidler + 10 pp rabatt', () => enc('sp', 'wealth.valuation'), () => ({ ...val, primaryHomeHighValueThreshold: 10_210_000, otherBp: val.otherBp - 1000 })],
+    ['r wealth.valuation: rabatter fjernet (Tabell 3)', () => enc('r', 'wealth.valuation'), () => ({ ...val, primaryHomeHighValueBp: 10_000, listedSharesBp: 10_000, otherBp: 10_000 })],
+    ['sv wealth.valuation: rabatter fjernet', () => enc('sv', 'wealth.valuation'), () => ({ ...val, primaryHomeHighValueBp: 10_000, listedSharesBp: 10_000, otherBp: 10_000 })],
+    ['h excise.cigarette: + 15 pst', () => enc('h', 'excise.cigarette'), () => ({ ratePerUnit: Math.round(P('excise.cigarette').ratePerUnit * 1.15) })],
+    ['v excise.cigarette: + 5 pst', () => enc('v', 'excise.cigarette'), () => ({ ratePerUnit: Math.round(P('excise.cigarette').ratePerUnit * 1.05) })],
+    ['sv excise.flightEurope: + 20 pst', () => enc('sv', 'excise.flightEurope'), () => ({ ratePerUnit: Math.round(P('excise.flightEurope').ratePerUnit * 1.2) })],
+    ['sv excise.flightOther: + 20 pst', () => enc('sv', 'excise.flightOther'), () => ({ ratePerUnit: Math.round(P('excise.flightOther').ratePerUnit * 1.2) })],
+    ['sv excise.petrolLitre: veibruk + 0,25', () => enc('sv', 'excise.petrolLitre'), () => ({ ratePerUnit: P('excise.petrolLitre').ratePerUnit + krPerUnit(0.25) })],
+    ['sv excise.dieselLitre: veibruk + 0,25', () => enc('sv', 'excise.dieselLitre'), () => ({ ratePerUnit: P('excise.dieselLitre').ratePerUnit + krPerUnit(0.25) })],
+    ['mdg excise.petrolLitre: veibruk + 2,50', () => enc('mdg', 'excise.petrolLitre'), () => ({ ratePerUnit: P('excise.petrolLitre').ratePerUnit + krPerUnit(2.5) })],
+    ['mdg excise.dieselLitre: veibruk + 2,50', () => enc('mdg', 'excise.dieselLitre'), () => ({ ratePerUnit: P('excise.dieselLitre').ratePerUnit + krPerUnit(2.5) })],
+    ['h benefit.childBenefit: prisjustert', () => enc('h', 'benefit.childBenefit'), () => {
+      expect(cbIndexed.under6PerMonth - cb.under6PerMonth).toBe(44); // Rødt s. 11: +88 kr/mnd for to barn
+      return { ...cb, under6PerMonth: cbIndexed.under6PerMonth, from6PerMonth: cbIndexed.from6PerMonth, extendedSingleParentPerMonth: cbIndexed.extendedSingleParentPerMonth };
+    }],
+    ['r benefit.childBenefit: prisjustert, utvidet + 500', () => enc('r', 'benefit.childBenefit'), () => ({ ...cb, under6PerMonth: cbIndexed.under6PerMonth, from6PerMonth: cbIndexed.from6PerMonth, extendedSingleParentPerMonth: cbIndexed.extendedSingleParentPerMonth + 500 })],
+    ['sv benefit.childBenefit: prisjustert + 100 per barn', () => enc('sv', 'benefit.childBenefit'), () => ({ ...cb, under6PerMonth: cbIndexed.under6PerMonth + 100, from6PerMonth: cbIndexed.from6PerMonth + 100, extendedSingleParentPerMonth: cbIndexed.extendedSingleParentPerMonth })],
+    ['r benefit.studentSupport: + 1 250 kr/mnd', () => enc('r', 'benefit.studentSupport'), () => ({ ...P('benefit.studentSupport'), basicSupportPerMonth: P('benefit.studentSupport').basicSupportPerMonth + 1_250 })],
+  ];
+
+  it.each(CASES)('%s', (_label, actual, expected) => {
+    expect(actual()).toEqual(expected());
+  });
+
+  it('every derived rule is covered by a case', () => {
+    // KrF's derived tobacco rules (L10a) are recomputed in the K2 test above.
+    const derived = DATA_BUNDLE.parties.filter((p) => p.id !== 'krf').flatMap((p) =>
+      p.deltas.filter((d) => /Utledet \(beslutning 2\)/.test(d.note ?? '')).map((d) => `${p.id} ${d.id}`),
+    );
+    const covered = CASES.map(([label]) => label.split(':')[0]!);
+    expect(derived.filter((k) => !covered.includes(k))).toEqual([]);
+  });
 });

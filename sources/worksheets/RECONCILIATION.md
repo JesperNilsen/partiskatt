@@ -22,22 +22,24 @@ Flags are independent of the verdict: `estimated` (needs an assumption), `derive
 
 | party | rows | agreed | conflicts | flagged | encodable | may enter headline |
 |---|---|---|---|---|---|---|
-| [Høyre](h.reconciled.md) | 33 | 31 | 2 | 6 | 4 | 2 |
-| [Fremskrittspartiet](frp.reconciled.md) | 33 | 26 | 7 | 11 | 4 | 4 |
-| [Sosialistisk Venstreparti](sv.reconciled.md) | 36 | 26 | 10 | 18 | 8 | 8 |
-| [Senterpartiet](sp.reconciled.md) | 33 | 25 | 8 | 11 | 4 | 4 |
-| [Rødt](r.reconciled.md) | 33 | 25 | 8 | 12 | 8 | 6 |
-| [Venstre](v.reconciled.md) | 33 | 26 | 7 | 14 | 8 | 6 |
-| [Miljøpartiet De Grønne](mdg.reconciled.md) | 33 | 19 | 14 | 18 | 4 | 2 |
+| [Høyre](h.reconciled.md) | 33 | 32 | 1 | 6 | 5 | 4 |
+| [Fremskrittspartiet](frp.reconciled.md) | 33 | 32 | 1 | 11 | 10 | 9 |
+| [Sosialistisk Venstreparti](sv.reconciled.md) | 36 | 35 | 1 | 18 | 17 | 16 |
+| [Senterpartiet](sp.reconciled.md) | 33 | 33 | 0 | 11 | 11 | 6 |
+| [Rødt](r.reconciled.md) | 33 | 32 | 1 | 11 | 14 | 9 |
+| [Venstre](v.reconciled.md) | 33 | 33 | 0 | 12 | 14 | 6 |
+| [Miljøpartiet De Grønne](mdg.reconciled.md) | 33 | 33 | 0 | 15 | 15 | 5 |
 | [Kristelig Folkeparti](krf.reconciled.md) | 33 | 33 | 0 | 7 | 7 | 4 |
-| **sum** | 267 | 211 | 56 | 97 | 47 | 36 |
+| **sum** | 267 | 263 | 4 | 91 | 93 | 59 |
 
 ## Rows S7 may encode (both extractors agree on a number)
 
 | party | formulaId | value | status | flags |
 |---|---|---|---|---|
 | h | `wealth.valuation` | aksjer og driftsmidler: 60 pst.; primærbolig, sekundærbolig, bankinns… | confirmed | `no-baseline-quoted`×2 |
+| frp | `income.bracketTax.trinn1` | sats 0 % (trinnet fjernes) | estimated | `estimated`×2 `no-baseline-quoted`×2 |
 | frp | `income.personalAllowance` | kr 127 850 | confirmed | `no-baseline-quoted`×2 |
+| frp | `wealth.netWealthTax` | bunnfradrag enslig 3 000 000, ektepar 6 000 000; sats 0,8 % (også ove… | estimated | `estimated`×2 |
 | frp | `wealth.valuation` | sekundærbolig 80 %; primærbolig DERIVE (reversering av ny modell, ikk… | confirmed | `page-mismatch` `baseline-mismatch` |
 | sv | `income.bracketTax.trinn3` | sats 16,2 %; innslagspunkt DERIVE (ikke nevnt ⇒ uendret) | confirmed | `no-baseline-quoted`×2 |
 | sv | `income.bracketTax.trinn4` | sats 19,2 %; innslagspunkt DERIVE (ikke nevnt ⇒ uendret) | confirmed | `no-baseline-quoted`×2 |
@@ -45,18 +47,31 @@ Flags are independent of the verdict: `estimated` (needs an assumption), `derive
 | sv | `income.personalAllowance` | kr 143 000 | confirmed | `no-baseline-quoted`×2 |
 | sv | `income.minimumDeductionWage` | sats 55 %; øvre grense NOT FOUND | confirmed | `no-baseline-quoted`×2 |
 | sv | `income.minimumDeductionPension` | sats 55 %; øvre grense NOT FOUND | confirmed | `no-baseline-quoted`×2 |
+| sv | `wealth.netWealthTax` | bunnfradrag 2 000 000 (ektepar 4 000 000); trinn 1 1,1 %; trinn 2 20 … | estimated | `estimated`×2 `no-baseline-quoted`×2 |
+| sv | `wealth.netWealthTax.trinn1` | 1,1 % | estimated | `estimated`×2 `no-baseline-quoted`×2 |
+| sv | `wealth.netWealthTax.trinn2` | 20 000 000 / 1,4 % | estimated | `estimated`×2 `no-baseline-quoted`×2 |
+| sv | `excise.petrolLitre` | veibruksavgift 4,50 kr/l; CO2-avgift som Prop. 1 LS (3,80) ⇒ 8,30 kr/l | estimated | `estimated`×2 `no-baseline-quoted`×2 |
+| sv | `excise.dieselLitre` | veibruksavgift 3,25 kr/l; CO2-avgift som Prop. 1 LS (4,42) ⇒ 7,67 kr/l | estimated | `estimated`×2 `no-baseline-quoted`×2 |
+| sv | `benefit.studentSupport` | basislån 16 686 kr/mnd i studieåret 2026-2027 | estimated | `estimated`×2 |
 | sp | `income.bracketTax.trinn4` | innslagspunkt: kr 960 000 · sats: ikke oppgitt | confirmed | `no-baseline-quoted`×2 |
-| sp | `wealth.valuation` | grense for boliger: 10,21 mill. kr | confirmed | — |
+| sp | `wealth.netWealthTax` | bunnfradrag 2 000 000 (ektepar 4 000 000); satser uendret | estimated | `estimated`×2 `no-baseline-quoted`×2 |
+| sp | `wealth.valuation` | boliggrense 10,21 mill. kr; driftsmidler DERIVE (70 - 10 = 60 %) | estimated | `estimated`×2 |
 | sp | `vat.food` | 10 prosent fra 1. september 2026 | confirmed | `no-baseline-quoted` `effective-date-differs` |
+| sp | `excise.flightEurope` | kr 50 per passasjer (lav sats) | estimated | `estimated`×2 |
+| r | `income.bracketTax.trinn1` | sats 0 % (trinnet fjernes) | estimated | `estimated`×2 |
 | r | `income.bracketTax.trinn2` | 404 115 / 4,0 % | confirmed | — |
 | r | `income.bracketTax.trinn4` | 800 000 / 21,7 % | confirmed | — |
 | r | `income.bracketTax.trinn5` | 1 467 200 / 25,0 % | confirmed | — |
 | r | `income.personalAllowance` | 121 810 | confirmed | — |
+| r | `wealth.netWealthTax` | bunnfradrag 2 200 000 (ektepar 4 400 000); sats 1 1,2 %; trinn 2 20 0… | estimated | `estimated`×2 |
+| r | `wealth.valuation` | primærbolig 25 %; over 10 mill. 100 %; sekundærbolig 100 %; aksjer og… | estimated | `estimated`×2 |
 | v | `income.socialSecurity` | nedre grense: kr 150 000. Satser lønn/pensjon: NOT FOUND | confirmed | `page-mismatch` `baseline-mismatch` |
 | v | `income.personalAllowance` | kr 125 757 | confirmed | `no-baseline-quoted` |
 | v | `wealth.valuation` | aksjer mv. («arbeidende kapital»): 70 pst. Primærbolig / sekundærboli… | confirmed | — |
 | v | `excise.kwh` | 6 øre/kWh hele året | confirmed | `baseline-not-proposed` `page-mismatch` `baseline-mismatch` |
+| v | `benefit.childBenefit` | 37 786 kr/år før skatt (alle barn 0-18); barnetrygden skattlegges | unquantified | — |
 | mdg | `income.personalAllowance` | kr 125 000 | confirmed | `no-baseline-quoted`×2 |
+| mdg | `wealth.netWealthTax` | bunnfradrag 10 000 000 (ektepar 20 000 000); satser uendret | estimated | `estimated`×2 `no-baseline-quoted`×2 |
 | krf | `wealth.valuation` | aksjer og driftsmidler: 60 pst | confirmed | `derive-detail-mismatch` |
 | krf | `benefit.childBenefit` | kr 2 250 per mnd | confirmed | `no-baseline-quoted`×2 |
 
@@ -65,61 +80,9 @@ Flags are independent of the verdict: `estimated` (needs an assumption), `derive
 | party | formulaId | verdict | claude | codex | why |
 |---|---|---|---|---|---|
 | h | `income.socialSecurity` | evidence-conflict | nedre grense (frikortgrense): kr 150 000; satser … | DERIVE | claude needs an assumption: ANTAKELSE: dokumentet sier "frikortgrensen", ikke "nedre grense i trygdeavgiften"; å behandle dem som samme par… |
-| h | `wealth.netWealthTax` | evidence-conflict | bunnfradrag: DERIVE; satser og trinn 2: NOT FOUND | DERIVE | claude gives value «bunnfradrag: DERIVE; satser og trinn 2: NOT FOUND», codex gives derive «DERIVE» |
-| frp | `income.bracketTax.trinn1` | evidence-conflict | sats: 0 % (trinnet fjernes); innslagspunkt: NOT F… | DERIVE | claude gives value «sats: 0 % (trinnet fjernes); innslagspunkt: NOT FOUND», codex gives derive «DERIVE» |
 | frp | `income.socialSecurity` | one-sided | satser lønn/pensjon: NOT FOUND. Nedre grense: kr … | NOT FOUND | claude needs an assumption: ANTAGELSE: dokumentet sier «frikortgrensen», ikke «trygdeavgiftens nedre grense» - ordet «trygdeavgift» finnes … |
-| frp | `income.unionFeeDeduction` | evidence-conflict | kr 0 (fradraget fjernes) | DERIVE | claude gives value «kr 0 (fradraget fjernes)», codex gives derive «DERIVE» |
-| frp | `wealth.netWealthTax` | value-conflict | bunnfradrag enslig kr 3 000 000, ektefeller kr 6 … | 3 mill. / 6 millioner for ektepar; 0,8%; trinn 2 … | the two readings quote different baselines: claude ««fra 1,9 til 3 millioner kroner» (s. 8, s. 13)» vs codex «1,9 millioner kroner (enslig)… |
-| frp | `excise.petrolLitre` | evidence-conflict | DERIVE: veibruksavgift = baseline ÷ 2; CO2-avgift… | DERIVE | claude gives value «DERIVE: veibruksavgift = baseline ÷ 2; CO2-avgift = baseline før regjeringens økning», codex gives derive «DERIVE» |
-| frp | `excise.dieselLitre` | evidence-conflict | DERIVE: veibruksavgift = baseline ÷ 2; CO2-avgift… | DERIVE | claude gives value «DERIVE: veibruksavgift = baseline ÷ 2; CO2-avgift = baseline før regjeringens økning», codex gives derive «DERIVE» |
-| frp | `benefit.studentSupport` | value-conflict | DERIVE: basisstøtte knyttet til 1,5 G, innfaset o… | DERIVE | claude ««Fremskrittspartiet vil derfor knytte studiestøtten til 1,5 G over fire år.»» vs codex «Knytte studiestøtte opp til 1,5 G over fire… |
 | sv | `income.socialSecurity` | one-sided | nedre grense/frikortgrense: kr 150 000. Satser lø… | NOT FOUND | claude needs an assumption: ANTAKELSE: dokumentet sier «frikortgrensen», ikke «nedre grense i trygdeavgiften»; koblingen mellom de to står … |
-| sv | `wealth.netWealthTax` | value-conflict | bunnfradrag (enslig) kr 2 000 000; ektefeller DER… | 2 millioner; personstatus ikke spesifisert | claude «bunnfradrag (enslig) kr 2 000 000; ektefeller DERIVE (ikke oppgitt); trinn 1-sats 1,1 %; trinn 2 innslag 20 mill., sats 1,4 %; nytt… |
-| sv | `wealth.valuation` | value-conflict | aksjer: DERIVE (rabatt fjernet ⇒ 100 %, prosent i… | aksjer DERIVE; primærbolig over 10 mill kr DERIVE… | claude ««Fjerne aksjerabatten (inkludert næringseiendom)»; «Fjerne verdsettelsesrabatten for primærbolig med høy verdi (over 10 mill kr)»» … |
-| sv | `excise.petrolLitre` | value-conflict | veibruksavgift 4,50 kr/L; CO2-avgift bensin: unqu… | veibruksavgift 4,50 kr/L; CO2-avgift DERIVE | claude «veibruksavgift 4,50 kr/L; CO2-avgift bensin: unquantified» vs codex «veibruksavgift 4,50 kr/L; CO2-avgift DERIVE» |
-| sv | `excise.dieselLitre` | value-conflict | veibruksavgift 3,25 kr/L; CO2-avgift diesel: unqu… | veibruksavgift 3,25 kr/L; CO2-avgift DERIVE | claude «veibruksavgift 3,25 kr/L; CO2-avgift diesel: unquantified» vs codex «veibruksavgift 3,25 kr/L; CO2-avgift DERIVE» |
-| sv | `benefit.childBenefit` | evidence-conflict | DERIVE (satsnivåer ikke oppgitt); endring +144 kr… | DERIVE | claude gives value «DERIVE (satsnivåer ikke oppgitt); endring +144 kr/mnd fra 1. mai for alle aldersgrupper», codex gives derive «DERIVE» |
-| sv | `benefit.studentSupport` | value-conflict | basislån kr 16 686/mnd i 2026-2027 (+10 %) | basislån 16.686 kr/mnd i snitt; folkehøgskole sti… | the two readings quote different baselines: claude «basislån kr 15 169/mnd (utledet: 16 686 - 1 517)» vs codex «basislån NOT FOUND; folkehø… |
-| sv | `wealth.netWealthTax.trinn1` | only-in-one-sheet | — | 1,1 prosent | only codex has a row for wealth.netWealthTax.trinn1 |
-| sv | `wealth.netWealthTax.trinn2` | only-in-one-sheet | — | 20 millioner; 1,4 prosent | only codex has a row for wealth.netWealthTax.trinn2 |
-| sv | `wealth.netWealthTax.trinn3` | only-in-one-sheet | — | over 100 mill kr; 1,7 prosent | only codex has a row for wealth.netWealthTax.trinn3 |
-| sp | `income.bracketTax.trinn5` | evidence-conflict | bortfaller - slått sammen med trinn 4 | DERIVE | claude gives value «bortfaller - slått sammen med trinn 4», codex gives derive «DERIVE» |
-| sp | `wealth.netWealthTax` | value-conflict | bunnfradrag: kr 2 000 000 | bunnfradrag 2 mill. kroner; ektefeller/satser NOT… | claude «bunnfradrag: kr 2 000 000» vs codex «bunnfradrag 2 mill. kroner; ektefeller/satser NOT FOUND» |
-| sp | `excise.petrolLitre` | status-conflict | DERIVE | DERIVE | claude needs an assumption: To separate vedtak på samme post: (1) kutt i vegbruksavgift slik at de samlede bensinavgiftene blir reelt uendr… |
-| sp | `excise.dieselLitre` | status-conflict | DERIVE | DERIVE | claude needs an assumption: Samme struktur som bensin: (1) kutt slik at samlede dieselavgifter blir reelt uendret - kronebeløp per liter ik… |
-| sp | `excise.flightEurope` | one-sided | kr 50 per passasjer (lav sats) | NOT FOUND | only claude found this proposal in the document |
-| sp | `excise.beerLitre` | one-sided | avgiften fjernet for gruppa «0,7 til 2,7 pst.»; ø… | NOT FOUND | only claude found this proposal in the document |
-| sp | `benefit.childBenefit` | one-sided | DERIVE (dobbel sats for tredje barn fra 1.10.2026) | NOT FOUND | only claude found this proposal in the document |
-| sp | `benefit.studentSupport` | one-sided | NOT FOUND | 40 % for studentar ved folkehøgskular; basisstøtt… | codex: the party measures this change against today's rate, not against Prop. 1 LS |
-| r | `income.bracketTax.trinn1` | one-sided | Fjernes - ingen trinn 1 | Fjernes / - | only claude found this proposal in the document |
-| r | `income.bracketTax.trinn3` | status-conflict | 725 050 / 13,7 % | kr 725 050 / 13,7 % | same value, status «confirmed» vs «no-change» |
 | r | `income.socialSecurity` | one-sided | nedre grense (frikortgrense) 150 000 kr; satser l… | NOT FOUND | only claude found this proposal in the document |
-| r | `wealth.netWealthTax` | value-conflict | Bunnfradrag 2 200 000; Sats 1 1,2 %; Trinn 2 20 0… | kr 2 200 000; 1,2 %; kr 20 000 000 / 1,4 %; kr 10… | the two readings quote different baselines: claude «Bunnfradrag 1 900 000; Sats 1 1,0 %; Trinn 2 21 500 000; Sats 2 1,1 %; Trinn 3 -; Sats … |
-| r | `wealth.valuation` | value-conflict | Primærbolig 25 %; primærbolig o/10 mill. 100 %; s… | Primærbolig 25 %; over kr 10 mill. 100 %; sekundæ… | the two readings quote different baselines: claude «Primærbolig 25 %; primærbolig o/10 mill. 70 %; sekundærbolig 100 %; aksjer og næringsei… |
-| r | `vat.food` | evidence-conflict | 0 % for norskproduserte ferske frukt og grønnsake… | DERIVE | claude gives value «0 % for norskproduserte ferske frukt og grønnsaker; øvrige næringsmidler ikke omtalt», codex gives derive «DERIVE» |
-| r | `excise.petrolLitre` | one-sided | DERIVE | NOT FOUND | only claude found this proposal in the document |
-| r | `excise.dieselLitre` | one-sided | DERIVE | NOT FOUND | only claude found this proposal in the document |
-| v | `wealth.netWealthTax` | evidence-conflict | DERIVE (sats trinn 1 = regjeringens sats - 0,1 ps… | trinn 1: DERIVE; gjelder formuer under kr 21,5 mi… | claude gives derive «DERIVE (sats trinn 1 = regjeringens sats - 0,1 pst-poeng). Bunnfradrag: NOT FOUND», codex gives value «trinn 1: DERIVE… |
-| v | `vat.food` | value-conflict | frukt og grønt: 0 pst (fritak). Kjøtt: 25 pst. Øv… | frukt/grønt: null moms; kjøtt: 25 pst.; øvrige næ… | claude «frukt og grønt: 0 pst (fritak). Kjøtt: 25 pst. Øvrige næringsmidler: NOT FOUND» vs codex «frukt/grønt: null moms; kjøtt: 25 pst.; ø… |
-| v | `vat.general` | one-sided | 25 pst | NOT FOUND | only claude found this proposal in the document |
-| v | `excise.petrolLitre` | evidence-conflict | DERIVE (ingen kr/l oppgitt); CO2-avgift 1 842 kr/… | DERIVE | claude gives value «DERIVE (ingen kr/l oppgitt); CO2-avgift 1 842 kr/tonn», codex gives derive «DERIVE» |
-| v | `excise.dieselLitre` | evidence-conflict | DERIVE; CO2-avgift 1 842 kr/tonn | DERIVE | claude gives value «DERIVE; CO2-avgift 1 842 kr/tonn», codex gives derive «DERIVE» |
-| v | `benefit.childBenefit` | value-conflict | alle barn 0-18: 37 786 kr/år (= 3 148,83 kr/mnd),… | alle barn 0-18: kr 37 786/år; utvidet inkl. ordin… | the two readings quote different baselines: claude «alle barn 0-18: 23 616 kr/år (2025-beløp); utvidet (enslige forsørgere, inkl. ordinær b… |
-| v | `benefit.studentSupport` | value-conflict | basisstøtte = 1,4G (DERIVE - G er ikke oppgitt i … | basisstøtte 1,4G; stipendandel NOT FOUND | claude «basisstøtte = 1,4G (DERIVE - G er ikke oppgitt i dokumentet); inntektsgrense: kr 250 000; stipendandel: NOT FOUND» vs codex «basiss… |
-| mdg | `wealth.netWealthTax` | value-conflict | bunnfradrag kr 10 000 000; satser DERIVE | bunnfradrag: 10 mill.; øvrige parametere: NOT FOU… | claude «bunnfradrag kr 10 000 000; satser DERIVE» vs codex «bunnfradrag: 10 mill.; øvrige parametere: NOT FOUND» |
-| mdg | `wealth.valuation` | value-conflict | 100 % verdsettelse (DERIVE) | DERIVE | claude needs an assumption: Antakelse: «rabatter fjernes» (s. 79) / «kutte verdsettingsrabatter» (s. 9) betyr at alle verdsettelsesrabatter… |
-| mdg | `vat.food` | status-conflict | DERIVE (generell sats) | DERIVE | same wording, status «confirmed» vs «unquantified» |
-| mdg | `vat.flights` | status-conflict | DERIVE (generell sats, innenlands) | DERIVE | same wording, status «confirmed» vs «unquantified» |
-| mdg | `excise.petrolLitre` | value-conflict | DERIVE | DERIVE | claude «Øker veibruksavgiften på bensin og bioetanol med 2.50 kroner» vs codex «Øker veibruksavgiften på bensin og bioetanol med 2.50 krone… |
-| mdg | `excise.dieselLitre` | value-conflict | DERIVE | DERIVE | claude «Øker veibruksavgiften på diesel/mineralolje og biodiesel med 2.50 kroner» vs codex «Øker veibruksavgiften på diesel/mineralolje og … |
-| mdg | `excise.kwh` | status-conflict | DERIVE | DERIVE | same wording, status «confirmed» vs «unquantified» |
-| mdg | `excise.flightEurope` | evidence-conflict | kr 0 per passasjer (avviklet) | DERIVE | claude gives value «kr 0 per passasjer (avviklet)», codex gives derive «DERIVE» |
-| mdg | `excise.flightOther` | evidence-conflict | kr 0 per passasjer (avviklet) | DERIVE | claude gives value «kr 0 per passasjer (avviklet)», codex gives derive «DERIVE» |
-| mdg | `excise.beerLitre` | one-sided | — | DERIVE | only codex found this proposal in the document |
-| mdg | `excise.wineLitre` | one-sided | — | DERIVE | only codex found this proposal in the document |
-| mdg | `excise.spiritsLitre` | one-sided | — | DERIVE | only codex found this proposal in the document |
-| mdg | `benefit.childBenefit` | status-conflict | DERIVE (dobbelt av gjeldende satser) | DERIVE | same wording, status «confirmed» vs «unquantified» |
-| mdg | `benefit.studentSupport` | evidence-conflict | basislån = 1,4 G (kronebeløp DERIVE) | basislån: 1,4G; stipendandel folkehøyskoleelever:… | claude gives derive «basislån = 1,4 G (kronebeløp DERIVE)», codex gives value «basislån: 1,4G; stipendandel folkehøyskoleelever: 40 pst.» |
 
 ## Every high-severity flag, row by row
 
@@ -129,78 +92,86 @@ A high-severity flag means the value needs an assumption (`estimated`), the two 
 |---|---|---|---|---|---|
 | h | `income.socialSecurity` | not-reviewed | nedre grense (frikortgrense): kr 150 00… | `estimated` | claude needs an assumption: ANTAKELSE: dokumentet sier "frikortgrensen", ikke "nedre grense i trygdeavgiften"; å behandle dem som samme parameter er en antakel… |
 | h | `income.socialSecurity` | not-reviewed | nedre grense (frikortgrense): kr 150 00… | `evidence-conflict` | claude gives value «nedre grense (frikortgrense): kr 150 000; satser lønn/pensjon: DERIVE», codex gives derive «DERIVE» |
-| h | `wealth.netWealthTax` | not-reviewed | bunnfradrag: DERIVE; satser og trinn 2:… | `evidence-conflict` | claude gives value «bunnfradrag: DERIVE; satser og trinn 2: NOT FOUND», codex gives derive «DERIVE» |
-| frp | `income.bracketTax.trinn1` | not-reviewed | sats: 0 % (trinnet fjernes); innslagspu… | `evidence-conflict` | claude gives value «sats: 0 % (trinnet fjernes); innslagspunkt: NOT FOUND», codex gives derive «DERIVE» |
+| h | `wealth.netWealthTax` | estimated | DERIVE | `estimated` | claude needs an assumption: [L10b] Utledet mot Prop. 1 LS s. 36 (1 900 000): 1 900 000 + 100 000 = 2 000 000 kr; ektepar dobbelt (4 000 000). Satser uendret. |
+| h | `wealth.netWealthTax` | estimated | DERIVE | `estimated` | codex needs an assumption: [L10b] Utledet mot Prop. 1 LS s. 36 (1 900 000): 1 900 000 + 100 000 = 2 000 000 kr; ektepar dobbelt (4 000 000). Satser uendret. |
+| h | `excise.cigarette` | estimated | DERIVE | `estimated` | claude needs an assumption: [L10b] Utledet mot Prop. 1 LS tabell 1.8: 3,31 kr/stk × 1,15 = 3,8065 kr/stk. Snus uendret. |
+| h | `excise.cigarette` | estimated | DERIVE | `estimated` | codex needs an assumption: [L10b] Utledet mot Prop. 1 LS tabell 1.8: 3,31 kr/stk × 1,15 = 3,8065 kr/stk. Snus uendret. |
+| h | `benefit.childBenefit` | estimated | DERIVE | `estimated` | claude needs an assumption: [L10b] Utledet: Prop. 1 LS 1 968 / 2 516 kr/mnd prisjustert til 2 012 / 2 572 (samme 609 mill. som Rødts linje, der eksempelet s. 1… |
+| h | `benefit.childBenefit` | estimated | DERIVE | `estimated` | codex needs an assumption: [L10b] Utledet: Prop. 1 LS 1 968 / 2 516 kr/mnd prisjustert til 2 012 / 2 572 (samme 609 mill. som Rødts linje, der eksempelet s. 11… |
+| frp | `income.bracketTax.trinn1` | estimated | sats 0 % (trinnet fjernes) | `estimated` | claude needs an assumption: [L10b] Trinn 1 fjernes = sats 0 %; innslagspunkt uten betydning. |
+| frp | `income.bracketTax.trinn1` | estimated | sats 0 % (trinnet fjernes) | `estimated` | codex needs an assumption: [L10b] Trinn 1 fjernes = sats 0 %; innslagspunkt uten betydning. |
+| frp | `income.bracketTax.trinn2` | estimated | DERIVE | `estimated` | claude needs an assumption: [L10b] Utledet mot Prop. 1 LS tabell 1.7 s. 33: 4,0 - 0,5 = 3,5 %; innslagspunkt 318 300 uendret. |
+| frp | `income.bracketTax.trinn2` | estimated | DERIVE | `estimated` | codex needs an assumption: [L10b] Utledet mot Prop. 1 LS tabell 1.7 s. 33: 4,0 - 0,5 = 3,5 %; innslagspunkt 318 300 uendret. |
 | frp | `income.socialSecurity` | not-reviewed | satser lønn/pensjon: NOT FOUND. Nedre g… | `estimated` | claude needs an assumption: ANTAGELSE: dokumentet sier «frikortgrensen», ikke «trygdeavgiftens nedre grense» - ordet «trygdeavgift» finnes 0 ganger. Mappingen … |
 | frp | `income.socialSecurity` | not-reviewed | satser lønn/pensjon: NOT FOUND. Nedre g… | `baseline-not-proposed` | claude: the party measures this change against today's rate, not against Prop. 1 LS |
 | frp | `income.socialSecurity` | not-reviewed | satser lønn/pensjon: NOT FOUND. Nedre g… | `one-sided` | only claude found this proposal in the document |
-| frp | `income.unionFeeDeduction` | not-reviewed | kr 0 (fradraget fjernes) | `evidence-conflict` | claude gives value «kr 0 (fradraget fjernes)», codex gives derive «DERIVE» |
-| frp | `wealth.netWealthTax` | not-reviewed | bunnfradrag enslig kr 3 000 000, ektefe… | `baseline-mismatch` | the two readings quote different baselines: claude ««fra 1,9 til 3 millioner kroner» (s. 8, s. 13)» vs codex «1,9 millioner kroner (enslig); øvrig NOT FOUND» |
-| frp | `wealth.netWealthTax` | not-reviewed | bunnfradrag enslig kr 3 000 000, ektefe… | `value-conflict` | claude «bunnfradrag enslig kr 3 000 000, ektefeller kr 6 000 000; sats 0,8 %; trinn 2: NOT FOUND» vs codex «3 mill. / 6 millioner for ektepar; 0,8%; trinn 2 NO… |
+| frp | `income.unionFeeDeduction` | estimated | DERIVE | `estimated` | claude needs an assumption: [L10b] Utledet: Prop. 1 LS maks 8 700 kr (tabell 1.7 s. 36) → 0 kr. |
+| frp | `income.unionFeeDeduction` | estimated | DERIVE | `estimated` | codex needs an assumption: [L10b] Utledet: Prop. 1 LS maks 8 700 kr (tabell 1.7 s. 36) → 0 kr. |
+| frp | `wealth.netWealthTax` | estimated | bunnfradrag enslig 3 000 000, ektepar 6… | `estimated` | claude needs an assumption: [L10b] Partiet nevner én sats og ikke trinn 2; 0,8 % brukt på all formue over bunnfradraget (samlet stat + kommune). Utgangspunktet… |
+| frp | `wealth.netWealthTax` | estimated | bunnfradrag enslig 3 000 000, ektepar 6… | `estimated` | codex needs an assumption: [L10b] Partiet nevner én sats og ikke trinn 2; 0,8 % brukt på all formue over bunnfradraget (samlet stat + kommune). Utgangspunktet … |
 | frp | `wealth.valuation` | confirmed | sekundærbolig 80 %; primærbolig DERIVE … | `baseline-mismatch` | the two readings quote different baselines: claude ««verdsettelsen av sekundærboliger til 100 prosent av markedsverdi» (s. 11)» vs codex «100 prosent av marked… |
-| frp | `excise.petrolLitre` | not-reviewed | DERIVE: veibruksavgift = baseline ÷ 2; … | `evidence-conflict` | claude gives value «DERIVE: veibruksavgift = baseline ÷ 2; CO2-avgift = baseline før regjeringens økning», codex gives derive «DERIVE» |
-| frp | `excise.dieselLitre` | not-reviewed | DERIVE: veibruksavgift = baseline ÷ 2; … | `evidence-conflict` | claude gives value «DERIVE: veibruksavgift = baseline ÷ 2; CO2-avgift = baseline før regjeringens økning», codex gives derive «DERIVE» |
-| frp | `benefit.studentSupport` | not-reviewed | DERIVE: basisstøtte knyttet til 1,5 G, … | `change-conflict` | claude ««Fremskrittspartiet vil derfor knytte studiestøtten til 1,5 G over fire år.»» vs codex «Knytte studiestøtte opp til 1,5 G over fire år; Stipendandel øk… |
+| frp | `vat.food` | estimated | DERIVE | `estimated` | claude needs an assumption: [L10b] Utledet: Prop. 1 LS/mva-vedtaket 15 % ÷ 2 = 7,5 %; virkning 1. april, vist som helårssats (beslutning 1). |
+| frp | `vat.food` | estimated | DERIVE | `estimated` | codex needs an assumption: [L10b] Utledet: Prop. 1 LS/mva-vedtaket 15 % ÷ 2 = 7,5 %; virkning 1. april, vist som helårssats (beslutning 1). |
+| frp | `excise.petrolLitre` | estimated | DERIVE | `estimated` | claude needs an assumption: [L10b] Utledet mot Prop. 1 LS tabell 1.8 s. 40-41: veibruk 4,25 ÷ 2 + CO2 2025-sats 3,25 = 5,375 kr/l. Kontroll s. 10: «om lag 3 kr… |
+| frp | `excise.petrolLitre` | estimated | DERIVE | `estimated` | codex needs an assumption: [L10b] Utledet mot Prop. 1 LS tabell 1.8 s. 40-41: veibruk 4,25 ÷ 2 + CO2 2025-sats 3,25 = 5,375 kr/l. Kontroll s. 10: «om lag 3 kro… |
+| frp | `excise.dieselLitre` | estimated | DERIVE | `estimated` | claude needs an assumption: [L10b] Utledet mot Prop. 1 LS tabell 1.8 s. 40-41: veibruk 3,00 ÷ 2 + CO2 2025-sats 3,79 = 5,29 kr/l. Kontroll s. 10: «om lag 2,50»… |
+| frp | `excise.dieselLitre` | estimated | DERIVE | `estimated` | codex needs an assumption: [L10b] Utledet mot Prop. 1 LS tabell 1.8 s. 40-41: veibruk 3,00 ÷ 2 + CO2 2025-sats 3,79 = 5,29 kr/l. Kontroll s. 10: «om lag 2,50» … |
 | sv | `income.socialSecurity` | not-reviewed | nedre grense/frikortgrense: kr 150 000.… | `estimated` | claude needs an assumption: ANTAKELSE: dokumentet sier «frikortgrensen», ikke «nedre grense i trygdeavgiften»; koblingen mellom de to står ikke i dokumentet. O… |
 | sv | `income.socialSecurity` | not-reviewed | nedre grense/frikortgrense: kr 150 000.… | `one-sided` | only claude found this proposal in the document |
-| sv | `wealth.netWealthTax` | not-reviewed | bunnfradrag (enslig) kr 2 000 000; ekte… | `value-conflict` | claude «bunnfradrag (enslig) kr 2 000 000; ektefeller DERIVE (ikke oppgitt); trinn 1-sats 1,1 %; trinn 2 innslag 20 mill., sats 1,4 %; nytt trinn 3 over 100 mi… |
-| sv | `wealth.valuation` | not-reviewed | aksjer: DERIVE (rabatt fjernet ⇒ 100 %,… | `change-conflict` | claude ««Fjerne aksjerabatten (inkludert næringseiendom)»; «Fjerne verdsettelsesrabatten for primærbolig med høy verdi (over 10 mill kr)»» vs codex «Fjerne aks… |
-| sv | `excise.petrolLitre` | not-reviewed | veibruksavgift 4,50 kr/L; CO2-avgift be… | `value-conflict` | claude «veibruksavgift 4,50 kr/L; CO2-avgift bensin: unquantified» vs codex «veibruksavgift 4,50 kr/L; CO2-avgift DERIVE» |
-| sv | `excise.dieselLitre` | not-reviewed | veibruksavgift 3,25 kr/L; CO2-avgift di… | `value-conflict` | claude «veibruksavgift 3,25 kr/L; CO2-avgift diesel: unquantified» vs codex «veibruksavgift 3,25 kr/L; CO2-avgift DERIVE» |
-| sv | `benefit.childBenefit` | not-reviewed | DERIVE (satsnivåer ikke oppgitt); endri… | `evidence-conflict` | claude gives value «DERIVE (satsnivåer ikke oppgitt); endring +144 kr/mnd fra 1. mai for alle aldersgrupper», codex gives derive «DERIVE» |
-| sv | `benefit.studentSupport` | not-reviewed | basislån kr 16 686/mnd i 2026-2027 (+10… | `baseline-mismatch` | the two readings quote different baselines: claude «basislån kr 15 169/mnd (utledet: 16 686 - 1 517)» vs codex «basislån NOT FOUND; folkehøgskole 15%» |
-| sv | `benefit.studentSupport` | not-reviewed | basislån kr 16 686/mnd i 2026-2027 (+10… | `value-conflict` | claude «basislån kr 16 686/mnd i 2026-2027 (+10 %)» vs codex «basislån 16.686 kr/mnd i snitt; folkehøgskole stipendandel 40%» |
-| sv | `wealth.netWealthTax.trinn1` | not-reviewed | — | `row-missing` | only codex has a row for wealth.netWealthTax.trinn1 |
-| sv | `wealth.netWealthTax.trinn2` | not-reviewed | — | `row-missing` | only codex has a row for wealth.netWealthTax.trinn2 |
-| sv | `wealth.netWealthTax.trinn3` | not-reviewed | — | `row-missing` | only codex has a row for wealth.netWealthTax.trinn3 |
-| sp | `income.bracketTax.trinn5` | not-reviewed | bortfaller - slått sammen med trinn 4 | `evidence-conflict` | claude gives value «bortfaller - slått sammen med trinn 4», codex gives derive «DERIVE» |
-| sp | `wealth.netWealthTax` | not-reviewed | bunnfradrag: kr 2 000 000 | `value-conflict` | claude «bunnfradrag: kr 2 000 000» vs codex «bunnfradrag 2 mill. kroner; ektefeller/satser NOT FOUND» |
-| sp | `excise.petrolLitre` | not-reviewed | DERIVE | `estimated` | claude needs an assumption: To separate vedtak på samme post: (1) kutt i vegbruksavgift slik at de samlede bensinavgiftene blir reelt uendret - beløpet per lit… |
-| sp | `excise.petrolLitre` | not-reviewed | DERIVE | `status-conflict` | same wording, status «estimated» vs «confirmed» |
-| sp | `excise.dieselLitre` | not-reviewed | DERIVE | `estimated` | claude needs an assumption: Samme struktur som bensin: (1) kutt slik at samlede dieselavgifter blir reelt uendret - kronebeløp per liter ikke oppgitt (anchor s… |
-| sp | `excise.dieselLitre` | not-reviewed | DERIVE | `status-conflict` | same wording, status «estimated» vs «confirmed» |
-| sp | `excise.flightEurope` | not-reviewed | kr 50 per passasjer (lav sats) | `one-sided` | only claude found this proposal in the document |
-| sp | `excise.beerLitre` | not-reviewed | avgiften fjernet for gruppa «0,7 til 2,… | `one-sided` | only claude found this proposal in the document |
-| sp | `benefit.childBenefit` | not-reviewed | DERIVE (dobbel sats for tredje barn fra… | `one-sided` | only claude found this proposal in the document |
-| sp | `benefit.studentSupport` | not-reviewed | NOT FOUND | `baseline-not-proposed` | codex: the party measures this change against today's rate, not against Prop. 1 LS |
-| sp | `benefit.studentSupport` | not-reviewed | NOT FOUND | `one-sided` | only codex found this proposal in the document |
-| r | `income.bracketTax.trinn1` | not-reviewed | Fjernes - ingen trinn 1 | `one-sided` | only claude found this proposal in the document |
-| r | `income.bracketTax.trinn3` | not-reviewed | 725 050 / 13,7 % | `status-conflict` | same value, status «confirmed» vs «no-change» |
+| sv | `wealth.netWealthTax` | estimated | bunnfradrag 2 000 000 (ektepar 4 000 00… | `estimated` | claude needs an assumption: [L10b] Partiets tall; ektepar = 2 × enslig som i Prop. 1 LS. Trinn 3 se egen rad. |
+| sv | `wealth.netWealthTax` | estimated | bunnfradrag 2 000 000 (ektepar 4 000 00… | `estimated` | codex needs an assumption: [L10b] Partiets tall; ektepar = 2 × enslig som i Prop. 1 LS. Trinn 3 se egen rad. |
+| sv | `wealth.netWealthTax.trinn1` | estimated | 1,1 % | `estimated` | claude needs an assumption: [L10b] Del av wealth.netWealthTax. |
+| sv | `wealth.netWealthTax.trinn1` | estimated | 1,1 % | `estimated` | codex needs an assumption: [L10b] Del av wealth.netWealthTax. |
+| sv | `wealth.netWealthTax.trinn2` | estimated | 20 000 000 / 1,4 % | `estimated` | claude needs an assumption: [L10b] Del av wealth.netWealthTax. |
+| sv | `wealth.netWealthTax.trinn2` | estimated | 20 000 000 / 1,4 % | `estimated` | codex needs an assumption: [L10b] Del av wealth.netWealthTax. |
+| sv | `wealth.valuation` | estimated | DERIVE | `estimated` | claude needs an assumption: [L10b] Utledet: rabatt fjernet ⇒ 100 % for aksjer (Prop. 1 LS 80), driftsmidler (70) og primærbolig over 10 mill. (70). Sekundærbol… |
+| sv | `wealth.valuation` | estimated | DERIVE | `estimated` | codex needs an assumption: [L10b] Utledet: rabatt fjernet ⇒ 100 % for aksjer (Prop. 1 LS 80), driftsmidler (70) og primærbolig over 10 mill. (70). Sekundærboli… |
+| sv | `excise.petrolLitre` | estimated | veibruksavgift 4,50 kr/l; CO2-avgift so… | `estimated` | claude needs an assumption: [L10b] Veibruk er partiets tall. «Øke opptrappingen av CO2-avgiften» har ingen sats og står som unquantified i sv.ts. |
+| sv | `excise.petrolLitre` | estimated | veibruksavgift 4,50 kr/l; CO2-avgift so… | `estimated` | codex needs an assumption: [L10b] Veibruk er partiets tall. «Øke opptrappingen av CO2-avgiften» har ingen sats og står som unquantified i sv.ts. |
+| sv | `excise.dieselLitre` | estimated | veibruksavgift 3,25 kr/l; CO2-avgift so… | `estimated` | claude needs an assumption: [L10b] Veibruk er partiets tall. CO2-økningen står som unquantified i sv.ts. |
+| sv | `excise.dieselLitre` | estimated | veibruksavgift 3,25 kr/l; CO2-avgift so… | `estimated` | codex needs an assumption: [L10b] Veibruk er partiets tall. CO2-økningen står som unquantified i sv.ts. |
+| sv | `excise.flightEurope` | estimated | DERIVE | `estimated` | claude needs an assumption: [L10b] Utledet: Prop. 1 LS 61 kr × 1,2 = 73,20 kr. |
+| sv | `excise.flightEurope` | estimated | DERIVE | `estimated` | codex needs an assumption: [L10b] Utledet: Prop. 1 LS 61 kr × 1,2 = 73,20 kr. |
+| sv | `excise.flightOther` | estimated | DERIVE | `estimated` | claude needs an assumption: [L10b] Utledet: Prop. 1 LS 350 kr × 1,2 = 420 kr. |
+| sv | `excise.flightOther` | estimated | DERIVE | `estimated` | codex needs an assumption: [L10b] Utledet: Prop. 1 LS 350 kr × 1,2 = 420 kr. |
+| sv | `benefit.childBenefit` | estimated | DERIVE | `estimated` | claude needs an assumption: [L10b] Utledet: 1 968 + 44 (prisjustering) + 100 = 2 112 kr/mnd; utvidet prisjustert 2 516 → 2 572. Prisjusteringen = Høyres/Rødts … |
+| sv | `benefit.childBenefit` | estimated | DERIVE | `estimated` | codex needs an assumption: [L10b] Utledet: 1 968 + 44 (prisjustering) + 100 = 2 112 kr/mnd; utvidet prisjustert 2 516 → 2 572. Prisjusteringen = Høyres/Rødts 6… |
+| sv | `benefit.studentSupport` | estimated | basislån 16 686 kr/mnd i studieåret 202… | `estimated` | claude needs an assumption: [L10b] Absolutt beløp brukt. Partiet måler mot 2025-2026-satsen, ikke Prop. 1 LS (15 488). Tabellen s. 34 har to ulike beløp. Folke… |
+| sv | `benefit.studentSupport` | estimated | basislån 16 686 kr/mnd i studieåret 202… | `estimated` | codex needs an assumption: [L10b] Absolutt beløp brukt. Partiet måler mot 2025-2026-satsen, ikke Prop. 1 LS (15 488). Tabellen s. 34 har to ulike beløp. Folkeh… |
+| sp | `income.socialSecurity` | estimated | DERIVE | `estimated` | claude needs an assumption: [L10b] Utledet: Prop. 1 LS s. 80 lønn/trygd 7,6 % - 0,1 = 7,5 %. Samme tiltak og proveny (-2 345) står i Prop. 1 LS s. 21 som 0,1 p… |
+| sp | `income.socialSecurity` | estimated | DERIVE | `estimated` | codex needs an assumption: [L10b] Utledet: Prop. 1 LS s. 80 lønn/trygd 7,6 % - 0,1 = 7,5 %. Samme tiltak og proveny (-2 345) står i Prop. 1 LS s. 21 som 0,1 pr… |
+| sp | `wealth.netWealthTax` | estimated | bunnfradrag 2 000 000 (ektepar 4 000 00… | `estimated` | claude needs an assumption: [L10b] Partiets tall; ektepar = 2 × enslig som i Prop. 1 LS (1,9 / 3,8 mill.). |
+| sp | `wealth.netWealthTax` | estimated | bunnfradrag 2 000 000 (ektepar 4 000 00… | `estimated` | codex needs an assumption: [L10b] Partiets tall; ektepar = 2 × enslig som i Prop. 1 LS (1,9 / 3,8 mill.). |
+| sp | `wealth.valuation` | estimated | boliggrense 10,21 mill. kr; driftsmidle… | `estimated` | claude needs an assumption: [L10b] Driftsmidler utledet mot Prop. 1 LS s. 36 (70 %, dvs. 30 % rabatt): 40 % rabatt ⇒ 60 %. |
+| sp | `wealth.valuation` | estimated | boliggrense 10,21 mill. kr; driftsmidle… | `estimated` | codex needs an assumption: [L10b] Driftsmidler utledet mot Prop. 1 LS s. 36 (70 %, dvs. 30 % rabatt): 40 % rabatt ⇒ 60 %. |
+| sp | `excise.flightEurope` | estimated | kr 50 per passasjer (lav sats) | `estimated` | claude needs an assumption: [L10b] Utgangspunktet 61 kr = Prop. 1 LS tabell 1.8 s. 43. Høy sats ikke nevnt. |
+| sp | `excise.flightEurope` | estimated | kr 50 per passasjer (lav sats) | `estimated` | codex needs an assumption: [L10b] Utgangspunktet 61 kr = Prop. 1 LS tabell 1.8 s. 43. Høy sats ikke nevnt. |
+| r | `income.bracketTax.trinn1` | estimated | sats 0 % (trinnet fjernes) | `estimated` | claude needs an assumption: [L10b] Tabell 1: regjeringskolonnen 226 100 / 1,7 %, Rødt «Fjernes». |
+| r | `income.bracketTax.trinn1` | estimated | sats 0 % (trinnet fjernes) | `estimated` | codex needs an assumption: [L10b] Tabell 1: regjeringskolonnen 226 100 / 1,7 %, Rødt «Fjernes». |
 | r | `income.socialSecurity` | not-reviewed | nedre grense (frikortgrense) 150 000 kr… | `one-sided` | only claude found this proposal in the document |
-| r | `wealth.netWealthTax` | not-reviewed | Bunnfradrag 2 200 000; Sats 1 1,2 %; Tr… | `baseline-mismatch` | the two readings quote different baselines: claude «Bunnfradrag 1 900 000; Sats 1 1,0 %; Trinn 2 21 500 000; Sats 2 1,1 %; Trinn 3 -; Sats 3 -» vs codex «kr 1 … |
-| r | `wealth.netWealthTax` | not-reviewed | Bunnfradrag 2 200 000; Sats 1 1,2 %; Tr… | `value-conflict` | claude «Bunnfradrag 2 200 000; Sats 1 1,2 %; Trinn 2 20 000 000; Sats 2 1,4 %; Trinn 3 100 000 000; Sats 3 1,6 %» vs codex «kr 2 200 000; 1,2 %; kr 20 000 000 … |
-| r | `wealth.valuation` | not-reviewed | Primærbolig 25 %; primærbolig o/10 mill… | `baseline-mismatch` | the two readings quote different baselines: claude «Primærbolig 25 %; primærbolig o/10 mill. 70 %; sekundærbolig 100 %; aksjer og næringseiendom 80 %; driftsmi… |
-| r | `wealth.valuation` | not-reviewed | Primærbolig 25 %; primærbolig o/10 mill… | `value-conflict` | claude «Primærbolig 25 %; primærbolig o/10 mill. 100 %; sekundærbolig 100 %; aksjer og næringseiendom 100 %; driftsmidler 100 %; oppdrettstillatelser 100 %; ba… |
-| r | `vat.food` | not-reviewed | 0 % for norskproduserte ferske frukt og… | `evidence-conflict` | claude gives value «0 % for norskproduserte ferske frukt og grønnsaker; øvrige næringsmidler ikke omtalt», codex gives derive «DERIVE» |
-| r | `excise.petrolLitre` | not-reviewed | DERIVE | `one-sided` | only claude found this proposal in the document |
-| r | `excise.dieselLitre` | not-reviewed | DERIVE | `one-sided` | only claude found this proposal in the document |
+| r | `wealth.netWealthTax` | estimated | bunnfradrag 2 200 000 (ektepar 4 400 00… | `estimated` | claude needs an assumption: [L10b] Partiets tall; regjeringskolonnen = Prop. 1 LS. Ektepar = 2 × enslig. Trinn 3 (1,6 % over 100 mill.) er unquantified i r.ts. |
+| r | `wealth.netWealthTax` | estimated | bunnfradrag 2 200 000 (ektepar 4 400 00… | `estimated` | codex needs an assumption: [L10b] Partiets tall; regjeringskolonnen = Prop. 1 LS. Ektepar = 2 × enslig. Trinn 3 (1,6 % over 100 mill.) er unquantified i r.ts. |
+| r | `wealth.valuation` | estimated | primærbolig 25 %; over 10 mill. 100 %; … | `estimated` | claude needs an assumption: [L10b] Partiets tall; regjeringskolonnen = Prop. 1 LS. |
+| r | `wealth.valuation` | estimated | primærbolig 25 %; over 10 mill. 100 %; … | `estimated` | codex needs an assumption: [L10b] Partiets tall; regjeringskolonnen = Prop. 1 LS. |
+| r | `benefit.childBenefit` | estimated | DERIVE | `estimated` | claude needs an assumption: [L10b] Utledet: 1 968 → 2 012 (eksempel s. 11: +88 kr for to barn); utvidet 2 516 → 2 572 + 500 = 3 072. Virkning 1. februar (s. 7)… |
+| r | `benefit.childBenefit` | estimated | DERIVE | `estimated` | codex needs an assumption: [L10b] Utledet: 1 968 → 2 012 (eksempel s. 11: +88 kr for to barn); utvidet 2 516 → 2 572 + 500 = 3 072. Virkning 1. februar (s. 7),… |
+| r | `benefit.studentSupport` | estimated | DERIVE | `estimated` | claude needs an assumption: [L10b] Utledet: 15 488 (Prop. 1 LS-grunnlaget 2026-2027) + 1 250 (partiets månedsbeløp s. 12) = 16 738 kr/mnd. Virkning 1. august, … |
+| r | `benefit.studentSupport` | estimated | DERIVE | `estimated` | codex needs an assumption: [L10b] Utledet: 15 488 (Prop. 1 LS-grunnlaget 2026-2027) + 1 250 (partiets månedsbeløp s. 12) = 16 738 kr/mnd. Virkning 1. august, h… |
 | v | `income.socialSecurity` | confirmed | nedre grense: kr 150 000. Satser lønn/p… | `baseline-mismatch` | the two readings quote different baselines: claude «nedre grense (frikortgrense) 100 000 kroner (s. 32); «med 50 000 kroner» (s. 78)» vs codex «nedre grense kr… |
-| v | `wealth.netWealthTax` | not-reviewed | DERIVE (sats trinn 1 = regjeringens sat… | `evidence-conflict` | claude gives derive «DERIVE (sats trinn 1 = regjeringens sats - 0,1 pst-poeng). Bunnfradrag: NOT FOUND», codex gives value «trinn 1: DERIVE; gjelder formuer un… |
-| v | `vat.food` | not-reviewed | frukt og grønt: 0 pst (fritak). Kjøtt: … | `value-conflict` | claude «frukt og grønt: 0 pst (fritak). Kjøtt: 25 pst. Øvrige næringsmidler: NOT FOUND» vs codex «frukt/grønt: null moms; kjøtt: 25 pst.; øvrige næringsmidler … |
-| v | `vat.general` | not-reviewed | 25 pst | `one-sided` | only claude found this proposal in the document |
-| v | `vat.electricity` | confirmed | DERIVE (fritaket bortfaller; resulteren… | `baseline-not-proposed` | claude: the party measures this change against today's rate, not against Prop. 1 LS |
-| v | `excise.petrolLitre` | not-reviewed | DERIVE (ingen kr/l oppgitt); CO2-avgift… | `evidence-conflict` | claude gives value «DERIVE (ingen kr/l oppgitt); CO2-avgift 1 842 kr/tonn», codex gives derive «DERIVE» |
-| v | `excise.dieselLitre` | not-reviewed | DERIVE; CO2-avgift 1 842 kr/tonn | `evidence-conflict` | claude gives value «DERIVE; CO2-avgift 1 842 kr/tonn», codex gives derive «DERIVE» |
+| v | `wealth.netWealthTax` | estimated | DERIVE | `estimated` | claude needs an assumption: [L10b] Utledet: Prop. 1 LS trinn 1 1,0 % - 0,1 = 0,9 %; trinn 2 og bunnfradrag uendret. |
+| v | `wealth.netWealthTax` | estimated | DERIVE | `estimated` | codex needs an assumption: [L10b] Utledet: Prop. 1 LS trinn 1 1,0 % - 0,1 = 0,9 %; trinn 2 og bunnfradrag uendret. |
 | v | `excise.kwh` | confirmed | 6 øre/kWh hele året | `baseline-not-proposed` | claude: the party measures this change against today's rate, not against Prop. 1 LS |
 | v | `excise.kwh` | confirmed | 6 øre/kWh hele året | `baseline-mismatch` | the two readings quote different baselines: claude «dagens: 9,79 øre jan-mar og 12,53 øre resten av året; regjeringens forslag: 4,18 øre» vs codex «regjeringen… |
-| v | `benefit.childBenefit` | not-reviewed | alle barn 0-18: 37 786 kr/år (= 3 148,8… | `baseline-mismatch` | the two readings quote different baselines: claude «alle barn 0-18: 23 616 kr/år (2025-beløp); utvidet (enslige forsørgere, inkl. ordinær barnetrygd): 49 408 k… |
-| v | `benefit.childBenefit` | not-reviewed | alle barn 0-18: 37 786 kr/år (= 3 148,8… | `value-conflict` | claude «alle barn 0-18: 37 786 kr/år (= 3 148,83 kr/mnd), før skattlegging. Utvidet (enslige forsørgere, inkl. ordinær barnetrygd): 79 053 kr/år» vs codex «all… |
-| v | `benefit.studentSupport` | not-reviewed | basisstøtte = 1,4G (DERIVE - G er ikke … | `value-conflict` | claude «basisstøtte = 1,4G (DERIVE - G er ikke oppgitt i dokumentet); inntektsgrense: kr 250 000; stipendandel: NOT FOUND» vs codex «basisstøtte 1,4G; stipenda… |
-| mdg | `wealth.netWealthTax` | not-reviewed | bunnfradrag kr 10 000 000; satser DERIVE | `value-conflict` | claude «bunnfradrag kr 10 000 000; satser DERIVE» vs codex «bunnfradrag: 10 mill.; øvrige parametere: NOT FOUND» |
-| mdg | `wealth.valuation` | not-reviewed | 100 % verdsettelse (DERIVE) | `estimated` | claude needs an assumption: Antakelse: «rabatter fjernes» (s. 79) / «kutte verdsettingsrabatter» (s. 9) betyr at alle verdsettelsesrabatter settes til null, dv… |
-| mdg | `wealth.valuation` | not-reviewed | 100 % verdsettelse (DERIVE) | `change-conflict` | claude «Øke bunnfradraget i formuesskatten til 10 mill. og kutte verdsettingsrabatter» vs codex «kutte verdsettingsrabatter» |
-| mdg | `vat.food` | not-reviewed | DERIVE (generell sats) | `status-conflict` | same wording, status «confirmed» vs «unquantified» |
-| mdg | `vat.flights` | not-reviewed | DERIVE (generell sats, innenlands) | `status-conflict` | same wording, status «confirmed» vs «unquantified» |
-| mdg | `excise.petrolLitre` | not-reviewed | DERIVE | `change-conflict` | claude «Øker veibruksavgiften på bensin og bioetanol med 2.50 kroner» vs codex «Øker veibruksavgiften på bensin og bioetanol med 2.50 kroner; CO2-avgiften til … |
-| mdg | `excise.dieselLitre` | not-reviewed | DERIVE | `change-conflict` | claude «Øker veibruksavgiften på diesel/mineralolje og biodiesel med 2.50 kroner» vs codex «Øker veibruksavgiften på diesel/mineralolje og biodiesel med 2.50 k… |
-| mdg | `excise.kwh` | not-reviewed | DERIVE | `status-conflict` | same wording, status «confirmed» vs «unquantified» |
-| mdg | `excise.flightEurope` | not-reviewed | kr 0 per passasjer (avviklet) | `evidence-conflict` | claude gives value «kr 0 per passasjer (avviklet)», codex gives derive «DERIVE» |
-| mdg | `excise.flightOther` | not-reviewed | kr 0 per passasjer (avviklet) | `evidence-conflict` | claude gives value «kr 0 per passasjer (avviklet)», codex gives derive «DERIVE» |
-| mdg | `excise.beerLitre` | not-reviewed | — | `one-sided` | only codex found this proposal in the document |
-| mdg | `excise.wineLitre` | not-reviewed | — | `one-sided` | only codex found this proposal in the document |
-| mdg | `excise.spiritsLitre` | not-reviewed | — | `one-sided` | only codex found this proposal in the document |
-| mdg | `benefit.childBenefit` | not-reviewed | DERIVE (dobbelt av gjeldende satser) | `status-conflict` | same wording, status «confirmed» vs «unquantified» |
-| mdg | `benefit.studentSupport` | not-reviewed | basislån = 1,4 G (kronebeløp DERIVE) | `evidence-conflict` | claude gives derive «basislån = 1,4 G (kronebeløp DERIVE)», codex gives value «basislån: 1,4G; stipendandel folkehøyskoleelever: 40 pst.» |
+| v | `excise.cigarette` | estimated | DERIVE | `estimated` | claude needs an assumption: [L10b] Utledet: Prop. 1 LS 3,31 kr/stk × 1,05 = 3,4755 kr/stk. Snus uendret. |
+| v | `excise.cigarette` | estimated | DERIVE | `estimated` | codex needs an assumption: [L10b] Utledet: Prop. 1 LS 3,31 kr/stk × 1,05 = 3,4755 kr/stk. Snus uendret. |
+| mdg | `income.socialSecurity` | estimated | DERIVE | `estimated` | claude needs an assumption: [L10b] Utledet: Prop. 1 LS s. 80 kutter lønn/trygd 7,7 → 7,6 %; reversert 7,7 %. Pensjon 5,1 % uendret. Sidene er enige om tiltaket… |
+| mdg | `income.socialSecurity` | estimated | DERIVE | `estimated` | codex needs an assumption: [L10b] Utledet: Prop. 1 LS s. 80 kutter lønn/trygd 7,7 → 7,6 %; reversert 7,7 %. Pensjon 5,1 % uendret. Sidene er enige om tiltaket;… |
+| mdg | `wealth.netWealthTax` | estimated | bunnfradrag 10 000 000 (ektepar 20 000 … | `estimated` | claude needs an assumption: [L10b] Partiets tall; ektepar = 2 × enslig som i Prop. 1 LS. Rabattkuttet i samme linje er unquantified. |
+| mdg | `wealth.netWealthTax` | estimated | bunnfradrag 10 000 000 (ektepar 20 000 … | `estimated` | codex needs an assumption: [L10b] Partiets tall; ektepar = 2 × enslig som i Prop. 1 LS. Rabattkuttet i samme linje er unquantified. |
+| mdg | `excise.petrolLitre` | estimated | DERIVE | `estimated` | claude needs an assumption: [L10b] Utledet: Prop. 1 LS (4,25 + 2,50) + CO2 3,80 = 10,55 kr/l. CO2-avgift 2150 kr/tonn er unquantified i mdg.ts. |
+| mdg | `excise.petrolLitre` | estimated | DERIVE | `estimated` | codex needs an assumption: [L10b] Utledet: Prop. 1 LS (4,25 + 2,50) + CO2 3,80 = 10,55 kr/l. CO2-avgift 2150 kr/tonn er unquantified i mdg.ts. |
+| mdg | `excise.dieselLitre` | estimated | DERIVE | `estimated` | claude needs an assumption: [L10b] Utledet: Prop. 1 LS (3,00 + 2,50) + CO2 4,42 = 9,92 kr/l. CO2-økningen er unquantified. |
+| mdg | `excise.dieselLitre` | estimated | DERIVE | `estimated` | codex needs an assumption: [L10b] Utledet: Prop. 1 LS (3,00 + 2,50) + CO2 4,42 = 9,92 kr/l. CO2-økningen er unquantified. |
 | krf | `excise.cigarette` | estimated | DERIVE | `estimated` | claude needs an assumption: [L10a] p. 19 row kap 5531 post 70 (vision reads A+C agree). Uniform 15 pst on the tobakksvarer duty; party quotes no baseline, so d… |
 | krf | `excise.cigarette` | estimated | DERIVE | `estimated` | codex needs an assumption: [L10a] p. 19 row kap 5531 post 70 (vision reads A+C agree). Uniform 15 pst on the tobakksvarer duty; party quotes no baseline, so de… |
 | krf | `excise.snusGram` | estimated | DERIVE | `estimated` | claude needs an assumption: [L10a] p. 19 row kap 5531 post 70 (vision reads A+C agree). Uniform 15 pst on the tobakksvarer duty; party quotes no baseline, so d… |
@@ -212,21 +183,17 @@ Row-level detail for every flag is in the party sheets. `no-baseline-quoted` and
 
 | flag | severity | h | frp | sv | sp | r | v | mdg | krf | sum |
 |---|---|---|---|---|---|---|---|---|---|---|
-| `no-baseline-quoted` | medium | 12 | 16 | 28 | 15 | 12 | 8 | 32 | 12 | 135 |
-| `derive` | medium | 8 | 10 | 7 | 8 | 11 | 11 | 26 | 10 | 91 |
+| `no-baseline-quoted` | medium | 12 | 16 | 33 | 17 | 14 | 15 | 30 | 12 | 149 |
+| `derive` | medium | 9 | 12 | 10 | 12 | 14 | 18 | 26 | 10 | 111 |
 | `review-status-mismatch` | note | 1 | 20 | 16 | 1 | 14 | 17 | 15 | 0 | 84 |
-| `page-mismatch` | note | 0 | 5 | 1 | 1 | 3 | 8 | 1 | 0 | 19 |
-| `evidence-conflict` | high | 2 | 4 | 1 | 1 | 1 | 3 | 3 | 0 | 15 |
-| `one-sided` | high | 0 | 1 | 1 | 4 | 4 | 1 | 3 | 0 | 14 |
-| `value-conflict` | high | 0 | 1 | 4 | 1 | 2 | 3 | 1 | 0 | 12 |
-| `estimated` | high | 1 | 1 | 1 | 2 | 0 | 0 | 1 | 4 | 10 |
-| `derive-detail-mismatch` | medium | 0 | 2 | 1 | 0 | 2 | 1 | 1 | 1 | 8 |
-| `baseline-mismatch` | high | 0 | 2 | 1 | 0 | 2 | 3 | 0 | 0 | 8 |
-| `status-conflict` | high | 0 | 0 | 0 | 2 | 1 | 0 | 4 | 0 | 7 |
-| `effective-date-differs` | medium | 0 | 1 | 2 | 2 | 1 | 0 | 0 | 0 | 6 |
-| `change-conflict` | high | 0 | 1 | 1 | 0 | 0 | 0 | 3 | 0 | 5 |
-| `baseline-not-proposed` | high | 0 | 1 | 0 | 1 | 0 | 2 | 0 | 0 | 4 |
-| `row-missing` | high | 0 | 0 | 3 | 0 | 0 | 0 | 0 | 0 | 3 |
+| `estimated` | high | 7 | 15 | 21 | 8 | 10 | 4 | 8 | 4 | 77 |
+| `page-mismatch` | note | 0 | 1 | 0 | 0 | 0 | 4 | 0 | 0 | 5 |
+| `one-sided` | high | 0 | 1 | 1 | 0 | 1 | 0 | 0 | 0 | 3 |
+| `baseline-mismatch` | high | 0 | 1 | 0 | 0 | 0 | 2 | 0 | 0 | 3 |
+| `baseline-not-proposed` | high | 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 2 |
+| `effective-date-differs` | medium | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 2 |
+| `evidence-conflict` | high | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| `derive-detail-mismatch` | medium | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 |
 
 ## Decisions that need Jesper
 
@@ -258,8 +225,8 @@ MDG quotes different figures for the same rules on different pages (personfradra
 Flagged rows that carry it:
 
 - `mdg/income.personalAllowance` → agreed-value → `confirmed` (no-baseline-quoted, no-baseline-quoted)
-- `mdg/income.socialSecurity` → agreed-proposal → `confirmed` (derive, no-baseline-quoted, derive, no-baseline-quoted)
-- `mdg/excise.flightEurope` → evidence-conflict → `not-reviewed` (no-baseline-quoted, derive, no-baseline-quoted, evidence-conflict)
+- `mdg/income.socialSecurity` → agreed-proposal → `estimated` (estimated, derive, no-baseline-quoted, estimated, derive, no-baseline-quoted)
+- `mdg/excise.flightEurope` → agreed-proposal → `unquantified` (derive, no-baseline-quoted, derive, no-baseline-quoted)
 
 ## Closed knots
 

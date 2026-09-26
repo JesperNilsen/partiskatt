@@ -3,6 +3,8 @@
 Source: sources/text/h-alt-2026.txt  
 Extractor: codex · Date: 2026-09-13
 
+> **Revised 2026-09-26 by sprint lane L10b (not-reviewed sweep, decision 2).** Section-A rows whose note carries `[L10b]` replace both extractors’ text with one adjudicated reading of the source, written identically into both sheets. Where the party states only a change, the row is `estimated` with `DERIVE` in the value column and the arithmetic against Prop. 1 LS in the note; the encoded value and its derivation are in `src/data/parties/<party>.ts`. Text in rows without an `[L10b]` note is the extractor’s original 2026-09-13 reading.
+
 ## A. Rules (one row per formula; add `trinnN` sub-rows for brackets)
 
 | formulaId | parameter | baseline quoted by party | party absolute value | stated change (verbatim ≤15 words) | page | anchor (≤10 words) | status | proveny mill. kr (if stated) | note |
@@ -17,8 +19,8 @@ Extractor: codex · Date: 2026-09-13
 | income.personalAllowance | personfradrag | NOT FOUND | NOT FOUND | NOT FOUND | NOT FOUND | NOT FOUND | no-change | NOT FOUND | Page 17 and file-wide search for personfradrag. |
 | income.minimumDeductionWage | minstefradrag lønn: sats / øvre grense | NOT FOUND | NOT FOUND | NOT FOUND | NOT FOUND | NOT FOUND | no-change | NOT FOUND | Page 17 and file-wide search for minstefradrag. |
 | income.minimumDeductionPension | minstefradrag pensjon: sats / øvre grense | NOT FOUND | NOT FOUND | NOT FOUND | NOT FOUND | NOT FOUND | no-change | NOT FOUND | Page 17 and file-wide search for minstefradrag. |
-| income.unionFeeDeduction | fagforeningsfradrag maks | NOT FOUND | DERIVE | Fagforeningsfradrag på 2021-nivå | 17 | Fagforeningsfradrag på 2021-nivå 980 980 | unquantified | 980 | The kroner maximum for “2021-nivå” is not quoted. |
-| wealth.netWealthTax | bunnfradrag (enslig/ektefeller), sats trinn 1, trinn 2 innslag + sats | NOT FOUND | DERIVE | Heve bunnfradraget med 100 000 kr | 17 | Formuesskatt. Heve bunnfradraget med 100 000 kr -690 -690 | confirmed | -690 | Baseline and rates are not quoted. |
+| income.unionFeeDeduction | fagforeningsfradrag maks | — | DERIVE | «Fagforeningsfradrag på 2021-nivå» | 17 | Fagforeningsfradrag på 2021-nivå | unquantified | 980 | [L10b] 2021-maksimum står verken i dokumentet eller i Prop. 1 LS; ikke sagt om nivået prisjusteres. Unquantified i h.ts. |
+| wealth.netWealthTax | bunnfradrag (enslig/ektefeller), sats trinn 1, trinn 2 innslag + sats | — | DERIVE | «Formuesskatt. Heve bunnfradraget med 100 000 kr» | 17 | Formuesskatt. Heve bunnfradraget med 100 000 kr | estimated | -690 | [L10b] Utledet mot Prop. 1 LS s. 36 (1 900 000): 1 900 000 + 100 000 = 2 000 000 kr; ektepar dobbelt (4 000 000). Satser uendret. |
 | wealth.valuation | verdsettelse primærbolig (inkl. høy verdi), sekundærbolig, aksjer, bankinnskudd | NOT FOUND | aksjer og driftsmidler: 60 pst. | Aksjer og driftsmidler verdsettes til 60 pst. | 17 | Aksjer og driftsmidler verdsettes til 60 pst. -5 430 | confirmed | -5 430 | Primærbolig, sekundærbolig and bankinnskudd: NOT FOUND. |
 | vat.food | mva næringsmidler | NOT FOUND | NOT FOUND | NOT FOUND | NOT FOUND | NOT FOUND | no-change | NOT FOUND | Page 17 and file-wide searches for mva, matmoms and næringsmidler. |
 | vat.general | mva alminnelig sats | NOT FOUND | NOT FOUND | NOT FOUND | NOT FOUND | NOT FOUND | no-change | NOT FOUND | Page 17 and file-wide searches for merverdiavgift and mva. |
@@ -35,9 +37,9 @@ Extractor: codex · Date: 2026-09-13
 | excise.beerLitre | alkoholavgift øl | NOT FOUND | NOT FOUND | NOT FOUND | NOT FOUND | NOT FOUND | no-change | NOT FOUND | File-wide search for alkoholavgift. |
 | excise.wineLitre | alkoholavgift vin | NOT FOUND | NOT FOUND | NOT FOUND | NOT FOUND | NOT FOUND | no-change | NOT FOUND | File-wide search for alkoholavgift. |
 | excise.spiritsLitre | alkoholavgift brennevin | NOT FOUND | NOT FOUND | NOT FOUND | NOT FOUND | NOT FOUND | no-change | NOT FOUND | File-wide search for alkoholavgift. |
-| excise.cigarette | tobakksavgift sigaretter | NOT FOUND | DERIVE | Tobakksavgift (utenom snus) økes 15 pst. | 17 | Tobakksavgift (utenom snus) økes 15 pst. 650 710 | confirmed | 650 | Baseline and per-unit duty are not quoted. |
+| excise.cigarette | tobakksavgift sigaretter | — | DERIVE | «Tobakksavgift (utenom snus) økes 15 pst.» | 17 | Tobakksavgift (utenom snus) økes 15 pst. | estimated | 650 | [L10b] Utledet mot Prop. 1 LS tabell 1.8: 3,31 kr/stk × 1,15 = 3,8065 kr/stk. Snus uendret. |
 | excise.snusGram | tobakksavgift snus | NOT FOUND | NOT FOUND | NOT FOUND | 17 | Tobakksavgift (utenom snus) økes 15 pst. 650 710 | no-change | NOT FOUND | Snus is explicitly excluded from the stated increase. |
-| benefit.childBenefit | barnetrygd under 6 / fra 6 / utvidet (enslig) | NOT FOUND | DERIVE | Prisjustere hele barnetrygden fra 1. februar | 24 | Prisjustere hele barnetrygden fra 1. februar 609 000 | unquantified | NOT FOUND | Per-child values are absent; stated expenditure change is 609 mill. kr. |
+| benefit.childBenefit | barnetrygd under 6 / fra 6 / utvidet (enslig) | — | DERIVE | «Prisjustere hele barnetrygden fra 1. februar» | 24 | Prisjustere hele barnetrygden fra 1. februar | estimated | 609 | [L10b] Utledet: Prop. 1 LS 1 968 / 2 516 kr/mnd prisjustert til 2 012 / 2 572 (samme 609 mill. som Rødts linje, der eksempelet s. 11 viser +44 kr per barn). Virkning 1. februar, vist som helårssats. |
 | benefit.studentSupport | studiestøtte (basisstøtte, stipendandel) | NOT FOUND | NOT FOUND | NOT FOUND | NOT FOUND | NOT FOUND | no-change | NOT FOUND | File-wide searches for studiestøtte, basisstøtte and stipend. |
 | employer.contribution | arbeidsgiveravgift sats / ekstra avgift | NOT FOUND | NOT FOUND | NOT FOUND | NOT FOUND | NOT FOUND | no-change | NOT FOUND | Page 17 and file-wide search for arbeidsgiveravgift. |
 

@@ -7,23 +7,23 @@ Statuser: `confirmed` (primærkilde, kontrollert) · `estimated` (rimelig anslag
 | Parti | Inntektsskatt | Formuesskatt | Moms | Særavgifter | Kontantytelser | Arbeidsgiveravgift |
 |---|---|---|---|---|---|---|
 | Ap | not-applicable | not-applicable | not-applicable | not-applicable | not-applicable | not-applicable |
-| H | estimated | estimated | not-applicable | not-applicable | not-applicable | not-applicable |
-| FrP | estimated | estimated | unquantified | not-applicable | not-reviewed | not-applicable |
-| SV | estimated | not-reviewed | not-applicable | not-applicable | not-reviewed | not-applicable |
-| Sp | unquantified | estimated | estimated | not-reviewed | not-reviewed | not-applicable |
-| R | estimated | not-reviewed | not-applicable | not-applicable | unquantified | not-applicable |
-| V | estimated | estimated | unquantified | estimated | not-reviewed | not-applicable |
-| MDG | unquantified | not-reviewed | not-applicable | not-applicable | not-reviewed | not-applicable |
+| H | unquantified | estimated | unquantified | estimated | estimated | not-applicable |
+| FrP | estimated | unquantified | estimated | estimated | unquantified | not-applicable |
+| SV | unquantified | unquantified | not-applicable | unquantified | unquantified | not-applicable |
+| Sp | unquantified | estimated | estimated | unquantified | unquantified | not-applicable |
+| R | estimated | unquantified | unquantified | unquantified | unquantified | not-applicable |
+| V | estimated | estimated | unquantified | unquantified | unquantified | not-applicable |
+| MDG | estimated | unquantified | unquantified | unquantified | unquantified | not-applicable |
 | KrF | unquantified | unquantified | unquantified | unquantified | estimated | not-applicable |
 
 ## Encoded party deltas (S7)
 
 - **Ap**: ingen deltas
-- **H**: `income.socialSecurity`, `wealth.valuation`
-- **FrP**: `income.socialSecurity`, `income.personalAllowance`, `wealth.valuation`
-- **SV**: `income.socialSecurity`, `income.bracketTax`, `income.personalAllowance`, `income.minimumDeductionWage`, `income.minimumDeductionPension`
-- **Sp**: `income.bracketTax`, `wealth.valuation`, `vat.food`
-- **R**: `income.socialSecurity`, `income.bracketTax`, `income.personalAllowance`
-- **V**: `income.socialSecurity`, `income.personalAllowance`, `wealth.valuation`, `excise.kwh`
-- **MDG**: `income.personalAllowance`
+- **H**: `income.socialSecurity`, `wealth.netWealthTax`, `wealth.valuation`, `excise.cigarette`, `benefit.childBenefit`
+- **FrP**: `income.socialSecurity`, `income.bracketTax`, `income.personalAllowance`, `income.unionFeeDeduction`, `wealth.netWealthTax`, `wealth.valuation`, `vat.food`, `excise.petrolLitre`, `excise.dieselLitre`
+- **SV**: `income.socialSecurity`, `income.bracketTax`, `income.personalAllowance`, `income.minimumDeductionWage`, `income.minimumDeductionPension`, `wealth.netWealthTax`, `wealth.valuation`, `excise.petrolLitre`, `excise.dieselLitre`, `excise.flightEurope`, `excise.flightOther`, `benefit.childBenefit`, `benefit.studentSupport`
+- **Sp**: `income.bracketTax`, `income.socialSecurity`, `wealth.netWealthTax`, `wealth.valuation`, `vat.food`, `excise.flightEurope`
+- **R**: `income.socialSecurity`, `income.bracketTax`, `income.personalAllowance`, `wealth.netWealthTax`, `wealth.valuation`, `benefit.childBenefit`, `benefit.studentSupport`
+- **V**: `income.socialSecurity`, `income.personalAllowance`, `wealth.netWealthTax`, `wealth.valuation`, `excise.kwh`, `excise.cigarette`
+- **MDG**: `income.personalAllowance`, `income.socialSecurity`, `wealth.netWealthTax`, `excise.petrolLitre`, `excise.dieselLitre`
 - **KrF**: `wealth.valuation`, `benefit.childBenefit`, `excise.cigarette`, `excise.snusGram`
