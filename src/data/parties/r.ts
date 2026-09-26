@@ -94,7 +94,7 @@ export const R_2026: PartyRuleSet = {
         'Primærbolig o/10 millioner: 100 %',
         'Tabell 3 s. 32 (regjeringen mot Rødt): primærbolig over 10 mill. 70 → 100 %, aksjer og næringseiendom 80 → 100 %, driftsmidler 70 → 100 %. Primærbolig under grensen (25 %) og sekundærbolig (100 %) er uendret.',
       ),
-      { baselineParams: proposedParams('wealth.valuation'), note: 'Partiets regjeringskolonne = Prop. 1 LS (70/80/70 pst).' },
+      { baselineParams: proposedParams('wealth.valuation'), note: 'Partiets regjeringskolonne = Prop. 1 LS (70/80/70 pst). Boliggrensen 10 mill. er partiets bokstavelige forslag og beholdes selv om vedtatt grense er 14 mill. (beslutning Jesper 2026-09-27).' },
     ),
     partyRule(
       'benefit.childBenefit',

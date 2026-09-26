@@ -100,7 +100,7 @@ export const SV_2026: PartyRuleSet = {
       ),
       {
         baselineParams: proposedParams('wealth.valuation'),
-        note: 'Utledet (beslutning 2): rabatt fjernet ⇒ 100 pst. for aksjer (80), driftsmidler (70) og primærbolig over 10 mill. (70).',
+        note: 'Utledet (beslutning 2): rabatt fjernet ⇒ 100 pst. for aksjer (80), driftsmidler (70) og primærbolig over 10 mill. (70). Boliggrensen 10 mill. er partiets bokstavelige forslag og beholdes selv om vedtatt grense er 14 mill. (beslutning Jesper 2026-09-27).',
       },
     ),
     partyRule(
