@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { ADOPTED_2026 } from '../data/baseline/2026/adopted.ts';
+import { ADOPTED_2026, ADOPTED_2026_ENCODED } from '../data/baseline/2026/adopted.ts';
+import { deriveGate3 } from '../data/gate3.ts';
+import { GATE3_RESULTS } from '../data/gate3-results.ts';
 import { FORLIK_2026, NON_FORLIK_BASELINE_DIFFS, forlikModeledFormulaIds } from '../data/baseline/2026/forlik.ts';
 import { PROPOSED_2026 } from '../data/baseline/2026/proposed.ts';
 import { FORMULA_IDS } from '../engine/formulas.ts';
@@ -107,9 +109,15 @@ describe('proposed vs adopted — forlik diff', () => {
     expect(ad.from6PerMonth).toBe(kr(2_012));
   });
 
-  it('no baseline rule is marked confirmed', () => {
-    for (const r of [...PROPOSED_2026.rules, ...ADOPTED_2026.rules]) {
+  it('no baseline rule is confirmed except via operator gate 3', () => {
+    // Encoded rules are never confirmed by hand; the adopted set's statuses are exactly what
+    // gate 3 derives from src/data/gate3-results.ts (empty today → all estimated).
+    for (const r of [...PROPOSED_2026.rules, ...ADOPTED_2026_ENCODED.rules]) {
       expect(r.status).toBe('estimated');
+    }
+    const derived = new Map(deriveGate3(ADOPTED_2026_ENCODED, GATE3_RESULTS).map((v) => [v.id, v.status]));
+    for (const r of ADOPTED_2026.rules) {
+      expect(r.status).toBe(derived.get(r.id));
     }
   });
 });

@@ -1,5 +1,7 @@
 import { kr, krPerUnit, pct } from '../../../engine/money.ts';
 import type { BaselineRuleSet, DataStatus, FormulaId, FormulaParams, Provenance, Rule } from '../../../types/index.ts';
+import { applyGate3Status } from '../../gate3.ts';
+import { GATE3_RESULTS } from '../../gate3-results.ts';
 
 /** Build provenance from sources/manifest.json ids (S3b: not Skatteetaten-confirmed). */
 function prov(
@@ -23,7 +25,10 @@ function prov(
   };
 }
 
-/** Operator gate 3: nothing is `confirmed` until Jesper cross-checks Skatteetaten. */
+/**
+ * Every rule is encoded `estimated`. Operator gate 3 is the only way to `confirmed`: it is derived
+ * per rule from src/data/gate3-results.ts by applyGate3Status below — never set here by hand.
+ */
 const STATUS: DataStatus = 'estimated';
 
 function rule<F extends FormulaId>(
@@ -69,8 +74,8 @@ const NAV_BT_URL = 'https://www.nav.no/barnetrygd';
 const LK = 'lanekassen-satser-2026-2027';
 const LK_URL = 'https://lanekassen.no/nb-NO/laresteder/nyheter/forskriftene-for-2026-2027-er-klare/';
 
-/** Vedtatt referansesystem 2026 (Lovdata + budsjettforlik). */
-export const ADOPTED_2026: BaselineRuleSet = {
+/** Vedtatt referansesystem 2026 (Lovdata + budsjettforlik), as encoded — before gate 3. */
+export const ADOPTED_2026_ENCODED: BaselineRuleSet = {
   id: 'adopted',
   year: 2026,
   rules: [
@@ -295,3 +300,6 @@ export const ADOPTED_2026: BaselineRuleSet = {
     ),
   ],
 };
+
+/** Vedtatt referansesystem 2026 with operator-gate-3 statuses derived from the recorded results. */
+export const ADOPTED_2026: BaselineRuleSet = applyGate3Status(ADOPTED_2026_ENCODED, GATE3_RESULTS);
