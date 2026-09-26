@@ -102,7 +102,8 @@ export function MethodView() {
         <p>
           Husholdningstallene er delt på gjennomsnittshusholdningen etter den OECD-modifiserte ekvivalensskalaen (1 + 0,5 per ekstra voksen
           + 0,3 per barn). «Nøkternt» og «Høyt» er ikke påslag på «Typisk», men laveste og høyeste inntektskvartil i SSB-tabell 14156.
-          Mengdene (liter, kWh, reiser) er kroner delt på gjennomsnittsprisen for 2022.
+          Mengdene (liter, reiser) er kroner delt på gjennomsnittsprisen for 2022. Strømforbruket er målt: 14 964 kWh per husholdning
+          i 2022 (SSB-tabell 10572, samme utvalg som forbruksundersøkelsen, 80 prosent med målerdata fra Elhub).
         </p>
         <p>
           Flypassasjeravgiften har to satser, så flykronene deles: 20 prosent regnes som reiser utenfor Europa og resten som
@@ -113,8 +114,8 @@ export function MethodView() {
         </p>
         <p className="muted">
           Beløpene står i 2022-kroner uten KPI-løft, og prisene på øl, vin, brennevin, sigaretter, snus og flyreiser er anslag — det finnes
-          ingen offisiell kroner-per-enhet for dem. Strømforbruket i kWh er det mest usikre tallet, fordi strømstøtten i 2022 gjør det uklart
-          hvilken kWh-pris utgiften svarer til. Utledningen og forbeholdene står i sin helhet i metodedokumentet og under «Kilder».
+          ingen offisiell kroner-per-enhet for dem. Strømforbruket i kWh er ikke lenger kroner delt på en strømpris: strømstøtten i 2022 gjorde
+          det valget usikkert, og SSBs målte forbruk har erstattet det. Utledningen og forbeholdene står i sin helhet i metodedokumentet og under «Kilder».
         </p>
       </section>
 

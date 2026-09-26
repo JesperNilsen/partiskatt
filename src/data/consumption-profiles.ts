@@ -51,7 +51,7 @@ export const COICOP_MAPPING: readonly CoicopRule[] = [
     category: 'electricity',
     include: ['04.5.1'],
     exclude: [],
-    why: 'Gruppen heter «Elektrisitet inkludert nettleie» — belopet inneholder altsa nettleie, avgifter og mva, ikke bare kraftprisen. Det er avgjorende for kWh-utledningen under.',
+    why: 'Gruppen heter «Elektrisitet inkludert nettleie» — belopet inneholder altsa nettleie, avgifter og mva, ikke bare kraftprisen. kWh utledes IKKE av dette belopet; se KWH_PER_HOUSEHOLD_2022.',
   },
   {
     category: 'fuel',
@@ -157,6 +157,8 @@ export const AVERAGE_HOUSEHOLD_EQUIVALENCE = 1.4713;
  * utenlands — et annet skille, som ville plassert en reise til Spania og en til Thailand pa
  * samme side. Derfor star andelen her som et navngitt tall med `sourceId: null`, pa samme
  * vilkar som 1 500-kr-prisen den erstatter, i stedet for a ligge implisitt i et frotall.
+ * Lane L11 (2026-09-26) lette pa nytt og fant ingen kilde som avgjor andelen eller prisen;
+ * det som ble sokt, og de beste kryssjekkene, star i docs/research/l11-profile-inputs.md.
  *
  * Kronene DELES, de legges ikke til: `flightEurope x prisEuropa + flightOther x prisUtenfor`
  * er lik `spend.flights` for hvert fro. Det er testet (`src/tests/consumption-profiles.test.ts`).
@@ -204,14 +206,7 @@ export const UNIT_PRICES_2022: Readonly<Record<string, UnitPrice>> = {
     sourceId: 'ssb-09654-drivstoffpriser-2022',
     note: 'Avgiftspliktig diesel, snitt av de tolv manedsprisene 2022.',
   },
-  kwh: {
-    price: 2.353,
-    unit: 'kr/kWh',
-    sourceId: 'ssb-09007-strompris-husholdninger-2022',
-    note:
-      'Kraft + nettleie INKLUDERT mva og elavgift, 235,3 ore/kWh (KraftOgNettIA). ' +
-      'SE ADVARSELEN UNDER: valget mellom denne og prisen etter strømstotte endrer kWh med ~60 %.',
-  },
+  // kWh har ingen pris her: mengden er malt, ikke utledet av kroner. Se KWH_PER_HOUSEHOLD_2022.
   beer: { price: 52, unit: 'kr/liter', sourceId: null, note: 'ANSLAG. Ingen offisiell kr/liter finnes.' },
   wine: { price: 150, unit: 'kr/liter', sourceId: null, note: 'ANSLAG. Ingen offisiell kr/liter finnes.' },
   spirits: { price: 500, unit: 'kr/liter', sourceId: null, note: 'ANSLAG. Ingen offisiell kr/liter finnes.' },
@@ -232,23 +227,39 @@ export const UNIT_PRICES_2022: Readonly<Record<string, UnitPrice>> = {
 };
 
 /**
- * ADVARSEL — kWh er det ene tallet her som kan vaere grovt galt, og det er verdt a lese.
+ * kWh: malt forbruk fra SSB, ikke kroner delt pa en strompris.
  *
- * FBUs 04.5.1 er kroner husholdningen FAKTISK betalte for strom inkludert nettleie i 2022.
- * 2022 var aret med stromstotte: SSB oppgir bade 235,3 ore/kWh inkludert mva og elavgift,
- * og 143,9 ore/kWh nar stotten er trukket fra. Hvilken av dem som svarer til FBUs
- * utgiftstall, star ikke i noen av de arkiverte filene.
+ * Tall: 14 964 kWh elektrisitet per husholdning i 2022, SSB-tabell 10572 «Gjennomsnittlig
+ * energiforbruk per husholdning, etter energibaerer» (Energibaerer 1.1 Elektrisitet,
+ * ContentsCode Forbruk, Tid 2022), arkivert som `ssb-10572-energibruk-husholdninger-2022`.
+ * Utvalget er FBU 2022 sitt eget (3 507 husholdninger), og for 2 813 av dem (80 %) er
+ * forbruket hentet fra Elhub, altsa malerdata (`ssb-energibruk-husholdningene-2022`,
+ * «Om statistikken», l. 413 i tekstfilen). Tallet gjelder boligen, ikke fritidsbolig, og
+ * inkluderer lading av elbil hjemme — begge deler star i samme dokumentasjon.
  *
- *   235,3 ore  ->  13 673 kWh per husholdning   (brukt her)
- *   143,9 ore  ->  22 358 kWh per husholdning   (forkastet)
+ * Hvorfor ikke kroner / pris, som for bensin og diesel: Q-001 delte FBUs 04.5.1 (32 173 kr)
+ * pa 235,3 ore/kWh (for strømstotte, `ssb-09007-strompris-husholdninger-2022`) og fikk
+ * 13 673 kWh; med 143,9 ore/kWh (etter stotte) blir det 22 358. Lane L11 (2026-09-26) fant
+ * SSBs egen behandling av FBU 2022-svarene: der Elhub mangler, regnes de egenoppgitte
+ * stromkostnadene om til kWh med en pris der «strømstøtte er trukket i fra» — SSB leser altsa
+ * FBU-utgiften som ETTER stotte. Men 32 173 / 1,439 = 22 358 kWh ligger 49 % over de 14 964 kWh
+ * SSB maler for samme utvalg, sa brøken er ikke en kWh-kilde uansett hvilken pris som velges.
+ * Implisitt pris 32 173 / 14 964 = 2,150 kr/kWh forklares ikke av noen arkivert kilde. Det
+ * malte tallet erstatter derfor utledningen. Se docs/research/l11-profile-inputs.md.
  *
- * 235,3 er valgt fordi 13 673 kWh ligger i naerheten av det norske husholdningssnittet pa
- * rundt 16 000 kWh i et ar da forbruket falt, mens 22 358 ligger langt over. Det er et
- * rimelighetsargument, ikke en kilde — derfor er kWh merket som anslag. Tallet mater
- * elavgiften direkte, sa hvis operatoren finner ut hvordan FBU behandler stromstotten,
- * er dette forste tall som skal rettes.
+ * Profilene: 10572 har ingen inntektsfordeling. ANTAKELSE, samme som kronene i `spend.electricity`
+ * allerede bygger pa: kWh folger 04.5 «Elektrisitet og brensel» per inntektskvartil i tabell
+ * 14156 (26 737 / 36 042 / 47 416 kr). Frøet er `kWh_2022 x 04.5_kvartil / 04.5_alle / 1,4713`,
+ * rundet til hele kWh: 7 545 / 10 171 / 13 380. Testen regner det om igjen fra begge rafilene.
  */
-export const KWH_IS_ESTIMATED = true;
+export const KWH_PER_HOUSEHOLD_2022 = 14_964;
+
+/** 04.5 «Elektrisitet og brensel» per husholdning per ar, 2022-kr, per profil (tabell 14156). */
+export const ENERGY_BY_PROFILE_2022: Readonly<Record<ConsumptionProfileId, number>> = {
+  noktern: 26_737,
+  typisk: 36_042,
+  hoy: 47_416,
+};
 
 /**
  * Tobakk: delingen av kronene i sigaretter og snus.
@@ -386,7 +397,7 @@ const SEEDS: readonly ProfileSeed[] = [
     units: {
       petrolLitre: 66,
       dieselLitre: 97,
-      kwh: 6_894,
+      kwh: 7_545, // KWH_PER_HOUSEHOLD_2022 x 26 737 / 36 042 / 1,4713
       // 2 800 kr flyreiser delt etter LONGHAUL_SPEND_SHARE. UAVRUNDET: dette er et
       // FORVENTET antall avreiser per ar, ikke en reise noen faktisk tar.
       flightEurope: (2_800 * (1 - LONGHAUL_SPEND_SHARE)) / FLIGHT_PRICE_EUROPE_2022,
@@ -418,7 +429,7 @@ const SEEDS: readonly ProfileSeed[] = [
     units: {
       petrolLitre: 134,
       dieselLitre: 195,
-      kwh: 9_293,
+      kwh: 10_171, // KWH_PER_HOUSEHOLD_2022 / 1,4713
       // 3 200 kr flyreiser delt etter LONGHAUL_SPEND_SHARE. UAVRUNDET: dette er et
       // FORVENTET antall avreiser per ar, ikke en reise noen faktisk tar.
       flightEurope: (3_200 * (1 - LONGHAUL_SPEND_SHARE)) / FLIGHT_PRICE_EUROPE_2022,
@@ -450,7 +461,7 @@ const SEEDS: readonly ProfileSeed[] = [
     units: {
       petrolLitre: 191,
       dieselLitre: 277,
-      kwh: 12_226,
+      kwh: 13_380, // KWH_PER_HOUSEHOLD_2022 x 47 416 / 36 042 / 1,4713
       // 4 500 kr flyreiser delt etter LONGHAUL_SPEND_SHARE. UAVRUNDET: dette er et
       // FORVENTET antall avreiser per ar, ikke en reise noen faktisk tar.
       flightEurope: (4_500 * (1 - LONGHAUL_SPEND_SHARE)) / FLIGHT_PRICE_EUROPE_2022,

@@ -9,12 +9,13 @@ import {
   COICOP_MAPPING,
   CONSUMPTION_PROFILES,
   consumptionFor,
+  ENERGY_BY_PROFILE_2022,
   equivalenceFactor,
   FBU_TOTAL_2022,
   FLIGHT_PRICE_EUROPE_2022,
   FLIGHT_PRICE_OTHER_2022,
   HOUSEHOLD_SPEND_2022,
-  KWH_IS_ESTIMATED,
+  KWH_PER_HOUSEHOLD_2022,
   LONGHAUL_SPEND_SHARE,
   PROFILE_SEEDS,
   TOBACCO_BY_PROFILE_2022,
@@ -400,7 +401,13 @@ describe('provenance (Q-001 punkt 4 og 7)', () => {
   );
 
   it('finner hver manifest-id modulen viser til', () => {
-    const cited = ['ssb-fbu-14100', 'ssb-fbu-14100-meta', 'ssb-fbu-14156'];
+    const cited = [
+      'ssb-fbu-14100',
+      'ssb-fbu-14100-meta',
+      'ssb-fbu-14156',
+      'ssb-10572-energibruk-husholdninger-2022',
+      'ssb-energibruk-husholdningene-2022',
+    ];
     for (const price of Object.values(UNIT_PRICES_2022)) {
       if (price.sourceId) cited.push(price.sourceId);
     }
@@ -422,7 +429,54 @@ describe('provenance (Q-001 punkt 4 og 7)', () => {
     }
   });
 
-  it('holder fast at kWh er et anslag så lenge strømstøtten er uavklart', () => {
-    expect(KWH_IS_ESTIMATED).toBe(true);
+  it('gir kWh ingen pris, så ingen kan dele 04.5.1-kroner på en strømpris igjen', () => {
+    expect(UNIT_PRICES_2022.kwh).toBeUndefined();
+  });
+});
+
+describe('kWh fra SSB-tabell 10572, ikke kroner delt på strømpris (L11)', () => {
+  function raw10572(carrier: string, contents: string): number {
+    const raw = JSON.parse(readFileSync(join(ROOT, 'sources', 'raw', 'ssb-10572-energibruk-husholdninger-2022.json'), 'utf8'));
+    const dim = raw.dimension;
+    expect(Object.keys(dim.Tid.category.index)).toEqual(['2022']);
+    const c: number = dim.Energibaerer.category.index[carrier];
+    const k: number = dim.ContentsCode.category.index[contents];
+    const nK = Object.keys(dim.ContentsCode.category.index).length;
+    return raw.value[c * nK + k];
+  }
+  function raw14156(code: string, quartile: string): number {
+    const raw = JSON.parse(readFileSync(join(ROOT, 'sources', 'raw', 'ssb-fbu-14156.json'), 'utf8'));
+    const dim = raw.dimension;
+    const g: number = dim.VareTjenesteGruppe.category.index[code];
+    const q: number = dim.InntektForbrEnhet.category.index[quartile];
+    return raw.value[g * Object.keys(dim.InntektForbrEnhet.category.index).length + q];
+  }
+
+  it('henter 14 964 kWh elektrisitet per husholdning 2022 fra den arkiverte 10572-filen', () => {
+    expect(raw10572('1.1', 'Forbruk')).toBe(KWH_PER_HOUSEHOLD_2022);
+    expect(KWH_PER_HOUSEHOLD_2022).toBe(14_964);
+  });
+
+  it('henter kvartilenes 04.5 fra 14156', () => {
+    for (const seed of PROFILE_SEEDS) {
+      expect(raw14156('04.5', seed.quartile), seed.id).toBe(ENERGY_BY_PROFILE_2022[seed.id]);
+    }
+  });
+
+  /** kWh_2022 x 04.5_kvartil / 04.5_alle / 1,4713, rundet. Eks. «Høyt»: 14 964 x 47 416 / 36 042 / 1,4713 = 13 380,2. */
+  it('gir kWh-frøene = 10572-kWh x kvartilens 04.5-andel / 1,4713, rundet', () => {
+    for (const seed of PROFILE_SEEDS) {
+      const expected = Math.round(
+        (raw10572('1.1', 'Forbruk') * raw14156('04.5', seed.quartile)) / raw14156('04.5', '0') / 1.4713,
+      );
+      expect(seed.units.kwh, seed.id).toBe(expected);
+    }
+    expect(PROFILE_SEEDS.map((s) => s.units.kwh)).toEqual([7_545, 10_171, 13_380]);
+  });
+
+  it('står på SSBs egen setning om at strømstøtten er trukket fra når FBU-utgiften regnes om', () => {
+    const text = readFileSync(join(ROOT, 'sources', 'text', 'ssb-energibruk-husholdningene-2022.txt'), 'utf8');
+    expect(text).toContain('mens strømstøtte er trukket i fra');
+    expect(text).toContain('For 2022 så er strømforbruket for 2813 husholdninger , altså 80 prosent, basert på tall fra Elhub');
   });
 });
