@@ -6,6 +6,7 @@
 import { partyOf, sourceOf } from '../data/index.ts';
 import { parsePageRefs } from '../data/provenance.ts';
 import type { DataStatus, PartyResult, Provenance } from '../types/index.ts';
+import { formatEffectiveDate } from '../utils/format.ts';
 
 export interface RuleRow {
   readonly key: string;
@@ -16,6 +17,25 @@ export interface RuleRow {
   readonly reason?: string;
   /** `null` only if the excluded item cannot be matched to the party's data (a data bug). */
   readonly provenance: Provenance | null;
+  /**
+   * "gjelder fra 1. mars; vist som helårseffekt" when the rule's `effectiveDate` is not
+   * 1 January (decision 1, 2026-09-25: mid-year rules stay full-year policy rates, no
+   * pro-rating by date). `undefined` when the rule takes effect at the start of the year
+   * or has no provenance.
+   */
+  readonly effectiveNote?: string | undefined;
+}
+
+/** Full year in the current data model: `Provenance.effectiveDate` defaults to this. */
+const START_OF_YEAR = '2026-01-01';
+
+/**
+ * The mid-year disclosure line for a rule, derived from its own `effectiveDate` — never
+ * from a hard-coded list of parties or rule ids.
+ */
+export function effectiveDateNote(provenance: Provenance | null): string | undefined {
+  if (!provenance || provenance.effectiveDate === START_OF_YEAR) return undefined;
+  return `gjelder fra ${formatEffectiveDate(provenance.effectiveDate)}; vist som helårseffekt`;
 }
 
 /** Compress sorted unique pages to ranges: [4,5,6,9] → "4–6, 9". */
@@ -81,6 +101,7 @@ export function partyRuleRows(result: PartyResult): { applied: RuleRow[]; exclud
       status: d.status,
       uncertain: d.uncertain,
       provenance: d.provenance,
+      effectiveNote: effectiveDateNote(d.provenance),
     }));
 
   const excluded: RuleRow[] = result.excluded.map((item, i) => {
@@ -94,6 +115,7 @@ export function partyRuleRows(result: PartyResult): { applied: RuleRow[]; exclud
       uncertain: item.uncertain,
       reason: item.reason,
       provenance,
+      effectiveNote: effectiveDateNote(provenance),
     };
   });
 

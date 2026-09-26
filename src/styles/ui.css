@@ -266,6 +266,7 @@ input[type='number'], select {
 .rule-row__method { margin-top: var(--sp-1); color: var(--ink-3); }
 .rule-row__method summary { cursor: pointer; }
 .rule-row__method p { margin: var(--sp-1) 0 0; }
+.rule-row__effective { margin: var(--sp-1) 0 0; color: var(--ink-2); font-style: italic; }
 .party-card__meta { color: var(--ink-3); margin: 0; }
 
 .empty-state, .loading-state, .error-state {

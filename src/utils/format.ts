@@ -2,6 +2,7 @@ import { kr, perMonth } from '../engine/money.ts';
 import type { Kroner } from '../types/index.ts';
 
 const nb = new Intl.NumberFormat('nb-NO', { maximumFractionDigits: 0 });
+const nbDate = new Intl.DateTimeFormat('nb-NO', { day: 'numeric', month: 'long', timeZone: 'UTC' });
 
 /** Whole kroner with Norwegian grouping, no currency suffix. */
 export function formatKr(amount: Kroner): string {
@@ -13,6 +14,11 @@ export function formatSignedKr(amount: Kroner): string {
   if (amount === 0) return '0';
   const sign = amount > 0 ? '+' : '−';
   return `${sign}${nb.format(Math.abs(amount))}`;
+}
+
+/** ISO date ("2026-03-01") as a Norwegian day+month ("1. mars"), for mid-year effective dates. */
+export function formatEffectiveDate(iso: string): string {
+  return nbDate.format(new Date(`${iso}T00:00:00Z`));
 }
 
 /** Plain-language headline for a party delta. */

@@ -120,6 +120,18 @@ export function MethodView() {
       </section>
 
       <section>
+        <h2>Ikrafttredelse midt i året</h2>
+        <p>
+          Enkelte regler trer i kraft en dato midt i 2026 — for eksempel barnetrygd fra 1. februar eller en momssats
+          fra 1. september — i stedet for 1. januar. Kalkulatoren pro-rerer ikke etter dato; det er bevisst utenfor
+          omfanget. Regelen vises i stedet som en <strong>helårseffekt</strong>: det årlige beløpet den ville gitt om
+          den hadde gjeldt hele 2026. Dette er et sammenligningsvalg, ikke en glipp — hensikten er å vise
+          politikknivåer mellom partier, ikke en kontantstrømprognose for 2026 med delårsvirkning. Der en regel har
+          en slik ikrafttredelsesdato, står den ved siden av regelen i partikortet.
+        </p>
+      </section>
+
+      <section>
         <h2>Avrunding</h2>
         <p>
           Alle beløp er hele kroner. Hver navngitt komponent avrundes én gang (halv opp, bort fra null). Summen av

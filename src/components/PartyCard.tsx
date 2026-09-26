@@ -36,6 +36,7 @@ function RuleProvenanceItem({ row }: { row: RuleRow }) {
         <strong className="rule-row__title">{row.title}</strong> <StatusBadge status={row.status} />
         {row.uncertain ? <span className="rule-row__flag"> Usikkert</span> : null}
       </div>
+      {row.effectiveNote ? <p className="rule-row__effective">{row.effectiveNote}</p> : null}
       {row.reason ? <p className="rule-row__reason">{row.reason}</p> : null}
       {src && row.provenance ? (
         <>

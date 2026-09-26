@@ -50,6 +50,9 @@ Andelen er et anslag og kan ikke være noe annet: ingen arkiverbar offisiell kil
 
 **Prisår: 2022-kroner brukes uendret, uten KPI-løft.** Det er et bevisst valg, ikke en forglemmelse. Profilen er et redigerbart utgangspunkt brukeren kan overstyre, og et udokumentert KPI-løft ville gitt tallene en presisjon de ikke har. Konsekvensen skal sies rett ut: mengdene (liter, kWh) er de riktige å regne særavgift av, mens kronebeløpene ligger på 2022-nivå og dermed noe under 2026-forbruk i kroner.
 
+## Ikrafttredelse midt i året
+Enkelte regler — vedtatte og foreslåtte — trer i kraft en dato midt i 2026, ikke 1. januar (for eksempel barnetrygd fra 1. februar eller en momssats fra 1. september). Denne modellen pro-rerer ikke etter ikrafttredelsesdato; det er uttrykkelig utenfor omfanget (beslutning 1, 2026-09-25, `docs/sprint-2026-09.md`). Regelen vises i stedet som en **helårseffekt**: det årlige beløpet den ville gitt om den gjaldt hele 2026. Dette er et bevisst valg, ikke en forglemmelse — kalkulatoren sammenligner **politikknivåer** mellom partier (satser, beløp, terskler for et helt år), ikke en kontantstrømprognose for 2026 med delårsvirkning. Der en regels `effectiveDate` avviker fra 1. januar, viser partikortet ikrafttredelsesdatoen ved siden av regelen («gjelder fra …; vist som helårseffekt»).
+
 ## Avrunding
 Alle beløp er hele kroner. Hver navngitt komponent avrundes én gang (halv opp, bort fra null). Summen av komponentene er per definisjon lik hovedtallet.
 
