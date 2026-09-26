@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { DATA_BUNDLE, PROPOSED_2026, partyOf, sourceOf } from '../data/index.ts';
 import { KNOWN_KNOTS } from '../data/knots.ts';
 import { NON_FORLIK_BASELINE_DIFFS } from '../data/baseline/2026/forlik.ts';
+import { anchorInText, normalizeForAnchor, parsePageRefs } from '../data/provenance.ts';
 import type { AnyRule, FormulaId, PartyId } from '../types/index.ts';
 import { PARTY_IDS } from '../types/index.ts';
 
@@ -16,28 +17,75 @@ function ruleOf(set: { rules: readonly AnyRule[] }, id: FormulaId): AnyRule {
   return r;
 }
 
-function pageText(sourceId: string, pageNum: number): string {
+const TEXT_PAGES = new Map<string, readonly string[]>();
+
+/** Pages of a source's archived text file (form-feed split; pdftotext's trailing \f is not a page). */
+function textPages(sourceId: string): readonly string[] {
+  const cached = TEXT_PAGES.get(sourceId);
+  if (cached) return cached;
   const entry = sourceOf(sourceId);
   if (!entry.textFile) throw new Error(`no text file for ${sourceId}`);
   const text = readFileSync(join(ROOT, entry.textFile), 'utf8');
-  const pages = text.split('\f');
-  return pages[pageNum - 1] ?? '';
+  const pages = (text.endsWith('\f') ? text.slice(0, -1) : text).split('\f');
+  TEXT_PAGES.set(sourceId, pages);
+  return pages;
 }
 
-/** Anchor test: every word in the anchor (len>1) occurs on the cited page. */
-function anchorOnPage(anchor: string, page: string): boolean {
-  const hay = page.toLowerCase().replace(/\s+/g, ' ');
-  const words = anchor
-    .toLowerCase()
-    .replace(/[^\p{L}\p{N}\s,.%øæå-]/gu, ' ')
-    .split(/\s+/)
-    .filter((w) => w.length > 1);
-  return words.length > 0 && words.every((w) => hay.includes(w));
+/** Parsed page refs, or a thrown error naming the rule — never a silent skip. */
+function pagesOf(label: string, sourceId: string, pageOrTable: string): number[] {
+  const pages = parsePageRefs(pageOrTable);
+  if (!pages || pages.length === 0) throw new Error(`${label}: unparsable page reference ${JSON.stringify(pageOrTable)}`);
+  const count = textPages(sourceId).length;
+  const outOfRange = pages.filter((p) => p > count);
+  if (outOfRange.length) throw new Error(`${label}: page(s) ${outOfRange.join(', ')} beyond ${sourceId} (${count} text pages)`);
+  return pages;
 }
 
-function pageFromProvenance(pageOrTable: string): number | null {
-  const m = pageOrTable.match(/p(?:df)?\s*(\d+)/i) ?? pageOrTable.match(/\bp(\d+)\b/i);
-  return m ? Number(m[1]) : null;
+interface ProvCase {
+  kind: 'delta' | 'unquantified';
+  party: PartyId;
+  label: string;
+  sourceId: string;
+  pageOrTable: string;
+  anchor: string;
+}
+
+const PROV_CASES: ProvCase[] = DATA_BUNDLE.parties.flatMap((party) => [
+  ...party.deltas.map((d) => ({
+    kind: 'delta' as const,
+    party: party.id,
+    label: d.id,
+    sourceId: d.provenance.sourceId,
+    pageOrTable: d.provenance.pageOrTable,
+    anchor: d.provenance.anchor,
+  })),
+  ...party.unquantified.map((u) => ({
+    kind: 'unquantified' as const,
+    party: party.id,
+    label: u.title,
+    sourceId: u.provenance.sourceId,
+    pageOrTable: u.provenance.pageOrTable,
+    anchor: u.provenance.anchor,
+  })),
+]);
+
+/**
+ * Known cases where the anchor cannot be found in the text layer. Each entry is
+ * checked to still be necessary: the anchor must NOT be found on any cited page
+ * (a stale entry fails), and `textEmpty` entries must cite only pages whose text
+ * layer holds nothing but the page number.
+ */
+const ANCHOR_ALLOWLIST: readonly { party: PartyId; label: string; textEmpty: boolean; why: string }[] = [
+  {
+    party: 'krf',
+    label: 'Skattevedlegg (PDF p35–46 tom i pdftotext)',
+    textEmpty: true,
+    why: 'K2: the KrF tax annex p35–46 is image-only; pdftotext yields only the page number on each, so no anchor can be text-verified. Resolved by L10a (vision read), which must then drop this entry.',
+  },
+];
+
+function allowlisted(c: ProvCase) {
+  return ANCHOR_ALLOWLIST.find((a) => a.party === c.party && a.label === c.label);
 }
 
 describe('DATA_BUNDLE', () => {
@@ -63,32 +111,101 @@ describe('party rule status — operator gate 3', () => {
 });
 
 describe('party baselineParams vs proposed', () => {
-  it('when baselineParams is set it deep-equals proposed', () => {
+  /** Rules that carry `baselineParams`, as `party:formulaId`. Explicitly none today. */
+  const WITH_BASELINE_PARAMS: readonly string[] = [];
+
+  it('exactly the listed rules carry baselineParams, each deep-equal to proposed', () => {
+    const withBaseline = DATA_BUNDLE.parties.flatMap((party) =>
+      party.deltas.filter((d) => d.baselineParams !== undefined).map((d) => ({ key: `${party.id}:${d.id}`, d })),
+    );
+    expect(withBaseline.map((x) => x.key).sort()).toEqual([...WITH_BASELINE_PARAMS].sort());
+    for (const { d } of withBaseline) {
+      expect(d.baselineParams).toEqual(ruleOf(PROPOSED_2026, d.id).params);
+    }
+  });
+});
+
+describe('provenance page references', () => {
+  it('parses single pages, ranges, lists and prefixes; rejects non-page text', () => {
+    expect(parsePageRefs('PDF p17')).toEqual([17]);
+    expect(parsePageRefs('PDF p11; p46')).toEqual([11, 46]);
+    expect(parsePageRefs('PDF p17–24')).toEqual([17, 18, 19, 20, 21, 22, 23, 24]);
+    expect(parsePageRefs('s. 12–13')).toEqual([12, 13]);
+    expect(parsePageRefs('pp. 4, 7')).toEqual([4, 7]);
+    expect(parsePageRefs('PDF pX')).toBeNull();
+    expect(parsePageRefs('PDF p0')).toBeNull();
+    expect(parsePageRefs('PDF p9–3')).toBeNull();
+    expect(parsePageRefs('ap-alt-2026 (manifest)')).toBeNull();
+    expect(parsePageRefs('Tabell 3.2')).toBeNull();
+  });
+
+  it('every delta and unquantified proposal parses to at least one page in its source text', () => {
+    const expected =
+      DATA_BUNDLE.parties.reduce((n, p) => n + p.deltas.length + p.unquantified.length, 0);
+    // Invariant: one case per delta + unquantified proposal, and each yields ≥ 1 parsed page.
+    expect(PROV_CASES).toHaveLength(expected);
+    const parsed = PROV_CASES.map((c) => pagesOf(`${c.party} ${c.label}`, c.sourceId, c.pageOrTable));
+    expect(parsed.filter((pages) => pages.length > 0)).toHaveLength(expected);
+  });
+
+  it('every reviewed note cites parsable pages, except Ap (no alternative budget)', () => {
     for (const party of DATA_BUNDLE.parties) {
-      for (const d of party.deltas) {
-        if (!d.baselineParams) continue;
-        expect(d.baselineParams).toEqual(ruleOf(PROPOSED_2026, d.id).params);
+      for (const [category, note] of Object.entries(party.reviewed)) {
+        if (party.id === 'ap') {
+          expect(note!.pageOrTable).toBe('ap-alt-2026 (manifest)');
+          continue;
+        }
+        pagesOf(`${party.id} reviewed ${category}`, `${party.id}-alt-2026`, note!.pageOrTable);
       }
     }
   });
 });
 
-describe('anchor test — party deltas', () => {
-  it.each(
-    DATA_BUNDLE.parties.flatMap((party) =>
-      party.deltas.map((d) => ({
-        party: party.id,
-        formulaId: d.id,
-        sourceId: d.provenance.sourceId,
-        pageOrTable: d.provenance.pageOrTable,
-        anchor: d.provenance.anchor,
-      })),
-    ),
-  )('$party $formulaId: anchor on cited page', ({ sourceId, pageOrTable, anchor }) => {
-    const page = pageFromProvenance(pageOrTable);
-    if (!page) return;
-    const text = pageText(sourceId, page);
-    expect(anchorOnPage(anchor, text)).toBe(true);
+describe('anchor matching', () => {
+  it('matches whole phrases, numbers with or without thousands separators', () => {
+    expect(anchorInText('150 000', 'øke frikortgrensen til 150.000 kroner')).toBe(true);
+    expect(anchorInText('kr 125.000', 'kr 125 000')).toBe(true);
+    expect(anchorInText('55', 'minstefradrag 55 pst.')).toBe(true);
+    expect(anchorInText('55', 'minstefradrag 155 pst.')).toBe(false);
+    expect(anchorInText('55', 'minstefradrag 550 pst.')).toBe(false);
+    expect(anchorInText('150 000', 'til 2 150 000 kroner')).toBe(false);
+    expect(anchorInText('strøm', 'strømstøtte')).toBe(false);
+    expect(anchorInText('matmoms', 'halvere matmomsen')).toBe(false);
+    expect(anchorInText('aksjer og driftsmidler', 'driftsmidler og aksjer')).toBe(false);
+    expect(anchorInText('Øke   frikortgrensen', 'øke\nfrikortgrensen')).toBe(true);
+    expect(anchorInText('10,21 mill.', 'verdi 10,21 mill. kroner')).toBe(true);
+  });
+
+  it('anchors are at most ten words', () => {
+    for (const c of PROV_CASES) {
+      expect(normalizeForAnchor(c.anchor).split(' ').length, `${c.party} ${c.label}`).toBeLessThanOrEqual(10);
+    }
+  });
+});
+
+describe('anchor test — party provenance', () => {
+  it.each(PROV_CASES)('$party $kind $label: anchor on a cited page', (c) => {
+    const pages = pagesOf(`${c.party} ${c.label}`, c.sourceId, c.pageOrTable);
+    const text = textPages(c.sourceId);
+    const hits = pages.filter((p) => anchorInText(c.anchor, text[p - 1]!));
+    const allow = allowlisted(c);
+    if (allow) {
+      // The entry must still be needed, and its stated reason must still hold.
+      expect(hits, `stale allowlist entry: ${c.party} ${c.label}`).toEqual([]);
+      if (allow.textEmpty) {
+        // Empty = nothing but the printed page number in the text layer.
+        expect(pages.filter((p) => !/^\d*$/.test(text[p - 1]!.trim()))).toEqual([]);
+      }
+      return;
+    }
+    expect(hits.length, `${c.party} ${c.label}: ${JSON.stringify(c.anchor)} not on ${c.pageOrTable}`).toBeGreaterThan(0);
+  });
+
+  it('every allowlist entry names an existing case', () => {
+    for (const a of ANCHOR_ALLOWLIST) {
+      expect(PROV_CASES.some((c) => c.party === a.party && c.label === a.label), `${a.party} ${a.label}`).toBe(true);
+      expect(a.why.length).toBeGreaterThan(20);
+    }
   });
 });
 
