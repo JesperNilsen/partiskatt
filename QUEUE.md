@@ -133,7 +133,8 @@ notes:
 - Engine-API er frosset (`src/engine/index.ts`); UI regner ingenting selv.
 
 ## Q-003 · Partikort viser status og kilde per regel
-status: blocked:sprint 2026-09-25 (docs/sprint-2026-09.md)
+status: done
+result: Sprint 2026-09 lane L5, merged to main at 152bdfd 2026-09-26. Expanded party card lists every applied rule and unquantified proposal with StatusBadge + 'Kilde: <source>, s. N' (pages via parsePageRefs) + method; PartyCard.provenance.test.tsx asserts within(row) against the rule's own provenance; 375 px checked on all 9 cards. Rows are per rule, not per component (components mix several rules).
 lane: partiskatt-main
 
 acceptance:
