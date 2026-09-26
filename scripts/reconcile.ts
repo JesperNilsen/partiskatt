@@ -16,8 +16,11 @@
  * for values that need an assumption (`estimated`) or an external baseline (`DERIVE`).
  *
  * KNOWN_KNOTS are the four snags carried over from the extraction pass. The script asserts
- * that each one still surfaces as a flagged row; if a knot ever goes quiet, that means the
- * reconciler lost it rather than that it was resolved, so the run exits non-zero.
+ * that each open knot still surfaces as a flagged row; if an open knot goes quiet, that means the
+ * reconciler lost it rather than that it was resolved, so the run exits non-zero. A knot is closed
+ * only by giving it a `resolution` in this file. A closed knot must then be quiet, and every row
+ * it names must exist. A closed knot that still flags is also an error: either the resolution is
+ * wrong, or the knot must be reopened.
  *
  * Usage: npm run reconcile [-- --check]
  *   --check  write nothing; fail if a committed sheet is stale or a knot has gone quiet
@@ -579,7 +582,7 @@ function reconcileRow(party: PartyKey, formulaId: string, claude: SheetRow | nul
 // --------------------------------------------------------------------------- the knots
 
 /**
- * The four snags the extraction pass documented. Each one must still show up as a flagged
+ * The four snags the extraction pass documented. Each open one must still show up as a flagged
  * row after reconciliation; `check` returns the rows that prove it.
  */
 interface Knot {
@@ -587,6 +590,8 @@ interface Knot {
   title: string;
   question: string;
   rows: { party: PartyKey; formulaId: string }[];
+  /** Set only when the knot is settled with evidence; the check then requires the rows to be quiet. */
+  resolution?: { date: string; by: string; summary: string };
 }
 
 const KNOWN_KNOTS: readonly Knot[] = [
@@ -610,7 +615,7 @@ const KNOWN_KNOTS: readonly Knot[] = [
   },
   {
     id: 'K2-krf-appendix-empty',
-    title: 'KrF: the tax appendix (PDF p. 35–46) is empty in the pdftotext output',
+    title: 'KrF: the tax table is an image with no text layer (PDF p. 19); pp. 35–46 are spending tables',
     question:
       'KrF’s numeric annex did not survive `pdftotext -layout`, so both extractors read an incomplete document ' +
       'and agree on «nothing found» for most of section A — agreement that proves nothing. Re-extract with ' +
@@ -622,6 +627,16 @@ const KNOWN_KNOTS: readonly Knot[] = [
       { party: 'krf', formulaId: 'income.personalAllowance' },
       { party: 'krf', formulaId: 'wealth.netWealthTax' },
     ],
+    resolution: {
+      date: '2026-09-26',
+      by: 'sprint lane L10a: two independent vision reads (A: Opus, C: Sonnet) of the image-only pages, archived in sources/worksheets/krf.vision.md',
+      summary:
+        'The tax table is PDF p. 19, «Skatter og avgifter», and it is complete: its SUM rows reproduce, and its totals match p. 3 (bokført) and ' +
+        'p. 18 (påløpt). It has no row for the rate on alminnelig inntekt, trinnskatt, personfradrag, minstefradrag, trygdeavgift or the ' +
+        'formuesskatt satser, so those rows are `no-change`. pp. 35–46 are spending tables with no tax parameter. From p. 19 the tobacco duty ' +
+        '(+15 pst) is encoded as `estimated`, derived from Prop. 1 LS. The alcohol, sugar, EV-VAT, youth-deduction, foreldrefradrag and ' +
+        'bolig-verdsettelse rows stay unquantified, each with its reason in krf.ts.',
+    },
   },
   {
     id: 'K3-venstre-elavgift-baseline',
@@ -962,14 +977,16 @@ function renderReport(all: Map<PartyKey, Reconciled[]>, knotProof: Map<string, R
   }
   lines.push('');
 
+  const openKnots = KNOWN_KNOTS.filter((k) => !k.resolution);
+  const closedKnots = KNOWN_KNOTS.filter((k) => k.resolution);
   lines.push('## Decisions that need Jesper');
   lines.push('');
   lines.push(
-    'The four knots below were documented during extraction. Each one is still a flagged row after ' +
+    `The ${String(openKnots.length)} open knots below were documented during extraction. Each one is still a flagged row after ` +
       'reconciliation — the reconciler has deliberately not resolved any of them.',
   );
   lines.push('');
-  for (const k of KNOWN_KNOTS) {
+  for (const k of openKnots) {
     const proof = knotProof.get(k.id) ?? [];
     lines.push(`### ${k.id} — ${k.title}`);
     lines.push('');
@@ -984,6 +1001,33 @@ function renderReport(all: Map<PartyKey, Reconciled[]>, knotProof: Map<string, R
       );
     }
     lines.push('');
+  }
+  if (closedKnots.length > 0) {
+    lines.push('## Closed knots');
+    lines.push('');
+    lines.push(
+      'Settled with evidence. A closed knot must stay quiet: if any of its rows flags again, the run fails ' +
+        'and the knot has to be fixed or reopened.',
+    );
+    lines.push('');
+    for (const k of closedKnots) {
+      const res = k.resolution!;
+      lines.push(`### ${k.id} — ${k.title}`);
+      lines.push('');
+      lines.push(`Closed ${res.date} by ${res.by}.`);
+      lines.push('');
+      lines.push(res.summary);
+      lines.push('');
+      lines.push(`Original question: ${k.question}`);
+      lines.push('');
+      lines.push('Rows it covers, now:');
+      lines.push('');
+      for (const want of k.rows) {
+        const r = (all.get(want.party) ?? []).find((x) => x.formulaId === want.formulaId);
+        lines.push(`- \`${want.party}/${want.formulaId}\` → ${r ? `${r.verdict} → \`${r.resolvedStatus}\`` : 'MISSING'}`);
+      }
+      lines.push('');
+    }
   }
   lines.push('## Not covered by this script');
   lines.push('');
@@ -1044,17 +1088,25 @@ function main(): void {
     );
   }
 
-  // Every documented knot must still be visible as a flagged row.
+  // Every open knot must still be visible as a flagged row; every closed knot must be quiet
+  // and must name rows that exist.
   const knotProof = new Map<string, Reconciled[]>();
   const silentKnots: string[] = [];
+  const unsettledKnots: string[] = [];
   for (const knot of KNOWN_KNOTS) {
     const proof: Reconciled[] = [];
+    let missingRows = 0;
     for (const want of knot.rows) {
       const row = (all.get(want.party) ?? []).find((r) => r.formulaId === want.formulaId);
+      if (!row) missingRows += 1;
       if (isFlagged(row) && row) proof.push(row);
     }
     knotProof.set(knot.id, proof);
-    if (proof.length === 0) silentKnots.push(knot.id);
+    if (knot.resolution) {
+      if (proof.length > 0 || missingRows > 0) unsettledKnots.push(knot.id);
+    } else if (proof.length === 0) {
+      silentKnots.push(knot.id);
+    }
   }
 
   emit(join(SHEETS, 'RECONCILIATION.md'), `${renderReport(all, knotProof)}\n`);
@@ -1079,7 +1131,9 @@ function main(): void {
       `${String(totals.flagged).padStart(8)} ${String(totals.encodable).padStart(8)} ${String(totals.headline).padStart(13)}`,
   );
   for (const [id, proof] of knotProof) {
-    console.log(`knot ${id}: ${proof.length > 0 ? `flagged in ${proof.map((r) => `${r.party}/${r.formulaId}`).join(', ')}` : 'NOT FLAGGED'}`);
+    const closed = KNOWN_KNOTS.find((k) => k.id === id)?.resolution;
+    const state = proof.length > 0 ? `flagged in ${proof.map((r) => `${r.party}/${r.formulaId}`).join(', ')}` : 'NOT FLAGGED';
+    console.log(`knot ${id}: ${closed ? `closed ${closed.date}; ` : ''}${state}`);
   }
   for (const path of written) console.log(`skrev ${path.replace(`${ROOT}/`, '')}`);
 
@@ -1089,12 +1143,18 @@ function main(): void {
         'En knute som blir stille er en feil i avstemmingen, ikke en avklaring.',
     );
   }
+  if (unsettledKnots.length > 0) {
+    console.error(
+      `FEIL: disse lukkede knutene er fortsatt flagget eller peker på rader som ikke finnes: ${unsettledKnots.join(', ')}. ` +
+        'Rett radene, eller åpne knuten igjen ved å fjerne `resolution`.',
+    );
+  }
   if (stale.length > 0) {
     console.error(
       `FEIL: disse avstemte arkene er utdaterte: ${stale.join(', ')}. Kjør «npm run reconcile» og commit resultatet.`,
     );
   }
-  if (missingSheets > 0 || silentKnots.length > 0 || stale.length > 0) process.exitCode = 1;
+  if (missingSheets > 0 || silentKnots.length > 0 || unsettledKnots.length > 0 || stale.length > 0) process.exitCode = 1;
 }
 
 main();

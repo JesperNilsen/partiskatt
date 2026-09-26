@@ -29,8 +29,8 @@ Flags are independent of the verdict: `estimated` (needs an assumption), `derive
 | [Rødt](r.reconciled.md) | 33 | 25 | 8 | 12 | 8 | 6 |
 | [Venstre](v.reconciled.md) | 33 | 26 | 7 | 14 | 8 | 6 |
 | [Miljøpartiet De Grønne](mdg.reconciled.md) | 33 | 19 | 14 | 18 | 4 | 2 |
-| [Kristelig Folkeparti](krf.reconciled.md) | 33 | 33 | 0 | 9 | 7 | 2 |
-| **sum** | 267 | 211 | 56 | 99 | 47 | 34 |
+| [Kristelig Folkeparti](krf.reconciled.md) | 33 | 33 | 0 | 7 | 7 | 4 |
+| **sum** | 267 | 211 | 56 | 97 | 47 | 36 |
 
 ## Rows S7 may encode (both extractors agree on a number)
 
@@ -201,6 +201,10 @@ A high-severity flag means the value needs an assumption (`estimated`), the two 
 | mdg | `excise.spiritsLitre` | not-reviewed | — | `one-sided` | only codex found this proposal in the document |
 | mdg | `benefit.childBenefit` | not-reviewed | DERIVE (dobbelt av gjeldende satser) | `status-conflict` | same wording, status «confirmed» vs «unquantified» |
 | mdg | `benefit.studentSupport` | not-reviewed | basislån = 1,4 G (kronebeløp DERIVE) | `evidence-conflict` | claude gives derive «basislån = 1,4 G (kronebeløp DERIVE)», codex gives value «basislån: 1,4G; stipendandel folkehøyskoleelever: 40 pst.» |
+| krf | `excise.cigarette` | estimated | DERIVE | `estimated` | claude needs an assumption: [L10a] p. 19 row kap 5531 post 70 (vision reads A+C agree). Uniform 15 pst on the tobakksvarer duty; party quotes no baseline, so d… |
+| krf | `excise.cigarette` | estimated | DERIVE | `estimated` | codex needs an assumption: [L10a] p. 19 row kap 5531 post 70 (vision reads A+C agree). Uniform 15 pst on the tobakksvarer duty; party quotes no baseline, so de… |
+| krf | `excise.snusGram` | estimated | DERIVE | `estimated` | claude needs an assumption: [L10a] p. 19 row kap 5531 post 70 (vision reads A+C agree). Uniform 15 pst on the tobakksvarer duty; party quotes no baseline, so d… |
+| krf | `excise.snusGram` | estimated | DERIVE | `estimated` | codex needs an assumption: [L10a] p. 19 row kap 5531 post 70 (vision reads A+C agree). Uniform 15 pst on the tobakksvarer duty; party quotes no baseline, so de… |
 
 ## Flag counts per party
 
@@ -210,24 +214,23 @@ Row-level detail for every flag is in the party sheets. `no-baseline-quoted` and
 |---|---|---|---|---|---|---|---|---|---|---|
 | `no-baseline-quoted` | medium | 12 | 16 | 28 | 15 | 12 | 8 | 32 | 12 | 135 |
 | `derive` | medium | 8 | 10 | 7 | 8 | 11 | 11 | 26 | 10 | 91 |
-| `review-status-mismatch` | note | 1 | 20 | 16 | 1 | 14 | 17 | 15 | 1 | 85 |
+| `review-status-mismatch` | note | 1 | 20 | 16 | 1 | 14 | 17 | 15 | 0 | 84 |
 | `page-mismatch` | note | 0 | 5 | 1 | 1 | 3 | 8 | 1 | 0 | 19 |
 | `evidence-conflict` | high | 2 | 4 | 1 | 1 | 1 | 3 | 3 | 0 | 15 |
 | `one-sided` | high | 0 | 1 | 1 | 4 | 4 | 1 | 3 | 0 | 14 |
 | `value-conflict` | high | 0 | 1 | 4 | 1 | 2 | 3 | 1 | 0 | 12 |
+| `estimated` | high | 1 | 1 | 1 | 2 | 0 | 0 | 1 | 4 | 10 |
 | `derive-detail-mismatch` | medium | 0 | 2 | 1 | 0 | 2 | 1 | 1 | 1 | 8 |
 | `baseline-mismatch` | high | 0 | 2 | 1 | 0 | 2 | 3 | 0 | 0 | 8 |
 | `status-conflict` | high | 0 | 0 | 0 | 2 | 1 | 0 | 4 | 0 | 7 |
-| `estimated` | high | 1 | 1 | 1 | 2 | 0 | 0 | 1 | 0 | 6 |
 | `effective-date-differs` | medium | 0 | 1 | 2 | 2 | 1 | 0 | 0 | 0 | 6 |
 | `change-conflict` | high | 0 | 1 | 1 | 0 | 0 | 0 | 3 | 0 | 5 |
 | `baseline-not-proposed` | high | 0 | 1 | 0 | 1 | 0 | 2 | 0 | 0 | 4 |
 | `row-missing` | high | 0 | 0 | 3 | 0 | 0 | 0 | 0 | 0 | 3 |
-| `source-text-incomplete` | medium | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 2 |
 
 ## Decisions that need Jesper
 
-The four knots below were documented during extraction. Each one is still a flagged row after reconciliation — the reconciler has deliberately not resolved any of them.
+The 3 open knots below were documented during extraction. Each one is still a flagged row after reconciliation — the reconciler has deliberately not resolved any of them.
 
 ### K1-frikort-trygdeavgift — Frikortgrense 150 000 kr mapped onto the lower threshold for trygdeavgift
 
@@ -239,15 +242,6 @@ Flagged rows that carry it:
 - `frp/income.socialSecurity` → one-sided → `not-reviewed` (estimated, baseline-not-proposed, one-sided)
 - `sv/income.socialSecurity` → one-sided → `not-reviewed` (estimated, no-baseline-quoted, one-sided)
 - `r/income.socialSecurity` → one-sided → `not-reviewed` (one-sided)
-
-### K2-krf-appendix-empty — KrF: the tax appendix (PDF p. 35–46) is empty in the pdftotext output
-
-KrF’s numeric annex did not survive `pdftotext -layout`, so both extractors read an incomplete document and agree on «nothing found» for most of section A — agreement that proves nothing. Re-extract with `pdftotext -raw` / table mode (or a PDF table extractor) before S7, or ship KrF with the affected categories visibly `not-reviewed` rather than `no-change`?
-
-Flagged rows that carry it:
-
-- `krf/income.generalRate` → agreed-nothing → `not-found` (source-text-incomplete)
-- `krf/income.bracketTax.trinn1` → agreed-nothing → `not-found` (source-text-incomplete)
 
 ### K3-venstre-elavgift-baseline — Venstre states the electricity duty against today’s rate, not against Prop. 1 LS
 
@@ -266,6 +260,25 @@ Flagged rows that carry it:
 - `mdg/income.personalAllowance` → agreed-value → `confirmed` (no-baseline-quoted, no-baseline-quoted)
 - `mdg/income.socialSecurity` → agreed-proposal → `confirmed` (derive, no-baseline-quoted, derive, no-baseline-quoted)
 - `mdg/excise.flightEurope` → evidence-conflict → `not-reviewed` (no-baseline-quoted, derive, no-baseline-quoted, evidence-conflict)
+
+## Closed knots
+
+Settled with evidence. A closed knot must stay quiet: if any of its rows flags again, the run fails and the knot has to be fixed or reopened.
+
+### K2-krf-appendix-empty — KrF: the tax table is an image with no text layer (PDF p. 19); pp. 35–46 are spending tables
+
+Closed 2026-09-26 by sprint lane L10a: two independent vision reads (A: Opus, C: Sonnet) of the image-only pages, archived in sources/worksheets/krf.vision.md.
+
+The tax table is PDF p. 19, «Skatter og avgifter», and it is complete: its SUM rows reproduce, and its totals match p. 3 (bokført) and p. 18 (påløpt). It has no row for the rate on alminnelig inntekt, trinnskatt, personfradrag, minstefradrag, trygdeavgift or the formuesskatt satser, so those rows are `no-change`. pp. 35–46 are spending tables with no tax parameter. From p. 19 the tobacco duty (+15 pst) is encoded as `estimated`, derived from Prop. 1 LS. The alcohol, sugar, EV-VAT, youth-deduction, foreldrefradrag and bolig-verdsettelse rows stay unquantified, each with its reason in krf.ts.
+
+Original question: KrF’s numeric annex did not survive `pdftotext -layout`, so both extractors read an incomplete document and agree on «nothing found» for most of section A — agreement that proves nothing. Re-extract with `pdftotext -raw` / table mode (or a PDF table extractor) before S7, or ship KrF with the affected categories visibly `not-reviewed` rather than `no-change`?
+
+Rows it covers, now:
+
+- `krf/income.generalRate` → agreed-nothing → `no-change`
+- `krf/income.bracketTax.trinn1` → agreed-nothing → `no-change`
+- `krf/income.personalAllowance` → agreed-nothing → `no-change`
+- `krf/wealth.netWealthTax` → agreed-nothing → `no-change`
 
 ## Not covered by this script
 
