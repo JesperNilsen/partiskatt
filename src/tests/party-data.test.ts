@@ -75,12 +75,27 @@ const PROV_CASES: ProvCase[] = DATA_BUNDLE.parties.flatMap((party) => [
  * (a stale entry fails), and `textEmpty` entries must cite only pages whose text
  * layer holds nothing but the page number.
  */
+const KRF_P19_IMAGE =
+  "K2 (closed 2026-09-26): KrF's tax table p19 «Skatter og avgifter» is one raster image with no text layer. The anchor is verbatim from the image, read twice independently (sources/worksheets/krf.vision.md), so it cannot be text-verified.";
+
 const ANCHOR_ALLOWLIST: readonly { party: PartyId; label: string; textEmpty: boolean; why: string }[] = [
   {
     party: 'krf',
-    label: 'Skattevedlegg (PDF p35–46 tom i pdftotext)',
+    label: 'excise.cigarette',
     textEmpty: true,
-    why: 'K2: the KrF tax annex p35–46 is image-only; pdftotext yields only the page number on each, so no anchor can be text-verified. Resolved by L10a (vision read), which must then drop this entry.',
+    why: KRF_P19_IMAGE,
+  },
+  {
+    party: 'krf',
+    label: 'excise.snusGram',
+    textEmpty: true,
+    why: KRF_P19_IMAGE,
+  },
+  {
+    party: 'krf',
+    label: 'Alkoholavgift: halvering av innførselskvoten',
+    textEmpty: true,
+    why: KRF_P19_IMAGE,
   },
 ];
 
@@ -231,6 +246,21 @@ describe('KNOWN_KNOTS', () => {
     expect(rule?.note).toMatch(/K3/);
   });
 
+  it('K2 is closed: KrF changes no income-tax rate, and the tobacco rules are Prop. 1 LS × 1,15', () => {
+    const k2 = KNOWN_KNOTS.find((k) => k.id === 'K2-krf-appendix-empty');
+    expect(k2?.resolved?.date).toBe('2026-09-26');
+    const krf = partyOf('krf');
+    const incomeIds: FormulaId[] = ['income.generalRate', 'income.bracketTax', 'income.personalAllowance', 'income.socialSecurity'];
+    expect(krf.deltas.filter((d) => incomeIds.includes(d.id))).toEqual([]);
+    expect(krf.unquantified.filter((u) => u.status === 'not-reviewed')).toEqual([]);
+    for (const id of ['excise.cigarette', 'excise.snusGram'] as const) {
+      const rule = krf.deltas.find((d) => d.id === id);
+      const base = ruleOf(PROPOSED_2026, id).params as { ratePerUnit: number };
+      expect(rule?.params).toEqual({ ratePerUnit: Math.round(base.ratePerUnit * 1.15) });
+      expect(rule?.provenance.pageOrTable).toBe('PDF p19');
+    }
+  });
+
   it('K4 MDG encodes personalAllowance with contradiction note', () => {
     const rule = partyOf('mdg').deltas.find((d) => d.id === 'income.personalAllowance');
     expect(rule?.note).toMatch(/K4/);
@@ -252,7 +282,7 @@ describe('agreed-value coverage', () => {
     r: ['income.socialSecurity', 'income.bracketTax', 'income.personalAllowance'],
     v: ['income.socialSecurity', 'income.personalAllowance', 'wealth.valuation', 'excise.kwh'],
     mdg: ['income.personalAllowance'],
-    krf: ['wealth.valuation', 'benefit.childBenefit'],
+    krf: ['wealth.valuation', 'benefit.childBenefit', 'excise.cigarette', 'excise.snusGram'],
   };
 
   it.each(Object.entries(ENCODED) as [PartyId, FormulaId[]][])(

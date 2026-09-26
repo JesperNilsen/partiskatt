@@ -8,6 +8,8 @@ export interface KnownKnot {
   readonly parties: readonly PartyId[];
   /** Whether S7 encoded a delta for this knot (may still carry flags). */
   readonly encoded: boolean;
+  /** Set when the knot is closed with evidence (mirrors `resolution` in scripts/reconcile.ts). */
+  readonly resolved?: { readonly date: string; readonly summary: string };
 }
 
 export const KNOWN_KNOTS: readonly KnownKnot[] = [
@@ -21,10 +23,18 @@ export const KNOWN_KNOTS: readonly KnownKnot[] = [
   },
   {
     id: 'K2-krf-appendix-empty',
-    title: 'KrF tax appendix empty in pdftotext output',
+    title: 'KrF tax table is image-only (PDF p19); pp. 35–46 are spending tables',
     formulaId: 'income.generalRate',
     parties: ['krf'],
+    // Nothing to encode for income.generalRate: KrF proposes no change to it.
     encoded: false,
+    resolved: {
+      date: '2026-09-26',
+      summary:
+        'Two independent vision reads of p19 «Skatter og avgifter» (sources/worksheets/krf.vision.md): no row for ' +
+        'sats alminnelig inntekt, trinnskatt, personfradrag, minstefradrag or trygdeavgift, so those are no-change. ' +
+        'Tobakksavgift +15 pst. is encoded (derived); the other p19 rows are unquantified with reasons in krf.ts.',
+    },
   },
   {
     id: 'K3-venstre-elavgift-baseline',

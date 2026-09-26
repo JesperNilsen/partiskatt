@@ -14,7 +14,7 @@ Statuser: `confirmed` (primærkilde, kontrollert) · `estimated` (rimelig anslag
 | R | estimated | not-reviewed | not-applicable | not-applicable | unquantified | not-applicable |
 | V | estimated | estimated | unquantified | estimated | not-reviewed | not-applicable |
 | MDG | unquantified | not-reviewed | not-applicable | not-applicable | not-reviewed | not-applicable |
-| KrF | not-reviewed | estimated | not-reviewed | not-reviewed | estimated | not-applicable |
+| KrF | unquantified | unquantified | unquantified | unquantified | estimated | not-applicable |
 
 ## Encoded party deltas (S7)
 
@@ -26,4 +26,4 @@ Statuser: `confirmed` (primærkilde, kontrollert) · `estimated` (rimelig anslag
 - **R**: `income.socialSecurity`, `income.bracketTax`, `income.personalAllowance`
 - **V**: `income.socialSecurity`, `income.personalAllowance`, `wealth.valuation`, `excise.kwh`
 - **MDG**: `income.personalAllowance`
-- **KrF**: `wealth.valuation`, `benefit.childBenefit`
+- **KrF**: `wealth.valuation`, `benefit.childBenefit`, `excise.cigarette`, `excise.snusGram`
