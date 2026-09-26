@@ -152,6 +152,19 @@ export const ADOPTED_2026_ENCODED: BaselineRuleSet = {
       prov(I4L, I4L_URL, 'PDF p6 / §2.3', 'yrkes- og næringsorganisasjoner foreslås økt til 8 700', 'Vedtatt via Innst. 4 L (skatteloven §6-20).'),
     ),
     rule(
+      'income.workTaxCredit',
+      { amountPerWorker: kr(0) },
+      'Ingen generelt jobbfradrag (0 kr)',
+      prov(
+        SV,
+        SV_URL,
+        '§6-5, §6-6',
+        'Forsøksordning med arbeidsfradrag',
+        'Skattevedtaket 2026 har ett personlig skattefradrag, for pensjonsinntekt (§6-5), og ingen generell skattereduksjon for folk i arbeid. Det eneste arbeidsfradraget er forsøksordningen for et trukket utvalg unge (§6-6, sktl. §6-86), et fradrag i alminnelig inntekt som ikke er modellert. Beløpet er derfor 0 kr.',
+      ),
+      { note: 'Finnes ikke i gjeldende rett; regelen finnes bare så Høyres jobbfradrag (usikkert, antatt flat) kan overlegges.' },
+    ),
+    rule(
       'wealth.netWealthTax',
       {
         single: { allowance: kr(1_900_000), tier2Threshold: kr(21_500_000) },

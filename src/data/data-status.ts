@@ -43,6 +43,7 @@ const COLUMN_FORMULAS: Record<DisplayColumn, readonly FormulaId[]> = {
     'income.minimumDeductionWage',
     'income.minimumDeductionPension',
     'income.unionFeeDeduction',
+    'income.workTaxCredit',
   ],
   Formuesskatt: ['wealth.netWealthTax', 'wealth.valuation'],
   Moms: [

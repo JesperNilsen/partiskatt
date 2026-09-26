@@ -20,6 +20,7 @@ export const FORMULA_IDS = [
   'income.minimumDeductionWage',
   'income.minimumDeductionPension',
   'income.unionFeeDeduction',
+  'income.workTaxCredit',
   'wealth.netWealthTax',
   'wealth.valuation',
   'vat.food',
@@ -56,8 +57,11 @@ export function categoryOf(id: FormulaId): Category {
   return 'employer';
 }
 
+/** Tax credits reduce tax: they are income-tax components the person receives, not pays. */
+const CREDIT_FORMULAS: ReadonlySet<FormulaId> = new Set<FormulaId>(['income.workTaxCredit']);
+
 export function directionOf(id: FormulaId): Direction {
-  return categoryOf(id) === 'benefit' ? 'received' : 'paid';
+  return categoryOf(id) === 'benefit' || CREDIT_FORMULAS.has(id) ? 'received' : 'paid';
 }
 
 /** User-facing line-item names (Norwegian). Parameter-only rules never become components. */
@@ -69,6 +73,7 @@ export const COMPONENT_LABEL: Record<FormulaId, string> = {
   'income.minimumDeductionWage': 'Minstefradrag i lønn',
   'income.minimumDeductionPension': 'Minstefradrag i pensjon',
   'income.unionFeeDeduction': 'Fagforeningsfradrag',
+  'income.workTaxCredit': 'Jobbfradrag (H), antatt flat',
   'wealth.netWealthTax': 'Formuesskatt',
   'wealth.valuation': 'Verdsettelse av formue',
   'vat.food': 'Merverdiavgift på mat',

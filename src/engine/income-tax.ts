@@ -69,7 +69,26 @@ export function socialSecurity(wage: Kroner, pension: Kroner, rs: ResolvedRuleSe
   return { amount: minK(full, cap), full, cap };
 }
 
-/** The three income-tax line items for one adult. */
+export interface WorkTaxCredit {
+  amount: Kroner;
+  /** Tax the credit can be set off against: general-income tax + bracket tax + trygdeavgift. */
+  cap: Kroner;
+}
+
+/**
+ * Jobbfradrag as a flat skattefradrag (L14, antatt): `amountPerWorker` for an adult with wage income
+ * above zero ("i arbeid" = has wage income; pension-only or no income gives nothing), never more
+ * than that adult's income tax. The cap covers skatt på alminnelig inntekt, trinnskatt and
+ * trygdeavgift — the same taxes the one existing personal skattefradrag (pensjonsinntekt, sktl.
+ * § 16-1) is set off against — so the tax after the credit is never below zero.
+ */
+export function workTaxCredit(wage: Kroner, taxPayable: Kroner, rs: ResolvedRuleSet): WorkTaxCredit {
+  const { amountPerWorker } = paramsOf(rs, 'income.workTaxCredit');
+  const cap = max0(taxPayable);
+  return { amount: wage > 0 ? minK(amountPerWorker, cap) : ZERO, cap };
+}
+
+/** The income-tax line items for one adult: three taxes and the jobbfradrag credit. */
 export function computeIncomeTax(adult: Adult, adultIndex: number, rs: ResolvedRuleSet): Component[] {
   const wage = adult.wageIncome;
   const pension = adult.pensionIncome;
@@ -85,6 +104,7 @@ export function computeIncomeTax(adult: Adult, adultIndex: number, rs: ResolvedR
   const generalTax = mulBp(taxBase, generalRateBp);
   const bt = bracketTax(personalIncome, rs);
   const ss = socialSecurity(wage, pension, rs);
+  const credit = workTaxCredit(wage, add(add(generalTax, bt.amount), ss.amount), rs);
   return [
     makeComponent(
       rs,
@@ -110,6 +130,17 @@ export function computeIncomeTax(adult: Adult, adultIndex: number, rs: ResolvedR
       'income.socialSecurity',
       ss.amount,
       { personinntekt: personalIncome, fullAvgift: ss.full, tak: ss.cap },
+      adultIndex,
+    ),
+    makeComponent(
+      rs,
+      'income.workTaxCredit',
+      credit.amount,
+      {
+        lonn: wage,
+        belopPerArbeidstaker: paramsOf(rs, 'income.workTaxCredit').amountPerWorker,
+        inntektsskattForFradrag: credit.cap,
+      },
       adultIndex,
     ),
   ];

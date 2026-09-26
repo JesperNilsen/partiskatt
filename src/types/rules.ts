@@ -31,6 +31,8 @@ export interface FormulaParams {
   'income.minimumDeductionWage': { rateBp: Bp; max: Kroner; min: Kroner };
   'income.minimumDeductionPension': { rateBp: Bp; max: Kroner; min: Kroner };
   'income.unionFeeDeduction': { max: Kroner };
+  /** Skattefradrag per adult with wage income, capped at that adult's income tax (see income-tax.ts). */
+  'income.workTaxCredit': { amountPerWorker: Kroner };
   'wealth.netWealthTax': {
     single: { allowance: Kroner; tier2Threshold: Kroner };
     couple: { allowance: Kroner; tier2Threshold: Kroner };

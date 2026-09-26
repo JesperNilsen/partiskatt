@@ -82,6 +82,8 @@ const NOT_IN_CALCULATOR_EMPLOYER =
 
 /** Every formula outside gate 3, with the reason it stays `estimated`. Exhaustive by type. */
 export const GATE3_OUT_OF_SCOPE: Record<Exclude<FormulaId, Gate3RuleId>, string> = {
+  'income.workTaxCredit':
+    'Et generelt jobbfradrag finnes ikke i gjeldende rett (0 kr i vedtatt budsjett); skattekalkulatoren har ingenting å sammenligne med.',
   'vat.food': NOT_IN_CALCULATOR_VAT,
   'vat.general': NOT_IN_CALCULATOR_VAT,
   'vat.transportServices': NOT_IN_CALCULATOR_VAT,

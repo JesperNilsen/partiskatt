@@ -53,6 +53,7 @@ export const SYNTHETIC: BaselineRuleSet = {
     rule('income.minimumDeductionWage', { rateBp: pct(46), max: kr(92_000), min: kr(4_000) }),
     rule('income.minimumDeductionPension', { rateBp: pct(40), max: kr(73_000), min: kr(4_000) }),
     rule('income.unionFeeDeduction', { max: kr(8_000) }),
+    rule('income.workTaxCredit', { amountPerWorker: kr(0) }),
     rule('wealth.netWealthTax', {
       single: { allowance: kr(1_760_000), tier2Threshold: kr(20_700_000) },
       couple: { allowance: kr(3_520_000), tier2Threshold: kr(41_400_000) },
