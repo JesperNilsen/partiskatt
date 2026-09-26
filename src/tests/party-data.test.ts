@@ -126,6 +126,24 @@ describe('party rule status — operator gate 3', () => {
   });
 });
 
+describe('uncertain party rules', () => {
+  /**
+   * Plausible but assumption-dependent values (Codex review of L10b, 2026-09-26): kept out of the
+   * headline unless «usikre forslag» is on. One delta per formula, so the whole rule is uncertain.
+   */
+  const UNCERTAIN: readonly string[] = ['frp:wealth.netWealthTax', 'h:benefit.childBenefit', 'sv:benefit.childBenefit'];
+
+  it('exactly the listed rules are uncertain, each stating its assumption in Norwegian', () => {
+    const flagged = DATA_BUNDLE.parties.flatMap((party) =>
+      party.deltas.filter((d) => d.uncertain).map((d) => ({ key: `${party.id}:${d.id}`, d })),
+    );
+    expect(flagged.map((x) => x.key).sort()).toEqual([...UNCERTAIN].sort());
+    for (const { key, d } of flagged) {
+      expect(d.provenance.method, key).toMatch(/^Usikkert: .*antatt/);
+    }
+  });
+});
+
 describe('party baselineParams vs proposed', () => {
   /**
    * Rules that carry `baselineParams`, as `party:formulaId`: the relative proposals derived against

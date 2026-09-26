@@ -159,12 +159,13 @@ export const SV_2026: PartyRuleSet = {
         'sv',
         'PDF p25',
         'Øke barnetrygden med 100 kr i måneden fra 1. mai',
-        'S. 25: «Øke barnetrygden med 100 kr i måneden fra 1. mai» (872 mill. kr) og «Prisjustere barnetrygden fra 1. mai» (443 mill. kr); s. 10: til sammen 144 kr i måneden. Regjeringen foreslår 1 968 kr/mnd uten prisjustering. 1 968 + 144 = 2 112 kr/mnd. Prisjusteringen er samme tiltak som hos Høyre og Rødt (609 mill. kr fra 1. februar = 443 mill. kr for 8 måneder) og gir utvidet 2 516 → 2 572 kr; de 100 kronene gjelder per barn. Vist som helårssats.',
+        'Usikkert: Det er antatt at utvidet barnetrygd bare prisjusteres og ikke får de 100 kronene. S. 25: «Øke barnetrygden med 100 kr i måneden fra 1. mai» (872 mill. kr) og «Prisjustere barnetrygden fra 1. mai» (443 mill. kr); s. 10: til sammen 144 kr i måneden. Regjeringen foreslår 1 968 kr/mnd uten prisjustering. 1 968 + 144 = 2 112 kr/mnd. Prisjusteringen er samme tiltak som hos Høyre og Rødt (609 mill. kr fra 1. februar = 443 mill. kr for 8 måneder) og gir utvidet 2 516 → 2 572 kr; de 100 kronene gjelder per barn. Vist som helårssats.',
         '2026-05-01',
       ),
       {
         baselineParams: proposedParams('benefit.childBenefit'),
-        note: 'Utledet (beslutning 2): 1 968 + 44 (prisjustering) + 100 = 2 112 kr/mnd; utvidet 2 516 → 2 572 (prisjustering). Kontroll: 609 × 8/11 = 443 mill.',
+        uncertain: true,
+        note: 'Usikkert: Det er antatt at utvidet barnetrygd bare prisjusteres og ikke får de 100 kronene. Utledet (beslutning 2): 1 968 + 44 (prisjustering) + 100 = 2 112 kr/mnd; utvidet 2 516 → 2 572 (prisjustering). Kontroll: 609 × 8/11 = 443 mill.',
       },
     ),
     partyRule(

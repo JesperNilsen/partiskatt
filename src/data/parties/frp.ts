@@ -92,11 +92,14 @@ export const FRP_2026: PartyRuleSet = {
         'frp',
         'PDF p13; p46',
         '6 millioner for ektepar',
-        'S. 13: «senke satsen til 0,8 prosent og heve innslagspunktet fra 1,9 til 3 millioner kroner (6 millioner for ektepar)»; s. 46: «Redusere formuesskatten til 0,8%». Partiet nevner én sats og ikke trinn 2, så 0,8 pst. er brukt for all formue over bunnfradraget (samlet sats for stat og kommune).',
+        'Usikkert: Partiet nevner bare én sats, så det er antatt at 0,8 pst. også gjelder over trinn 2-grensen. S. 13: «senke satsen til 0,8 prosent og heve innslagspunktet fra 1,9 til 3 millioner kroner (6 millioner for ektepar)»; s. 46: «Redusere formuesskatten til 0,8%». Partiet nevner én sats og ikke trinn 2, så 0,8 pst. er brukt for all formue over bunnfradraget (samlet sats for stat og kommune).',
         '2026-01-01',
         'medium',
       ),
-      { note: 'Antagelse: én sats 0,8 pst. også over trinn 2-grensen (partiet nevner ikke trinn 2). Utgangspunktet 1,9 mill. = Prop. 1 LS.' },
+      {
+        uncertain: true,
+        note: 'Usikkert: Partiet nevner bare én sats, så det er antatt at 0,8 pst. også gjelder over trinn 2-grensen. Utgangspunktet 1,9 mill. = Prop. 1 LS.',
+      },
     ),
     partyRule(
       'wealth.valuation',
