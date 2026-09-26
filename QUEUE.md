@@ -21,8 +21,8 @@ merker den `blocked:no verify gate` i stedet for å gjette. Hold postene avgrens
 kjør `npm ci` før noe annet.
 
 ## Q-001 · Forbruksprofiler fra SSB 14100 i datalaget
-status: blocked:avvist i gjennomgang 2026-09-18 — erstattet av Q-010; settes done når Q-010 er flettet
-result: datalaget og kartleggingen er gjort og verifisert (tsc rent, 138 tester gronne); migreringen, manifest-radene og METHODOLOGY star igjen. Fire nye SSB-arkiv ligger ukommitert-i-commit pa grenen: 14156 (inntektskvartiler — gjor noktern/hoy kildefestet i stedet for oppdiktede faktorer), 06076, 07459, 09654, 09007. LES kWh-advarselen i modulen for dette landes.
+status: done
+result: Sprint 2026-09 lane L1, merged to main at ebae916 2026-09-26. Avvist 2026-09-18 (flightOther stille 0); rettet og landet via Q-010 i samme commit. SSB FBU 2022-profilene ligger på main.
 result: Køkjøringen 2026-09-15 avbrøt. Treet ~/dev/queue-partiskatt-001 (gren queue/q-001-ssb-forbruksprofiler, 0 commits) fikk samtidige skrivinger fra en annen agent som løser SAMME oppgave: mine arkiverte råfiler ble slettet og erstattet med filer under andre navn, og src/data/consumption-profiles.ts + src/tests/consumption-profiles.test.ts dukket opp uten at kjøringen hadde skrevet dem. Mine egne endringer (fire manifestrader + fire tekstuttrekk) er rullet tilbake; den andre agentens ucommittede filer er rørt. MERK 2026-09-16: briefs/queue-2026-09-15.md ble aldri skrevet og finnes ikke på noen gren — den utledningen er tapt. Grunnlaget som FINNES er commit faf0c7d (src/data/consumption-profiles.ts + testen + fem SSB-arkiv under sources/raw/); utled resten på nytt derfra, ikke fra denne noten.
 result: Fullfort 2026-09-16 i 0be47ed pa queue/q-001-ssb-forbruksprofiler (pushet). Manifestrader for de fem arkivene, METHODOLOGY § Forbruksprofil med den faktiske utledningen, MethodView-teksten, src/provisional/ slettet, og testene for punkt 7. `npm run check` gronn (146 tester) og verify-porten passerer. Star til gjennomgang, ikke merget.
 result: Avvist i gjennomgang 2026-09-18 (flightOther-frø blir stille 0; se noten nederst). IKKE kjørt på nytt: rettelsen og landingen av grenen er Q-010. Rydding 2026-09-24: grenen ligger som origin/rejected/q-001-ssb-forbruksprofiler (0be47ed), origin/queue/q-001-ssb-forbruksprofiler er slettet, worktreet ~/dev/queue-partiskatt-001 er fjernet. Denne posten holdt lanen stengt fra 2026-09-16 til 2026-09-24.
@@ -340,7 +340,8 @@ notes:
 - Kolliderer ikke med Q-001→Q-003.
 
 ## Q-010 · Forbruksprofiler: `flightOther`-frø og landing av Q-001-grenen
-status: blocked:sprint 2026-09-25 (docs/sprint-2026-09.md)
+status: done
+result: Sprint 2026-09 lane L1, merged to main at ebae916 2026-09-26. Squashed as one commit: ProfileSeed.units complete Record (no ?? 0, @ts-expect-error guard), høy flightOther, exact 2+2 høy flight-duty test (88 kr / 307 kr) tied to MethodView; tobacco/alcohol units from 14156 quartile subtotals × 14100 national split. Codex: BLOCK on 50/50 tobacco → fixed → PASS. 171 tests.
 lane: partiskatt-main
 
 acceptance:
