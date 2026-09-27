@@ -81,6 +81,7 @@ export function AdultFields({ index, adult, dispatch, showAdvanced, labelSuffix 
         >
           <input
             id={`studyMonths-${index}`}
+            aria-describedby={`studyMonths-${index}-hint`}
             type="number"
             inputMode="numeric"
             min={0}

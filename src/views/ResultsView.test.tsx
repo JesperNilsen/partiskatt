@@ -12,7 +12,7 @@ import { ResultsView } from './ResultsView.tsx';
 
 afterEach(cleanup);
 
-const NO_INCOME_NOTICE = 'Ingen inntekt lagt inn: tallene viser bare avgifter og ytelser.';
+const NO_INCOME_NOTICE = 'Ingen inntekt lagt inn: tallene viser bare avgifter, ytelser og eventuell formuesskatt.';
 
 /** The calculator and the results page behind the real provider, on an in-memory router. */
 function renderApp(startPath: string) {

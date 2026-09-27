@@ -64,7 +64,7 @@ export function ResultsView() {
 
       {hasNoIncome(profile) ? (
         <div className="banner banner--notice" role="status">
-          <p>Ingen inntekt lagt inn: tallene viser bare avgifter og ytelser.</p>
+          <p>Ingen inntekt lagt inn: tallene viser bare avgifter, ytelser og eventuell formuesskatt.</p>
         </div>
       ) : null}
 

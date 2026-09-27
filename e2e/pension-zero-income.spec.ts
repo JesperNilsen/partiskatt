@@ -6,7 +6,7 @@ import { submitCalculator } from './fill-profile.ts';
 
 /** The label the engine gives `income.pensionTaxCredit` (src/engine/formulas.ts). */
 const PENSION_CREDIT_LABEL = 'Skattefradrag for pensjonsinntekt';
-const NO_INCOME_NOTICE = 'Ingen inntekt lagt inn: tallene viser bare avgifter og ytelser.';
+const NO_INCOME_NOTICE = 'Ingen inntekt lagt inn: tallene viser bare avgifter, ytelser og eventuell formuesskatt.';
 
 test.use({ viewport: { width: 375, height: 812 } });
 
