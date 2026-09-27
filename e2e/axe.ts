@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, type Page } from '@playwright/test';
+import type { Result } from 'axe-core';
 
 /** WCAG 2 Level A + AA, across the 2.0/2.1/2.2 tag generations. */
 export const WCAG2_A_AA_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22a', 'wcag22aa'];
@@ -20,11 +21,16 @@ export async function expectAxeClean(page: Page) {
   return results;
 }
 
-function formatViolations(violations: { id: string; help: string; nodes: { target: string[] }[] }[]): string {
+function formatViolations(violations: Result[]): string {
   if (violations.length === 0) return '';
   return violations
-    .map((v) => `${v.id} (${v.help}): ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)
+    .map((v) => `${v.id} (${v.help}): ${v.nodes.map((n) => targetToString(n.target)).join(', ')}`)
     .join('\n');
+}
+
+/** A node's `target` is a CSS selector per frame/shadow-root hop, each hop itself a selector or a shadow-DOM chain. */
+function targetToString(target: Result['nodes'][number]['target']): string {
+  return target.map((hop) => (Array.isArray(hop) ? hop.join(' >> ') : hop)).join(' ');
 }
 
 /** Asserts the page does not overflow horizontally at the current viewport. */
