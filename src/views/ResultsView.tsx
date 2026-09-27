@@ -70,6 +70,9 @@ export function ResultsView() {
       <section className="results-list" aria-label="Alle partier rangert">
         <h2 className="results-list__title">Alle ni partier</h2>
         <p className="results-list__sub">Sortert etter mest penger igjen per år mot det vedtatte 2026-systemet.</p>
+        <p className="results-list__sub">
+          Forslag partiene ikke har tallfestet er ikke med i rangeringen; chipen på partikortet viser hvor mange.
+        </p>
         <ol className="party-list">
           {results.map((result, i) => (
             <li key={result.party}>

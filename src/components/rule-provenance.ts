@@ -5,7 +5,8 @@
  */
 import { partyOf, sourceOf } from '../data/index.ts';
 import { parsePageRefs } from '../data/provenance.ts';
-import type { DataStatus, PartyResult, Provenance } from '../types/index.ts';
+import { sum, toKroner } from '../engine/money.ts';
+import type { DataStatus, FormulaId, Kroner, PartyResult, Provenance } from '../types/index.ts';
 import { formatEffectiveDate } from '../utils/format.ts';
 
 export interface RuleRow {
@@ -18,16 +19,62 @@ export interface RuleRow {
   /** `null` only if the excluded item cannot be matched to the party's data (a data bug). */
   readonly provenance: Provenance | null;
   /**
-   * "gjelder fra 1. mars; vist som helårseffekt" when the rule's `effectiveDate` is not
-   * 1 January (decision 1, 2026-09-25: mid-year rules stay full-year policy rates, no
-   * pro-rating by date). `undefined` when the rule takes effect at the start of the year
-   * or has no provenance.
+   * "gjelder fra 1. september; hovedtallet viser helårseffekt" when the rule's `effectiveDate`
+   * is not 1 January. The headline stays a full-year policy-rate comparison (decision 1,
+   * 2026-09-25, reaffirmed as D2 on 2026-09-27) — it is not a 2026 cash-flow forecast.
+   * `undefined` when the rule takes effect at the start of the year or has no provenance.
    */
   readonly effectiveNote?: string | undefined;
+  /**
+   * D2 (2026-09-27): the rule's own 2026 effect, i.e. `midYearShare` of the annual delta
+   * already computed by the engine (`PartyResult.components`, matched by `formulaId`, summed
+   * across per-adult components). Only set on applied rows: an excluded row's componentDelta
+   * is computed against the party's own value, which the engine never applies, so it is always
+   * zero — showing a mid-year share of that zero would look like data instead of "not computed".
+   */
+  readonly midYearDelta?: Kroner | undefined;
 }
 
 /** Full year in the current data model: `Provenance.effectiveDate` defaults to this. */
 const START_OF_YEAR = '2026-01-01';
+
+/**
+ * D2 (2026-09-27): the disbursement calendar `benefit.studentSupport` follows — January
+ * through June, then August through December. No July, so 11 months, not 12.
+ */
+const STUDENT_SUPPORT_MONTHS = [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12];
+
+function daysRemainingInYear(iso: string): number {
+  const date = new Date(`${iso}T00:00:00Z`);
+  const yearEnd = new Date(Date.UTC(date.getUTCFullYear(), 11, 31));
+  return Math.round((yearEnd.getTime() - date.getTime()) / 86_400_000) + 1;
+}
+
+function isLeapYear(year: number): boolean {
+  return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+}
+
+function daysInYear(year: number): number {
+  return isLeapYear(year) ? 366 : 365;
+}
+
+/**
+ * D2 (2026-09-27): the share of 2026 a mid-year rule is actually in force, for the card's
+ * "i 2026" figure. `benefit.studentSupport` follows the disbursement calendar (11 months,
+ * no July); every other formula follows the plain calendar, counting from the 1st of the
+ * effective month (13 − month) / 12. A date that is not the 1st of its month — none in the
+ * current data — is prorated by days instead of whole months, since a mid-month start does
+ * not correspond to a whole number of calendar months.
+ */
+export function midYearShare(formulaId: FormulaId, effectiveDate: string): number {
+  const date = new Date(`${effectiveDate}T00:00:00Z`);
+  const month = date.getUTCMonth() + 1;
+  if (formulaId === 'benefit.studentSupport') {
+    return STUDENT_SUPPORT_MONTHS.filter((m) => m >= month).length / STUDENT_SUPPORT_MONTHS.length;
+  }
+  if (date.getUTCDate() === 1) return (13 - month) / 12;
+  return daysRemainingInYear(effectiveDate) / daysInYear(date.getUTCFullYear());
+}
 
 /**
  * The mid-year disclosure line for a rule, derived from its own `effectiveDate` — never
@@ -35,7 +82,18 @@ const START_OF_YEAR = '2026-01-01';
  */
 export function effectiveDateNote(provenance: Provenance | null): string | undefined {
   if (!provenance || provenance.effectiveDate === START_OF_YEAR) return undefined;
-  return `gjelder fra ${formatEffectiveDate(provenance.effectiveDate)}; vist som helårseffekt`;
+  return `gjelder fra ${formatEffectiveDate(provenance.effectiveDate)}; hovedtallet viser helårseffekt`;
+}
+
+/**
+ * D2 (2026-09-27): the rule's own 2026 figure — `midYearShare` of the annual delta the engine
+ * already computed for this formula, summed across per-adult components. `undefined` unless
+ * the rule is mid-year and has a computed component (i.e. it is an applied row).
+ */
+function midYearDelta(result: PartyResult, formulaId: FormulaId, provenance: Provenance | null): Kroner | undefined {
+  if (!provenance || provenance.effectiveDate === START_OF_YEAR) return undefined;
+  const annual = sum(result.components.filter((c) => c.formulaId === formulaId).map((c) => c.keptDelta));
+  return toKroner(annual * midYearShare(formulaId, provenance.effectiveDate));
 }
 
 /** Compress sorted unique pages to ranges: [4,5,6,9] → "4–6, 9". */
@@ -102,6 +160,7 @@ export function partyRuleRows(result: PartyResult): { applied: RuleRow[]; exclud
       uncertain: d.uncertain,
       provenance: d.provenance,
       effectiveNote: effectiveDateNote(d.provenance),
+      midYearDelta: midYearDelta(result, d.id, d.provenance),
     }));
 
   const excluded: RuleRow[] = result.excluded.map((item, i) => {
@@ -120,4 +179,13 @@ export function partyRuleRows(result: PartyResult): { applied: RuleRow[]; exclud
   });
 
   return { applied, excluded };
+}
+
+/**
+ * D3: how many of the party's proposals never entered the arithmetic because they are not
+ * tallfestet (`PartyRuleSet.unquantified`), for the card's "n forslag ikke tallfestet" chip.
+ * Independent of `partyRuleRows`/`expanded` so the chip shows on a collapsed card too.
+ */
+export function unquantifiedCount(result: PartyResult): number {
+  return partyOf(result.party).unquantified.length;
 }

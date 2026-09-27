@@ -1,10 +1,11 @@
+import { useEffect, useRef } from 'react';
 import { PARTY_META } from '../config/parties.ts';
 import { Link } from 'wouter';
 import type { PartyResult } from '../types/index.ts';
 import { kr } from '../engine/money.ts';
 import { formatSignedKr } from '../utils/format.ts';
 import { BreakdownBars } from './BreakdownBars.tsx';
-import { partyRuleRows, sourceLine, type RuleRow } from './rule-provenance.ts';
+import { partyRuleRows, sourceLine, unquantifiedCount, type RuleRow } from './rule-provenance.ts';
 import { StatusBadge } from './StatusBadge.tsx';
 
 interface PartyCardProps {
@@ -40,7 +41,14 @@ function RuleProvenanceItem({ row }: { row: RuleRow }) {
         <strong className="rule-row__title">{row.title}</strong> <StatusBadge status={row.status} />
         {row.uncertain ? <span className="rule-row__flag"> Usikkert</span> : null}
       </div>
-      {row.effectiveNote ? <p className="rule-row__effective">{row.effectiveNote}</p> : null}
+      {row.effectiveNote ? (
+        <p className="rule-row__effective">
+          {row.effectiveNote}
+          {row.midYearDelta !== undefined ? (
+            <> — <strong>i 2026: {formatSignedKr(row.midYearDelta)} kr</strong></>
+          ) : null}
+        </p>
+      ) : null}
       {row.reason ? <p className="rule-row__reason">{row.reason}</p> : null}
       {src && row.provenance ? (
         <>
@@ -71,6 +79,32 @@ export function PartyCard({ result, rank, expanded = false, onToggle }: PartyCar
   const deltaCls = gain ? 'party-card--gain' : loss ? 'party-card--loss' : 'party-card--neutral';
   const isReference = meta.inGovernment && neutral;
   const rules = expanded ? partyRuleRows(result) : null;
+  const uCount = unquantifiedCount(result);
+  const excludedHeadingRef = useRef<HTMLHeadingElement>(null);
+  const pendingScrollToExcluded = useRef(false);
+
+  /** jsdom (component tests) has no `scrollIntoView`; real browsers do. */
+  function revealExcludedList() {
+    const heading = excludedHeadingRef.current;
+    if (!heading) return;
+    heading.scrollIntoView?.({ block: 'start', behavior: 'smooth' });
+    heading.focus();
+  }
+
+  useEffect(() => {
+    if (!expanded || !pendingScrollToExcluded.current) return;
+    pendingScrollToExcluded.current = false;
+    revealExcludedList();
+  }, [expanded]);
+
+  function showUnquantified() {
+    if (expanded) {
+      revealExcludedList();
+    } else {
+      pendingScrollToExcluded.current = true;
+      onToggle?.();
+    }
+  }
 
   return (
     <article
@@ -91,6 +125,16 @@ export function PartyCard({ result, rank, expanded = false, onToggle }: PartyCar
               <p className="party-card__ref-note">
                 Referanseparti — det vedtatte 2026-systemet er regjeringens politikk, så avviket er null per konstruksjon.
               </p>
+            ) : null}
+            {uCount > 0 ? (
+              <button
+                type="button"
+                className="status-badge status-badge--unquantified party-card__coverage"
+                onClick={showUnquantified}
+                aria-label={`${uCount} forslag fra ${meta.shortName} er ikke tallfestet og ikke med i hovedtallet. Vis dem.`}
+              >
+                {uCount} forslag ikke tallfestet
+              </button>
             ) : null}
           </div>
         </div>
@@ -153,7 +197,9 @@ export function PartyCard({ result, rank, expanded = false, onToggle }: PartyCar
           ) : null}
           {rules.excluded.length > 0 ? (
             <section>
-              <h4 id={`party-${result.party}-excluded`}>Ikke medregnet i hovedtallet</h4>
+              <h4 id={`party-${result.party}-excluded`} ref={excludedHeadingRef} tabIndex={-1}>
+                Ikke medregnet i hovedtallet
+              </h4>
               <ul className="rule-list excluded-list" aria-labelledby={`party-${result.party}-excluded`}>
                 {rules.excluded.map((row) => (
                   <RuleProvenanceItem key={row.key} row={row} />

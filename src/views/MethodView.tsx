@@ -130,12 +130,15 @@ export function MethodView() {
       <section>
         <h2>Ikrafttredelse midt i året</h2>
         <p>
-          Enkelte regler trer i kraft en dato midt i 2026 — for eksempel barnetrygd fra 1. februar eller en momssats
-          fra 1. september — i stedet for 1. januar. Kalkulatoren pro-rerer ikke etter dato; det er bevisst utenfor
-          omfanget. Regelen vises i stedet som en <strong>helårseffekt</strong>: det årlige beløpet den ville gitt om
-          den hadde gjeldt hele 2026. Dette er et sammenligningsvalg, ikke en glipp — hensikten er å vise
-          politikknivåer mellom partier, ikke en kontantstrømprognose for 2026 med delårsvirkning. Der en regel har
-          en slik ikrafttredelsesdato, står den ved siden av regelen i partikortet.
+          Enkelte regler trer i kraft en dato midt i 2026 — for eksempel studiestøtte fra 1. august eller en momssats
+          fra 1. september — i stedet for 1. januar. Hovedtallet er fortsatt en <strong>helårseffekt</strong>: det
+          årlige beløpet regelen ville gitt om den hadde gjeldt hele 2026, slik at kalkulatoren sammenligner
+          politikknivåer mellom partier, ikke en kontantstrømprognose for 2026 med delårsvirkning (beslutning D2,
+          2026-09-27, viderefører beslutning 1 fra 2026-09-25). Der en regel har en slik ikrafttredelsesdato, står
+          den ved siden av regelen i partikortet sammen med en egen <strong>«i 2026»</strong>-linje: den delen av
+          helårsbeløpet regelen faktisk gir i 2026, ut fra hvor mange måneder den er i kraft. Studiestøtte følger
+          utbetalingskalenderen januar–juni og august–desember (11 måneder, ingen juli); andre regler følger vanlig
+          kalendermåned fra ikrafttredelsesdatoen til årsslutt.
         </p>
       </section>
 
