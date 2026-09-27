@@ -1,4 +1,6 @@
+import { useMemo } from 'react';
 import { useLocation } from 'wouter';
+import { AdultFields, unionFeeCapOf } from '../components/AdultFields.tsx';
 import { Field } from '../components/Field.tsx';
 import { MoneyInput } from '../components/MoneyInput.tsx';
 import { DataBanner } from '../components/DataBanner.tsx';
@@ -46,6 +48,7 @@ export function CalculatorView() {
 
   const adult = profile.adults[0];
   const adult2 = profile.adults[1];
+  const unionFeeCap = useMemo(() => (data ? unionFeeCapOf(data.bundle) : null), [data]);
 
   return (
     <>
@@ -81,31 +84,22 @@ export function CalculatorView() {
 
         <section className="card">
           <h2>Inntekt</h2>
-          <Field label="Årlig brutto arbeidsinntekt" id="wage-0" hint="Før skatt, pensjon og trygd.">
-            <MoneyInput
-              id="wage-0"
-              value={adult.wageIncome}
-              onChange={(v) => dispatchProfile({ type: 'adult', index: 0, patch: { wageIncome: v } })}
-            />
-          </Field>
-
-          <label className="checkbox">
-            <input
-              type="checkbox"
-              checked={adult.isStudent}
-              onChange={(e) => dispatchProfile({ type: 'adult', index: 0, patch: { isStudent: e.target.checked, studyMonths: e.target.checked ? 10 : 0 } })}
-            />
-            Student med inntekt fra jobb (gir 10 måneder studiestøtte)
-          </label>
-
+          <AdultFields
+            index={0}
+            adult={adult}
+            dispatch={dispatchProfile}
+            showAdvanced={showAdvanced}
+            unionFeeCap={unionFeeCap}
+          />
           {profile.mode === 'household' && adult2 ? (
-            <Field label="Årlig brutto arbeidsinntekt (voksen 2)" id="wage-1">
-              <MoneyInput
-                id="wage-1"
-                value={adult2.wageIncome}
-                onChange={(v) => dispatchProfile({ type: 'adult', index: 1, patch: { wageIncome: v } })}
-              />
-            </Field>
+            <AdultFields
+              index={1}
+              adult={adult2}
+              dispatch={dispatchProfile}
+              showAdvanced={showAdvanced}
+              labelSuffix=" (voksen 2)"
+              unionFeeCap={unionFeeCap}
+            />
           ) : null}
         </section>
 
@@ -175,6 +169,9 @@ export function CalculatorView() {
 
           {showAdvanced ? (
             <div className="advanced-panel">
+              <p className="field__hint">
+                Kapitalinntekt, renteutgifter og fagforeningskontingent fyller du inn per voksen under «Inntekt».
+              </p>
               <h3>Formue og gjeld</h3>
               <Field label="Primærbolig (markedsverdi)" id="wealth-primary">
                 <MoneyInput
@@ -217,22 +214,6 @@ export function CalculatorView() {
                   id="wealth-other"
                   value={profile.wealth.otherTaxableWealth}
                   onChange={(v) => dispatchProfile({ type: 'wealth', patch: { otherTaxableWealth: v } })}
-                />
-              </Field>
-
-              <h3>Kapitalinntekt og fradrag</h3>
-              <Field label="Kapitalinntekt" id="capital-0">
-                <MoneyInput
-                  id="capital-0"
-                  value={adult.capitalIncome}
-                  onChange={(v) => dispatchProfile({ type: 'adult', index: 0, patch: { capitalIncome: v } })}
-                />
-              </Field>
-              <Field label="Renteutgifter" id="interest-0">
-                <MoneyInput
-                  id="interest-0"
-                  value={adult.interestExpense}
-                  onChange={(v) => dispatchProfile({ type: 'adult', index: 0, patch: { interestExpense: v } })}
                 />
               </Field>
 
