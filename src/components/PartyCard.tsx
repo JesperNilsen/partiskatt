@@ -197,7 +197,12 @@ export function PartyCard({ result, rank, expanded = false, onToggle }: PartyCar
           ) : null}
           {rules.excluded.length > 0 ? (
             <section>
-              <h4 id={`party-${result.party}-excluded`} ref={excludedHeadingRef} tabIndex={-1}>
+              <h4
+                id={`party-${result.party}-excluded`}
+                className="party-card__excluded-heading"
+                ref={excludedHeadingRef}
+                tabIndex={-1}
+              >
                 Ikke medregnet i hovedtallet
               </h4>
               <ul className="rule-list excluded-list" aria-labelledby={`party-${result.party}-excluded`}>

@@ -21,4 +21,18 @@ describe('MoneyInput', () => {
     const input = container.querySelector('#wage-0')!;
     expect(input.getAttribute('aria-describedby')).toBe('wage-0-hint wage-0-suffix');
   });
+
+  it('suffix defaults to "kr/år" for a flow like wage', () => {
+    const { container } = render(<MoneyInput id="wage-0" value={kr(0)} onChange={() => {}} />);
+    expect(container.querySelector('#wage-0-suffix')?.textContent).toBe('kr/år');
+  });
+
+  it('a "kr" suffix can be passed for a one-off amount like a wealth field, without touching the describedby id', () => {
+    const { container } = render(
+      <MoneyInput id="wealth-primary" value={kr(0)} onChange={() => {}} suffix="kr" />,
+    );
+    const input = container.querySelector('#wealth-primary')!;
+    expect(container.querySelector('#wealth-primary-suffix')?.textContent).toBe('kr');
+    expect(input.getAttribute('aria-describedby')).toBe('wealth-primary-suffix');
+  });
 });

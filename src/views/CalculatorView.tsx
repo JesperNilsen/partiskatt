@@ -93,16 +93,15 @@ export function CalculatorView() {
             index={0}
             adult={adult}
             dispatch={dispatchProfile}
-            showAdvanced={showAdvanced}
             unionFeeCap={unionFeeCap}
+            {...(profile.mode === 'household' ? { legend: 'Voksen 1' } : {})}
           />
           {profile.mode === 'household' && adult2 ? (
             <AdultFields
               index={1}
               adult={adult2}
               dispatch={dispatchProfile}
-              showAdvanced={showAdvanced}
-              labelSuffix=" (voksen 2)"
+              legend="Voksen 2"
               unionFeeCap={unionFeeCap}
             />
           ) : null}
@@ -175,13 +174,11 @@ export function CalculatorView() {
 
           {showAdvanced ? (
             <div className="advanced-panel">
-              <p className="field__hint">
-                Kapitalinntekt, renteutgifter og fagforeningskontingent fyller du inn per voksen under «Inntekt».
-              </p>
               <h3>Formue og gjeld</h3>
               <Field label="Primærbolig (markedsverdi)" id="wealth-primary">
                 <MoneyInput
                   id="wealth-primary"
+                  suffix="kr"
                   value={profile.wealth.primaryHomeValue}
                   onChange={(v) => dispatchProfile({ type: 'wealth', patch: { primaryHomeValue: v } })}
                 />
@@ -189,6 +186,7 @@ export function CalculatorView() {
               <Field label="Sekundærbolig (markedsverdi)" id="wealth-secondary">
                 <MoneyInput
                   id="wealth-secondary"
+                  suffix="kr"
                   value={profile.wealth.secondaryHomeValue}
                   onChange={(v) => dispatchProfile({ type: 'wealth', patch: { secondaryHomeValue: v } })}
                 />
@@ -196,6 +194,7 @@ export function CalculatorView() {
               <Field label="Gjeld" id="wealth-debt">
                 <MoneyInput
                   id="wealth-debt"
+                  suffix="kr"
                   value={profile.wealth.debt}
                   onChange={(v) => dispatchProfile({ type: 'wealth', patch: { debt: v } })}
                 />
@@ -203,6 +202,7 @@ export function CalculatorView() {
               <Field label="Bankinnskudd" id="wealth-bank">
                 <MoneyInput
                   id="wealth-bank"
+                  suffix="kr"
                   value={profile.wealth.bankDeposits}
                   onChange={(v) => dispatchProfile({ type: 'wealth', patch: { bankDeposits: v } })}
                 />
@@ -210,6 +210,7 @@ export function CalculatorView() {
               <Field label="Aksjer og fond" id="wealth-shares">
                 <MoneyInput
                   id="wealth-shares"
+                  suffix="kr"
                   value={profile.wealth.listedShares}
                   onChange={(v) => dispatchProfile({ type: 'wealth', patch: { listedShares: v } })}
                 />
@@ -218,6 +219,7 @@ export function CalculatorView() {
               <Field label="Annen skattepliktig formue" id="wealth-other">
                 <MoneyInput
                   id="wealth-other"
+                  suffix="kr"
                   value={profile.wealth.otherTaxableWealth}
                   onChange={(v) => dispatchProfile({ type: 'wealth', patch: { otherTaxableWealth: v } })}
                 />

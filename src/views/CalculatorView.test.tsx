@@ -50,6 +50,14 @@ describe('CalculatorView: wealth fields the engine already models', () => {
     expect(wealthParty).toBeDefined();
   });
 
+  it('wealth fields show the "kr" suffix, unlike the "kr/år" wage field (L8)', () => {
+    renderCalculator();
+    expect(document.querySelector('#wage-0-suffix')?.textContent).toBe('kr/år');
+    for (const id of ['wealth-primary', 'wealth-secondary', 'wealth-debt', 'wealth-bank', 'wealth-shares', 'wealth-other']) {
+      expect(document.querySelector(`#${id}-suffix`)?.textContent, id).toBe('kr');
+    }
+  });
+
   for (const [selector, key] of FIELDS) {
     it(`${key}: the input reaches the profile and moves the wealth tax`, () => {
       const seen = renderCalculator();

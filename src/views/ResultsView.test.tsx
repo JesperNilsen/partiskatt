@@ -119,7 +119,8 @@ describe('ResultsView: the no-income notice', () => {
 
   it('no notice with capital income only', async () => {
     renderApp('/');
-    fireEvent.click(screen.getByRole('button', { name: 'Avanserte felt' }));
+    // L8: capital/interest/union sit behind each adult's own disclosure inside "Inntekt", not "Avanserte felt".
+    fireEvent.click(screen.getByRole('button', { name: 'Kapitalinntekt, renter og fagforening' }));
     fireEvent.change(input('#capital-0'), { target: { value: '40000' } });
     await submit();
     expect(screen.queryByText(NO_INCOME_NOTICE)).toBeNull();

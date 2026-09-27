@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 import { DATA_BUNDLE } from '../data/index.ts';
 import { headlineGate, kr, paramsOf, resolveBaseline } from '../engine/index.ts';
@@ -13,6 +13,8 @@ import { CalculatorView } from '../views/CalculatorView.tsx';
 import { AdultFields, clampStudyMonths, FULL_STUDY_YEAR_MONTHS, unionFeeCapOf } from './AdultFields.tsx';
 
 afterEach(cleanup);
+
+const CAPITAL_DISCLOSURE_LABEL = 'Kapitalinntekt, renter og fagforening';
 
 /** The real calculator in the real provider; exposes the live profile and the results it computed. */
 function renderCalculator() {
@@ -46,62 +48,140 @@ function el<T extends HTMLElement = HTMLInputElement>(selector: string): T {
   return found;
 }
 
-/** Field ids and label texts inside one adult's block, with the adult's own index and suffix removed. */
-function fieldSet(index: number) {
-  const block = el<HTMLDivElement>(`[data-adult="${index}"]`);
+/** The per-adult "Kapitalinntekt, renter og fagforening" disclosure button for one adult. */
+function capitalToggle(index: number): HTMLElement {
+  const block = el<HTMLElement>(`[data-adult="${index}"]`);
+  return within(block).getByRole('button', { name: CAPITAL_DISCLOSURE_LABEL });
+}
+
+function openCapitalPanel(index: number) {
+  fireEvent.click(capitalToggle(index));
+}
+
+/** Field ids inside one adult's block, in DOM order. */
+function fieldIds(index: number): string[] {
+  const block = el<HTMLElement>(`[data-adult="${index}"]`);
   const inputs = [...block.querySelectorAll('input')];
-  return inputs.map((input) => {
-    const label = block.querySelector(`label[for="${input.id}"]`) ?? input.closest('label');
-    return {
-      id: input.id.replace(new RegExp(`-${index}$`), ''),
-      idEndsInIndex: input.id.endsWith(`-${index}`),
-      label: (label?.textContent ?? '').replace(' (voksen 2)', ''),
-      suffixed: (label?.textContent ?? '').includes(' (voksen 2)'),
-    };
-  });
+  return inputs.map((input) => input.id.replace(new RegExp(`-${index}$`), ''));
 }
 
 const ADOPTED_UNION_CAP = paramsOf(resolveBaseline(DATA_BUNDLE.adopted), 'income.unionFeeDeduction').max;
 
 describe('AdultFields: both adults get the same fields', () => {
-  it('with advanced fields open and both adults students, the two field sets are identical', () => {
+  it('with the capital panel open and both adults students, the two field sets are identical', () => {
     renderCalculator();
     household();
-    openAdvanced();
     fireEvent.click(el('#student-0'));
     fireEvent.click(el('#student-1'));
+    openCapitalPanel(0);
+    openCapitalPanel(1);
 
-    const first = fieldSet(0);
-    const second = fieldSet(1);
-    expect(first.map((f) => f.id)).toEqual(['wage', 'pension', 'student', 'studyMonths', 'capital', 'interest', 'union']);
-    expect(second.map((f) => f.id)).toEqual(first.map((f) => f.id));
-    expect(second.map((f) => f.label)).toEqual(first.map((f) => f.label));
-    expect(first.every((f) => f.idEndsInIndex && !f.suffixed)).toBe(true);
-    expect(second.every((f) => f.idEndsInIndex && f.suffixed)).toBe(true);
+    const first = fieldIds(0);
+    const second = fieldIds(1);
+    expect(first).toEqual(['wage', 'pension', 'student', 'studyMonths', 'capital', 'interest', 'union']);
+    expect(second).toEqual(first);
   });
 
-  it('advanced fields stay hidden until the panel opens; the e2e ids are unchanged', () => {
+  it('the capital/interest/union fields stay hidden until that adult’s own panel opens', () => {
     renderCalculator();
     household();
-    expect(fieldSet(0).map((f) => f.id)).toEqual(['wage', 'pension', 'student']);
-    expect(fieldSet(1).map((f) => f.id)).toEqual(['wage', 'pension', 'student']);
+    expect(fieldIds(0)).toEqual(['wage', 'pension', 'student']);
+    expect(fieldIds(1)).toEqual(['wage', 'pension', 'student']);
+    openCapitalPanel(0);
+    expect(fieldIds(0)).toEqual(['wage', 'pension', 'student', 'capital', 'interest', 'union']);
+    expect(fieldIds(1)).toEqual(['wage', 'pension', 'student']);
+  });
+
+  it('the global "Avanserte felt" toggle no longer reveals capital/interest/union (L8)', () => {
+    renderCalculator();
+    household();
     openAdvanced();
-    for (const id of ['#wage-0', '#units-petrolLitre', '#wealth-secondary']) expect(el(id)).toBeTruthy();
-    expect(document.querySelectorAll('#capital-0, #interest-0, #union-0').length).toBe(3);
+    expect(document.querySelectorAll('#capital-0, #interest-0, #union-0, #capital-1, #interest-1, #union-1').length).toBe(0);
+    // the toggle still governs wealth/units/scenario fields
+    for (const id of ['#units-petrolLitre', '#wealth-secondary']) expect(el(id)).toBeTruthy();
   });
 
   it('person mode renders one adult only', () => {
     renderCalculator();
-    openAdvanced();
     expect(document.querySelector('[data-adult="1"]')).toBeNull();
     expect(document.querySelector('#union-1')).toBeNull();
+  });
+});
+
+describe('AdultFields: capital/interest/union disclosure (L8)', () => {
+  it('is collapsed by default for both adults, with aria-expanded false', () => {
+    renderCalculator();
+    household();
+    expect(document.querySelectorAll('#capital-0, #capital-1').length).toBe(0);
+    expect(capitalToggle(0).getAttribute('aria-expanded')).toBe('false');
+    expect(capitalToggle(1).getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('opening one adult’s panel reveals only that adult’s fields and flips its own aria-expanded', () => {
+    renderCalculator();
+    household();
+    openCapitalPanel(0);
+
+    expect(el('#capital-0')).toBeTruthy();
+    expect(el('#interest-0')).toBeTruthy();
+    expect(el('#union-0')).toBeTruthy();
+    expect(capitalToggle(0).getAttribute('aria-expanded')).toBe('true');
+
+    // adult 2 is untouched
+    expect(document.querySelectorAll('#capital-1, #interest-1, #union-1').length).toBe(0);
+    expect(capitalToggle(1).getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('the two adults’ panels open independently of each other', () => {
+    renderCalculator();
+    household();
+    openCapitalPanel(1);
+    expect(el('#union-1')).toBeTruthy();
+    expect(document.querySelector('#union-0')).toBeNull();
+
+    openCapitalPanel(0);
+    expect(el('#union-0')).toBeTruthy();
+    expect(el('#union-1')).toBeTruthy();
+
+    // closing adult 1's panel leaves adult 0's open
+    openCapitalPanel(1);
+    expect(document.querySelector('#union-1')).toBeNull();
+    expect(el('#union-0')).toBeTruthy();
+  });
+
+  it('aria-controls names the panel that contains the fields', () => {
+    renderCalculator();
+    openCapitalPanel(0);
+    const panelId = capitalToggle(0).getAttribute('aria-controls');
+    expect(panelId).toBeTruthy();
+    const panel = document.getElementById(panelId!);
+    expect(panel).not.toBeNull();
+    expect(panel!.querySelector('#capital-0')).not.toBeNull();
+  });
+});
+
+describe('AdultFields: household legends (L8)', () => {
+  it('wraps each adult in a fieldset with its own legend, and a divider between them', () => {
+    renderCalculator();
+    household();
+    const first = el<HTMLFieldSetElement>('fieldset[data-adult="0"]');
+    const second = el<HTMLFieldSetElement>('fieldset[data-adult="1"]');
+    expect(first.querySelector('legend')?.textContent).toBe('Voksen 1');
+    expect(second.querySelector('legend')?.textContent).toBe('Voksen 2');
+  });
+
+  it('person mode needs no legend or fieldset', () => {
+    renderCalculator();
+    expect(document.querySelector('fieldset')).toBeNull();
+    expect(document.querySelector('legend')).toBeNull();
+    expect(el('[data-adult="0"]').tagName).toBe('DIV');
   });
 });
 
 describe('AdultFields: union fee', () => {
   it('the hint shows the cap read from the adopted rule', async () => {
     renderCalculator();
-    openAdvanced();
+    openCapitalPanel(0);
     const hint = el<HTMLParagraphElement>('#union-0-hint');
     await waitFor(() => expect(hint.textContent).toContain(`${formatKr(ADOPTED_UNION_CAP)} kr`));
   });
@@ -122,18 +202,18 @@ describe('AdultFields: union fee', () => {
         index={1}
         adult={createProfile().adults[0]}
         dispatch={() => {}}
-        showAdvanced
-        labelSuffix=" (voksen 2)"
+        legend="Voksen 2"
         unionFeeCap={unionFeeCapOf(bundle)}
       />,
     );
+    openCapitalPanel(1);
     expect(el('#union-1-hint').textContent).toContain(`${formatKr(kr(12_345))} kr`);
   });
 
   it('a fee typed for adult 2 reaches the engine result through the calculator’s own submit', async () => {
     const seen = renderCalculator();
     household();
-    openAdvanced();
+    openCapitalPanel(1);
     fireEvent.change(el('#wage-1'), { target: { value: '600000' } });
     fireEvent.change(el('#union-1'), { target: { value: '20000' } });
     expect(seen.profile!.adults[1]?.unionFee).toBe(20_000);
@@ -167,13 +247,10 @@ describe('AdultFields: pension', () => {
   it('both adults get «Alderspensjon og AFP» right after the wage field, with the «Ikke uføretrygd.» hint', () => {
     renderCalculator();
     household();
-    for (const [index, suffix] of [
-      [0, ''],
-      [1, ' (voksen 2)'],
-    ] as const) {
-      const ids = fieldSet(index).map((f) => f.id);
+    for (const index of [0, 1] as const) {
+      const ids = fieldIds(index);
       expect(ids.indexOf('pension'), `adult ${index}`).toBe(ids.indexOf('wage') + 1);
-      expect(el(`label[for="pension-${index}"]`).textContent).toBe(`Alderspensjon og AFP${suffix}`);
+      expect(el(`label[for="pension-${index}"]`).textContent).toBe('Alderspensjon og AFP');
       expect(el(`#pension-${index}-hint`).textContent).toBe('Ikke uføretrygd.');
       expect(el(`#pension-${index}`).getAttribute('aria-describedby')).toContain(`pension-${index}-hint`);
     }

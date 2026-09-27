@@ -1,4 +1,4 @@
-import type { Dispatch } from 'react';
+import { useState, type Dispatch } from 'react';
 import type { DataBundle } from '../engine/index.ts';
 import { paramsOf, resolveBaseline } from '../engine/index.ts';
 import type { ProfileAction } from '../state/profile.ts';
@@ -31,33 +31,35 @@ interface AdultFieldsProps {
   index: number;
   adult: Adult;
   dispatch: Dispatch<ProfileAction>;
-  showAdvanced: boolean;
-  /** Appended to every label, e.g. " (voksen 2)"; empty for the first adult. */
-  labelSuffix?: string;
+  /**
+   * Legend text for the `<fieldset>` wrapping this adult's fields, e.g. "Voksen 2". Omitted in
+   * person mode, where a single adult needs no heading and the fields render in a plain `<div>`.
+   * A `<fieldset>`/`<legend>` pair (rather than a repeated label suffix) is what disambiguates the
+   * two adults' otherwise-identical field labels for assistive tech (WCAG technique H71).
+   */
+  legend?: string;
   /** Adopted cap on the union-fee deduction; null while the data loads. */
   unionFeeCap: Kroner | null;
 }
 
-/** One adult's income fields. Both adults get exactly the same set; only the ids and labels differ. */
-export function AdultFields({ index, adult, dispatch, showAdvanced, labelSuffix = '', unionFeeCap }: AdultFieldsProps) {
+/** One adult's income fields. Both adults get exactly the same set; only the ids and, in household mode, the enclosing legend differ. */
+export function AdultFields({ index, adult, dispatch, legend, unionFeeCap }: AdultFieldsProps) {
   const patch = (p: Partial<Adult>) => dispatch({ type: 'adult', index, patch: p });
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const detailsPanelId = `adult-${index}-capital-fields`;
   const unionHint =
     unionFeeCap === null
       ? 'Gir fradrag i alminnelig inntekt, opp til et tak.'
       : `Gir fradrag i alminnelig inntekt på inntil ${formatKr(unionFeeCap)} kr (vedtatt for 2026).`;
 
-  return (
-    <div data-adult={index}>
-      <Field
-        label={`Årlig brutto arbeidsinntekt${labelSuffix}`}
-        id={`wage-${index}`}
-        hint="Før skatt, pensjon og trygd."
-      >
+  const fields = (
+    <>
+      <Field label="Årlig brutto arbeidsinntekt" id={`wage-${index}`} hint="Før skatt, pensjon og trygd.">
         <MoneyInput id={`wage-${index}`} value={adult.wageIncome} onChange={(v) => patch({ wageIncome: v })} />
       </Field>
 
       {/* Only alderspensjon and AFP give skattefradrag for pensjonsinntekt; uføretrygd does not (sktl. § 16-1 første ledd). */}
-      <Field label={`Alderspensjon og AFP${labelSuffix}`} id={`pension-${index}`} hint="Ikke uføretrygd.">
+      <Field label="Alderspensjon og AFP" id={`pension-${index}`} hint="Ikke uføretrygd.">
         <MoneyInput id={`pension-${index}`} value={adult.pensionIncome} onChange={(v) => patch({ pensionIncome: v })} />
       </Field>
 
@@ -70,12 +72,12 @@ export function AdultFields({ index, adult, dispatch, showAdvanced, labelSuffix 
             patch({ isStudent: e.target.checked, studyMonths: e.target.checked ? FULL_STUDY_YEAR_MONTHS : 0 })
           }
         />
-        {`Student med inntekt fra jobb${labelSuffix} — fulltid gir ${FULL_STUDY_YEAR_MONTHS} måneder studiestøtte`}
+        {`Student med inntekt fra jobb — fulltid gir ${FULL_STUDY_YEAR_MONTHS} måneder studiestøtte`}
       </label>
 
       {adult.isStudent ? (
         <Field
-          label={`Måneder med studiestøtte i 2026${labelSuffix}`}
+          label="Måneder med studiestøtte i 2026"
           id={`studyMonths-${index}`}
           hint={`Fra 0 til ${FULL_STUDY_YEAR_MONTHS}. Et helt studieår på fulltid gir ${FULL_STUDY_YEAR_MONTHS}.`}
         >
@@ -93,24 +95,48 @@ export function AdultFields({ index, adult, dispatch, showAdvanced, labelSuffix 
         </Field>
       ) : null}
 
-      {showAdvanced ? (
-        <>
-          <h3>{`Kapitalinntekt og fradrag${labelSuffix}`}</h3>
-          <Field label={`Kapitalinntekt${labelSuffix}`} id={`capital-${index}`}>
+      <button
+        type="button"
+        className="btn btn--ghost adult-fields__disclosure"
+        aria-expanded={detailsOpen}
+        aria-controls={detailsPanelId}
+        onClick={() => setDetailsOpen((v) => !v)}
+      >
+        Kapitalinntekt, renter og fagforening
+      </button>
+
+      {detailsOpen ? (
+        <div id={detailsPanelId} className="adult-fields__details">
+          <Field label="Kapitalinntekt" id={`capital-${index}`}>
             <MoneyInput id={`capital-${index}`} value={adult.capitalIncome} onChange={(v) => patch({ capitalIncome: v })} />
           </Field>
-          <Field label={`Renteutgifter${labelSuffix}`} id={`interest-${index}`}>
+          <Field label="Renteutgifter" id={`interest-${index}`}>
             <MoneyInput
               id={`interest-${index}`}
               value={adult.interestExpense}
               onChange={(v) => patch({ interestExpense: v })}
             />
           </Field>
-          <Field label={`Fagforeningskontingent${labelSuffix}`} id={`union-${index}`} hint={unionHint}>
+          <Field label="Fagforeningskontingent" id={`union-${index}`} hint={unionHint}>
             <MoneyInput id={`union-${index}`} value={adult.unionFee} onChange={(v) => patch({ unionFee: v })} />
           </Field>
-        </>
+        </div>
       ) : null}
+    </>
+  );
+
+  if (legend) {
+    return (
+      <fieldset className="adult-fields" data-adult={index}>
+        <legend>{legend}</legend>
+        {fields}
+      </fieldset>
+    );
+  }
+
+  return (
+    <div className="adult-fields" data-adult={index}>
+      {fields}
     </div>
   );
 }

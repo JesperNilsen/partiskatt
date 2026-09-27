@@ -10,6 +10,8 @@ interface MoneyInputProps extends DescribedByProps {
   onChange: (value: Kroner) => void;
   placeholder?: string;
   min?: number;
+  /** Unit shown after the field, e.g. "kr" for a one-off wealth amount. Defaults to the annual-flow unit. */
+  suffix?: string;
 }
 
 function parseKr(raw: string): Kroner {
@@ -20,7 +22,15 @@ function parseKr(raw: string): Kroner {
   return kr(Math.min(n, 1_000_000_000));
 }
 
-export function MoneyInput({ id, value, onChange, placeholder = '0', min = 0, describedBy }: MoneyInputProps) {
+export function MoneyInput({
+  id,
+  value,
+  onChange,
+  placeholder = '0',
+  min = 0,
+  describedBy,
+  suffix = 'kr/år',
+}: MoneyInputProps) {
   const [text, setText] = useState(formatKr(value));
   const [focused, setFocused] = useState(false);
   const suffixId = `${id}-suffix`;
@@ -58,7 +68,7 @@ export function MoneyInput({ id, value, onChange, placeholder = '0', min = 0, de
         }}
         aria-describedby={ariaDescribedBy}
       />
-      <span className="money-input__suffix" id={suffixId}>kr/år</span>
+      <span className="money-input__suffix" id={suffixId}>{suffix}</span>
     </div>
   );
 }
