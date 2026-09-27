@@ -123,7 +123,8 @@ export function MethodView() {
         <p>
           Prisår: standardprofilene står i 2026-priser. Kronene fra 2022 er løftet per mva-kategori med SSBs konsumprisindeks (tabell
           14700): snittet for januar–august 2026 delt på snittet for 2022. Mat løftes med 1,250 og strøm med 0,924 — under 1 fordi 2022
-          var et krisår for strømprisen. Mengdene (liter, kWh, reiser) løftes ikke, så særavgiftene er de samme i begge prisår; det er
+          var et krisår for strømprisen. Kollektivtransport løftes med 1,094: en vektet indeks av tog, buss og båt (07.3.1, 07.3.2 og
+          07.3.4, med 2026-vektene 3,9, 11,4 og 4,5 promille), uten flyreisene, som har sin egen faktor. Mengdene (liter, kWh, reiser) løftes ikke, så særavgiftene er de samme i begge prisår; det er
           momsen som følger kronene. Velg «2022» ved siden av profilvelgeren for å se profilene uløftet. Beløp du har skrevet inn selv,
           løftes aldri. Alle faktorene står i metodedokumentet.
         </p>

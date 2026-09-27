@@ -22,11 +22,12 @@ import {
   PRICE_INDEX_MAPPING,
   PRICE_UPLIFT_2022_2026,
   PROFILE_SEEDS,
+  TRANSPORT_SERVICES_WEIGHTS_2026,
   TOBACCO_BY_PROFILE_2022,
   TOBACCO_SPLIT_2022,
   UNIT_PRICES_2022,
 } from '../data/consumption-profiles.ts';
-import type { ProfileSeed } from '../data/consumption-profiles.ts';
+import type { PriceIndexRule, ProfileSeed } from '../data/consumption-profiles.ts';
 import { ADOPTED_2026 } from '../data/baseline/2026/adopted.ts';
 import { DATA_BUNDLE } from '../data/index.ts';
 import { calculateParty, computeScenario, sanitizeProfile } from '../engine/index.ts';
@@ -511,8 +512,26 @@ describe('prisløft 2022 -> 2026 fra SSB-tabell 14700 (D4)', () => {
   }
   const months2022 = months.filter((m) => m.startsWith('2022'));
   const months2026 = months.filter((m) => m.startsWith('2026'));
+  function weight(group: string, month: string): number {
+    const g = dim.VareTjenesteGrp.category.index[group];
+    const c = dim.ContentsCode.category.index.KpiVektMnd;
+    const t = dim.Tid.category.index[month];
+    const v = kpi.value[(g * contents.length + c) * months.length + t];
+    if (typeof v !== 'number') throw new Error(`ingen vekt for ${group} ${month}`);
+    return v;
+  }
   const mean = (group: string, ms: readonly string[]) => ms.reduce((a, m) => a + index(group, m), 0) / ms.length;
-  const factorFromArchive = (group: string) => mean(group, months2026) / mean(group, months2022);
+  /** Regelens indeks for én måned: sum(vekt x indeks) / sum(vekt), med regelens faste vekter. */
+  function ruleIndex(rule: PriceIndexRule, month: string): number {
+    const entries = Object.entries(rule.groups);
+    const total = entries.reduce((a, [, w]) => a + w, 0);
+    return entries.reduce((a, [g, w]) => a + w * index(g, month), 0) / total;
+  }
+  /** Veiet per måned FØRST, så snittet over månedene — slik oppdraget beskriver det. */
+  const factorFromArchive = (rule: PriceIndexRule) => {
+    const avg = (ms: readonly string[]) => ms.reduce((a, m) => a + ruleIndex(rule, m), 0) / ms.length;
+    return avg(months2026) / avg(months2022);
+  };
 
   it('bruker alle tolv 2022-måneder og hver 2026-måned SSB hadde publisert ved henting', () => {
     expect(dim.ContentsCode.category.unit.KpiIndMnd.base).toBe('indeks');
@@ -537,7 +556,9 @@ describe('prisløft 2022 -> 2026 fra SSB-tabell 14700 (D4)', () => {
     expect(covered).toEqual([...VAT_CATEGORIES].sort());
     expect(new Set(covered).size).toBe(covered.length);
     for (const rule of PRICE_INDEX_MAPPING) {
-      expect(groups, `${rule.category} -> ${rule.group}`).toContain(rule.group);
+      for (const group of Object.keys(rule.groups)) {
+        expect(groups, `${rule.category} -> ${group}`).toContain(group);
+      }
       expect(PRICE_UPLIFT_2022_2026[rule.category], rule.category).toBeDefined();
     }
   });
@@ -548,11 +569,39 @@ describe('prisløft 2022 -> 2026 fra SSB-tabell 14700 (D4)', () => {
     for (const rule of COICOP_MAPPING) {
       if (rule.include.length !== 1 || rule.exclude.length !== 0) continue;
       const price = PRICE_INDEX_MAPPING.find((r) => r.category === rule.category);
-      expect(price?.group, rule.category).toBe(rule.include[0]);
+      expect(price?.groups, rule.category).toEqual({ [rule.include[0]!]: 1 });
     }
     // De tre som ikke er én gruppe, og hva de får i stedet.
-    const group = (c: VatCategory) => PRICE_INDEX_MAPPING.find((r) => r.category === c)?.group;
-    expect([group('transportServices'), group('general'), group('exempt')]).toEqual(['07.3', '00', '00']);
+    const groupsOf = (c: VatCategory) => PRICE_INDEX_MAPPING.find((r) => r.category === c)?.groups;
+    expect(Object.keys(groupsOf('transportServices')!)).toEqual(['07.3.1', '07.3.2', '07.3.4']);
+    expect(groupsOf('general')).toEqual({ '00': 1 });
+    expect(groupsOf('exempt')).toEqual({ '00': 1 });
+  });
+
+  /**
+   * Kollektivtransport: FBU-kronene er 07.3 minus fly (COICOP_MAPPING), så indeksen skal være
+   * 07.3 uten 07.3.3 — hver annen undergruppe av 07.3 som 14700 har, vektet med KpiVektMnd for
+   * det siste året i arkivet, samme vekter for begge år.
+   */
+  it('vekter kollektivtransport med hver ikke-fly-undergruppe av 07.3 og 2026-vektene fra arkivet', () => {
+    const meta = JSON.parse(readFileSync(join(ROOT, 'sources', 'raw', 'ssb-kpi-14700.meta.json'), 'utf8'));
+    const codes: string[] = meta.variables.find((v: { code: string }) => v.code === 'VareTjenesteGrp').values;
+    const nonAir = codes.filter((c) => /^07\.3\.\d$/.test(c) && c !== '07.3.3');
+    expect(nonAir).toEqual(['07.3.1', '07.3.2', '07.3.4']);
+    expect(Object.keys(TRANSPORT_SERVICES_WEIGHTS_2026)).toEqual(nonAir);
+    const transport = PRICE_INDEX_MAPPING.find((r) => r.category === 'transportServices')!;
+    expect(transport.groups).toBe(TRANSPORT_SERVICES_WEIGHTS_2026);
+    // 2026 er det siste året i arkivet, og vektene er de samme i hver 2026-måned.
+    expect(months.at(-1)!.slice(0, 4)).toBe('2026');
+    for (const [group, w] of Object.entries(TRANSPORT_SERVICES_WEIGHTS_2026)) {
+      for (const m of months2026) expect(weight(group, m), `${group} ${m}`).toBe(w);
+    }
+    expect(TRANSPORT_SERVICES_WEIGHTS_2026).toEqual({ '07.3.1': 3.9, '07.3.2': 11.4, '07.3.4': 4.5 });
+    // Veiing per måned og så snitt = veiing av snittene, fordi vektene er faste.
+    const w = TRANSPORT_SERVICES_WEIGHTS_2026;
+    const viaMeans = (ms: readonly string[]) =>
+      Object.entries(w).reduce((a, [g, x]) => a + x * mean(g, ms), 0) / Object.values(w).reduce((a, x) => a + x, 0);
+    expect(viaMeans(months2026) / viaMeans(months2022)).toBeCloseTo(factorFromArchive(transport), 12);
   });
 
   it('har summene i KPI_MONTHLY_SUMS fra den arkiverte filen', () => {
@@ -570,18 +619,21 @@ describe('prisløft 2022 -> 2026 fra SSB-tabell 14700 (D4)', () => {
    *   strøm        04.5.1  833,2 / 8 = 104,1500  1352,8 / 12 = 112,7333  -> 0,9239
    *   drivstoff    07.2.2  805,6 / 8 = 100,7000  1273,8 / 12 = 106,1500  -> 0,9487
    *   fly          07.3.3  798,4 / 8 =  99,8000   795,3 / 12 = 66,2750   -> 1,5058
-   *   kollektiv    07.3    814,1 / 8 = 101,7625   997,4 / 12 = 83,1167   -> 1,2243
+   *   kollektiv    07.3.1 x 3,9 + 07.3.2 x 11,4 + 07.3.4 x 4,5, delt på 19,8:
+   *     2026: (3,9 x 825,9 + 11,4 x 809,2 + 4,5 x 855,5) / 8 / 19,8 = 16 295,64 / 158,4 = 102,8765
+   *     2022: (3,9 x 1058,5 + 11,4 x 1045,5 + 4,5 x 1399,2) / 12 / 19,8 = 22 343,25 / 237,6 = 94,0372
+   *                                                                               -> 1,0940
    *   øvrig, fritt 00      822,1 / 8 = 102,7625  1069,9 / 12 = 89,1583   -> 1,1526
    */
   it('gir hver faktor = snitt 2026 / snitt 2022 regnet fra rafilen', () => {
     for (const rule of PRICE_INDEX_MAPPING) {
-      expect(PRICE_UPLIFT_2022_2026[rule.category], rule.category).toBeCloseTo(factorFromArchive(rule.group), 12);
+      expect(PRICE_UPLIFT_2022_2026[rule.category], rule.category).toBeCloseTo(factorFromArchive(rule), 12);
     }
     const pinned = Object.fromEntries(VAT_CATEGORIES.map((c) => [c, Number(PRICE_UPLIFT_2022_2026[c]!.toFixed(4))]));
     expect(pinned).toEqual({
       food: 1.25,
       general: 1.1526,
-      transportServices: 1.2243,
+      transportServices: 1.094,
       electricity: 0.9239,
       fuel: 0.9487,
       alcoholTobacco: 1.1701,
@@ -606,7 +658,7 @@ describe('prisløft 2022 -> 2026 fra SSB-tabell 14700 (D4)', () => {
           const cat = rule.category;
           expect(c22.spend[cat], `${seed.id} ${cat} 2022`).toBe(Math.round((seed.spend[cat] * eq) / 100) * 100);
           expect(c26.spend[cat], `${seed.id} ${cat} 2026`).toBe(
-            Math.round((seed.spend[cat] * eq * factorFromArchive(rule.group)) / 100) * 100,
+            Math.round((seed.spend[cat] * eq * factorFromArchive(rule)) / 100) * 100,
           );
         }
       }
@@ -700,10 +752,27 @@ describe('prisløft 2022 -> 2026 fra SSB-tabell 14700 (D4)', () => {
     const md = readFileSync(join(ROOT, 'METHODOLOGY.md'), 'utf8').replace(/\s+/g, ' ');
     const view = readFileSync(join(ROOT, 'src', 'views', 'MethodView.tsx'), 'utf8').replace(/\s+/g, ' ');
     // Boolske sjekker, sa en feil navngir frasen og ikke dumper hele dokumentet.
+    const dec = (x: number) => String(x).replace('.', ',');
+    const and = (xs: readonly string[]) => `${xs.slice(0, -1).join(', ')} og ${xs.at(-1)}`;
+    // Én gruppe: «(01) 1,250». Vektet: «(07.3.1 × 3,9 + 07.3.2 × 11,4 + 07.3.4 × 4,5, vekter i promille) 1,094».
+    const label = (rule: PriceIndexRule) => {
+      const entries = Object.entries(rule.groups);
+      return entries.length === 1
+        ? entries[0]![0]
+        : `${entries.map(([g, w]) => `${g} × ${dec(w)}`).join(' + ')}, vekter i promille`;
+    };
     const phrases: [string, string][] = PRICE_INDEX_MAPPING.map((rule) => [
       md,
-      `(${rule.group}) ${three(PRICE_UPLIFT_2022_2026[rule.category]!)}`,
+      `(${label(rule)}) ${three(PRICE_UPLIFT_2022_2026[rule.category]!)}`,
     ]);
+    const w = TRANSPORT_SERVICES_WEIGHTS_2026;
+    phrases.push(
+      [md, `KPI-vektene (KpiVektMnd) for 2026, det siste året i arkivet, ${and(Object.values(w).map(dec))} promille`],
+      [
+        view,
+        `Kollektivtransport løftes med ${three(PRICE_UPLIFT_2022_2026.transportServices!)}: en vektet indeks av tog, buss og båt (${and(Object.keys(w))}, med 2026-vektene ${and(Object.values(w).map(dec))} promille)`,
+      ],
+    );
     const food = (y: PriceYear) => krs(typicalFamily(y).consumption.spend.food);
     phrases.push(
       [md, 'januar–august 2026'],

@@ -127,35 +127,50 @@ export const FBU_TOTAL_2022 = 554_585;
  */
 export interface PriceIndexRule {
   readonly category: VatCategory;
-  /** `VareTjenesteGrp`-kode i tabell 14700. */
-  readonly group: string;
-  /** Hvorfor akkurat denne gruppen. */
+  /**
+   * `VareTjenesteGrp`-koder i tabell 14700 med vekten hver kode far. En enkelt gruppe har vekt 1.
+   * Flere grupper gir en vektet indeks: sum(vekt x indeks) / sum(vekt) per maned, med EN fast
+   * vektvektor for begge ar.
+   */
+  readonly groups: Readonly<Record<string, number>>;
+  /** Hvorfor akkurat disse gruppene. */
   readonly why: string;
 }
 
+/**
+ * Vektene for kollektivtransport uten fly: KpiVektMnd (promille av KPI-kurven) for 2026, det
+ * siste aret i den arkiverte 14700-filen, der vektene er like alle atte manedene. Samme vekter
+ * brukes for 2022-manedene, sa faktoren males pa en fast kurv og ikke pa to ulike.
+ */
+export const TRANSPORT_SERVICES_WEIGHTS_2026: Readonly<Record<string, number>> = {
+  '07.3.1': 3.9, // passasjertransport pa skinner
+  '07.3.2': 11.4, // passasjertransport pa vei
+  '07.3.4': 4.5, // passasjertransport med bat
+};
+
 export const PRICE_INDEX_MAPPING: readonly PriceIndexRule[] = [
-  { category: 'food', group: '01', why: 'Samme divisjon som FBU-kronene: 01 «Matvarer og alkoholfrie drikkevarer».' },
-  { category: 'alcoholTobacco', group: '02', why: 'Divisjon 02, alkohol og tobakk, som i COICOP_MAPPING.' },
+  { category: 'food', groups: { '01': 1 }, why: 'Samme divisjon som FBU-kronene: 01 «Matvarer og alkoholfrie drikkevarer».' },
+  { category: 'alcoholTobacco', groups: { '02': 1 }, why: 'Divisjon 02, alkohol og tobakk, som i COICOP_MAPPING.' },
   {
     category: 'electricity',
-    group: '04.5.1',
+    groups: { '04.5.1': 1 },
     why: '«Elektrisitet inkludert nettleie», samme gruppe som FBU-kronene. 2022 var et krisear for strompris, sa faktoren er under 1.',
   },
-  { category: 'fuel', group: '07.2.2', why: '«Drivstoff og smoremidler», samme gruppe som FBU-kronene.' },
-  { category: 'flights', group: '07.3.3', why: '«Passasjertransport med fly», samme gruppe som FBU-kronene.' },
+  { category: 'fuel', groups: { '07.2.2': 1 }, why: '«Drivstoff og smoremidler», samme gruppe som FBU-kronene.' },
+  { category: 'flights', groups: { '07.3.3': 1 }, why: '«Passasjertransport med fly», samme gruppe som FBU-kronene.' },
   {
     category: 'transportServices',
-    group: '07.3',
-    why: 'Minste gruppe som rommer skinner, vei og bat (07.3.1, 07.3.2, 07.3.4). En indeks kan ikke trekkes fra, sa flyreisene (07.3.3) er med i den; det trekker faktoren opp. Kjent skjevhet, ikke glemt.',
+    groups: TRANSPORT_SERVICES_WEIGHTS_2026,
+    why: 'FBU-kronene er 07.3 minus fly. 07.3 selv inneholder flyprisene, som har egen kategori og egen faktor, sa indeksen er de ovrige undergruppene av 07.3 (skinner, vei, bat) vektet med 2026-vektene.',
   },
   {
     category: 'general',
-    group: '00',
+    groups: { '00': 1 },
     why: 'Ingen enkelt gruppe dekker restkodene i COICOP_MAPPING (03, 05, 08, 09, 11, 13 og restene av 04 og 07); totalindeksen brukes.',
   },
   {
     category: 'exempt',
-    group: '00',
+    groups: { '00': 1 },
     why: 'Husleie, helse, utdanning og forsikring har ingen felles gruppe; totalindeksen brukes. Kategorien har ingen mva, sa faktoren flytter ingen avgiftskrone, bare det viste belopet.',
   },
 ];
@@ -183,14 +198,27 @@ export const KPI_MONTHLY_SUMS: Readonly<Record<string, { readonly sum2022: numbe
   '02': { sum2022: 1_053.4, sum2026: 821.7 },
   '04.5.1': { sum2022: 1_352.8, sum2026: 833.2 },
   '07.2.2': { sum2022: 1_273.8, sum2026: 805.6 },
-  '07.3': { sum2022: 997.4, sum2026: 814.1 },
+  '07.3.1': { sum2022: 1_058.5, sum2026: 825.9 },
+  '07.3.2': { sum2022: 1_045.5, sum2026: 809.2 },
   '07.3.3': { sum2022: 795.3, sum2026: 798.4 },
+  '07.3.4': { sum2022: 1_399.2, sum2026: 855.5 },
 };
 
-function kpiUplift(group: string): number {
-  const sums = KPI_MONTHLY_SUMS[group];
-  if (!sums) throw new Error(`KPI-gruppe mangler: ${group}`);
-  return sums.sum2026 / KPI_2026_MONTHS.length / (sums.sum2022 / 12);
+/**
+ * Snittet av den (vektede) manedsindeksen over et ar. Med faste vekter er snittet av de
+ * vektede manedsindeksene lik det vektede snittet av gruppesnittene, sa manedssummene holder.
+ */
+function kpiMean(groups: Readonly<Record<string, number>>, year: 2022 | 2026): number {
+  let weighted = 0;
+  let weight = 0;
+  for (const [group, w] of Object.entries(groups)) {
+    const sums = KPI_MONTHLY_SUMS[group];
+    if (!sums) throw new Error(`KPI-gruppe mangler: ${group}`);
+    weighted += w * (year === 2022 ? sums.sum2022 / 12 : sums.sum2026 / KPI_2026_MONTHS.length);
+    weight += w;
+  }
+  if (!(weight > 0)) throw new Error('KPI-regel uten vekt');
+  return weighted / weight;
 }
 
 /**
@@ -199,7 +227,7 @@ function kpiUplift(group: string): number {
  * den blir ikke stille 1.
  */
 export const PRICE_UPLIFT_2022_2026: Readonly<Partial<Record<VatCategory, number>>> = Object.fromEntries(
-  PRICE_INDEX_MAPPING.map((rule) => [rule.category, kpiUplift(rule.group)]),
+  PRICE_INDEX_MAPPING.map((rule) => [rule.category, kpiMean(rule.groups, 2026) / kpiMean(rule.groups, 2022)]),
 );
 
 /**
