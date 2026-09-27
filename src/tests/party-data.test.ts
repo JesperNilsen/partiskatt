@@ -239,11 +239,39 @@ describe('provenance page references', () => {
     expect(PROV_CASES).toHaveLength(expected);
   });
 
+  // One test per party's alt-2026 text file (named with its source id), so a missing file
+  // (docs/rights.md) skips only that party's check, visibly, instead of failing every party's at
+  // once — and REQUIRE_PARTY_TEXTS=1 (the private repo's CI) turns a missing file back into a
+  // failure that names it.
+  for (const partyId of PARTIES_WITH_TEXT) {
+    const sourceId = `${partyId}-alt-2026`;
+    const cases = PROV_CASES.filter((c) => c.party === partyId);
+    it.skipIf(partyTextMissing(sourceId) && !REQUIRE_PARTY_TEXTS)(
+      `${partyId}: every delta and unquantified proposal parses to at least one page in its source text (${sourceId})`,
+      () => {
+        const parsed = cases.map((c) => pagesOf(`${c.party} ${c.label}`, c.sourceId, c.pageOrTable));
+        expect(parsed.filter((pages) => pages.length > 0)).toHaveLength(cases.length);
+      },
+    );
+  }
+
   it('Ap reviewed notes cite the manifest, not a page (no alternative budget)', () => {
     for (const [category, note] of Object.entries(partyOf('ap').reviewed)) {
       expect(note!.pageOrTable, category).toBe('ap-alt-2026 (manifest)');
     }
   });
+
+  for (const partyId of PARTIES_WITH_TEXT) {
+    const sourceId = `${partyId}-alt-2026`;
+    it.skipIf(partyTextMissing(sourceId) && !REQUIRE_PARTY_TEXTS)(
+      `${partyId}: every reviewed note cites parsable pages (${sourceId})`,
+      () => {
+        for (const [category, note] of Object.entries(partyOf(partyId).reviewed)) {
+          pagesOf(`${partyId} reviewed ${category}`, sourceId, note!.pageOrTable);
+        }
+      },
+    );
+  }
 });
 
 describe('anchor matching', () => {
@@ -269,41 +297,14 @@ describe('anchor matching', () => {
 });
 
 describe('anchor test — party provenance', () => {
-  it('every allowlist entry names an existing case', () => {
-    for (const a of ANCHOR_ALLOWLIST) {
-      expect(PROV_CASES.some((c) => c.party === a.party && c.label === a.label), `${a.party} ${a.label}`).toBe(true);
-      expect(a.why.length).toBeGreaterThan(20);
-    }
-  });
-});
-
-/**
- * The checks in this describe are the only ones in the file that read a party's archived text
- * file (`sources/text/*-alt-2026.txt`). One test per party, naming its source id, so:
- *  - a party file missing from the checkout (e.g. after the rights call in docs/rights.md holds
- *    some of them back from a public repo) skips visibly instead of throwing, and `npm run check`
- *    still passes overall — exactly one skip per missing file;
- *  - `REQUIRE_PARTY_TEXTS=1` (set by the private repo's CI, `.github/workflows/ci.yml`) turns a
- *    missing file back into a hard failure, so an accidental deletion there is still caught.
- * Official sources (Lovdata, Prop. 1 LS, SSB, …) are never gated this way.
- */
-describe('party text checks — skip visibly when the party file is absent', () => {
-  for (const partyId of PARTIES_WITH_TEXT) {
-    const sourceId = `${partyId}-alt-2026`;
-    const cases = PROV_CASES.filter((c) => c.party === partyId);
-    const skip = partyTextMissing(sourceId) && !REQUIRE_PARTY_TEXTS;
-    (skip ? it.skip : it)(`${partyId}: page-anchor and reviewed-note checks against ${sourceId}`, () => {
-      // 1. Every delta and unquantified proposal parses to at least one page in the source text.
-      const parsed = cases.map((c) => pagesOf(`${c.party} ${c.label}`, c.sourceId, c.pageOrTable));
-      expect(parsed.filter((pages) => pages.length > 0)).toHaveLength(cases.length);
-
-      // 2. Every reviewed-category note parses to at least one page in the source text.
-      for (const [category, note] of Object.entries(partyOf(partyId).reviewed)) {
-        pagesOf(`${partyId} reviewed ${category}`, sourceId, note!.pageOrTable);
-      }
-
-      // 3. Every case's anchor is found on one of its cited pages (or is a checked allowlist entry).
-      for (const c of cases) {
+  // One test per case (not it.each, so each can carry its own it.skipIf): a missing party text
+  // file (docs/rights.md) skips visibly, naming the source id, instead of failing every case
+  // across all parties. REQUIRE_PARTY_TEXTS=1 (the private repo's CI) turns a missing file back
+  // into a failure that names it.
+  for (const c of PROV_CASES) {
+    it.skipIf(partyTextMissing(c.sourceId) && !REQUIRE_PARTY_TEXTS)(
+      `${c.party} ${c.kind} ${c.label}: anchor on a cited page (${c.sourceId})`,
+      () => {
         const pages = pagesOf(`${c.party} ${c.label}`, c.sourceId, c.pageOrTable);
         const text = textPages(c.sourceId);
         const hits = pages.filter((p) => anchorInText(c.anchor, text[p - 1]!));
@@ -315,12 +316,19 @@ describe('party text checks — skip visibly when the party file is absent', () 
             // Empty = nothing but the printed page number in the text layer.
             expect(pages.filter((p) => !/^\d*$/.test(text[p - 1]!.trim()))).toEqual([]);
           }
-          continue;
+          return;
         }
         expect(hits.length, `${c.party} ${c.label}: ${JSON.stringify(c.anchor)} not on ${c.pageOrTable}`).toBeGreaterThan(0);
-      }
-    });
+      },
+    );
   }
+
+  it('every allowlist entry names an existing case', () => {
+    for (const a of ANCHOR_ALLOWLIST) {
+      expect(PROV_CASES.some((c) => c.party === a.party && c.label === a.label), `${a.party} ${a.label}`).toBe(true);
+      expect(a.why.length).toBeGreaterThan(20);
+    }
+  });
 });
 
 describe('KNOWN_KNOTS', () => {
