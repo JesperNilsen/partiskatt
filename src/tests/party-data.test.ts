@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
@@ -41,6 +41,26 @@ function pagesOf(label: string, sourceId: string, pageOrTable: string): number[]
   if (outOfRange.length) throw new Error(`${label}: page(s) ${outOfRange.join(', ')} beyond ${sourceId} (${count} text pages)`);
   return pages;
 }
+
+/**
+ * The private-repo CI gate (`.github/workflows/ci.yml`, `check` job): when set, a missing party
+ * text file must fail the suite instead of skipping it. Netlify's build never sets this, so a
+ * public repo that ships without the 8 party PDFs/text (see docs/rights.md) still builds green.
+ */
+const REQUIRE_PARTY_TEXTS = process.env.REQUIRE_PARTY_TEXTS === '1';
+
+/**
+ * True when a party's alternative-budget text file (`*-alt-2026`, one of the 8 archived under
+ * `sources/text/`) is absent on disk. Official sources (Lovdata, Prop. 1 LS, SSB, …) are never
+ * checked this way — they stay required unconditionally, in every environment.
+ */
+function partyTextMissing(sourceId: string): boolean {
+  const entry = sourceOf(sourceId);
+  return !entry.textFile || !existsSync(join(ROOT, entry.textFile));
+}
+
+/** Parties with an alternative-budget text source — all nine but Ap, which never published one. */
+const PARTIES_WITH_TEXT: readonly PartyId[] = PARTY_IDS.filter((id) => id !== 'ap');
 
 interface ProvCase {
   kind: 'delta' | 'unquantified';
@@ -212,24 +232,16 @@ describe('provenance page references', () => {
     expect(parsePageRefs('Tabell 3.2')).toBeNull();
   });
 
-  it('every delta and unquantified proposal parses to at least one page in its source text', () => {
+  it('has exactly one provenance case per delta + unquantified proposal', () => {
     const expected =
       DATA_BUNDLE.parties.reduce((n, p) => n + p.deltas.length + p.unquantified.length, 0);
     // Invariant: one case per delta + unquantified proposal, and each yields ≥ 1 parsed page.
     expect(PROV_CASES).toHaveLength(expected);
-    const parsed = PROV_CASES.map((c) => pagesOf(`${c.party} ${c.label}`, c.sourceId, c.pageOrTable));
-    expect(parsed.filter((pages) => pages.length > 0)).toHaveLength(expected);
   });
 
-  it('every reviewed note cites parsable pages, except Ap (no alternative budget)', () => {
-    for (const party of DATA_BUNDLE.parties) {
-      for (const [category, note] of Object.entries(party.reviewed)) {
-        if (party.id === 'ap') {
-          expect(note!.pageOrTable).toBe('ap-alt-2026 (manifest)');
-          continue;
-        }
-        pagesOf(`${party.id} reviewed ${category}`, `${party.id}-alt-2026`, note!.pageOrTable);
-      }
+  it('Ap reviewed notes cite the manifest, not a page (no alternative budget)', () => {
+    for (const [category, note] of Object.entries(partyOf('ap').reviewed)) {
+      expect(note!.pageOrTable, category).toBe('ap-alt-2026 (manifest)');
     }
   });
 });
@@ -257,29 +269,58 @@ describe('anchor matching', () => {
 });
 
 describe('anchor test — party provenance', () => {
-  it.each(PROV_CASES)('$party $kind $label: anchor on a cited page', (c) => {
-    const pages = pagesOf(`${c.party} ${c.label}`, c.sourceId, c.pageOrTable);
-    const text = textPages(c.sourceId);
-    const hits = pages.filter((p) => anchorInText(c.anchor, text[p - 1]!));
-    const allow = allowlisted(c);
-    if (allow) {
-      // The entry must still be needed, and its stated reason must still hold.
-      expect(hits, `stale allowlist entry: ${c.party} ${c.label}`).toEqual([]);
-      if (allow.textEmpty) {
-        // Empty = nothing but the printed page number in the text layer.
-        expect(pages.filter((p) => !/^\d*$/.test(text[p - 1]!.trim()))).toEqual([]);
-      }
-      return;
-    }
-    expect(hits.length, `${c.party} ${c.label}: ${JSON.stringify(c.anchor)} not on ${c.pageOrTable}`).toBeGreaterThan(0);
-  });
-
   it('every allowlist entry names an existing case', () => {
     for (const a of ANCHOR_ALLOWLIST) {
       expect(PROV_CASES.some((c) => c.party === a.party && c.label === a.label), `${a.party} ${a.label}`).toBe(true);
       expect(a.why.length).toBeGreaterThan(20);
     }
   });
+});
+
+/**
+ * The checks in this describe are the only ones in the file that read a party's archived text
+ * file (`sources/text/*-alt-2026.txt`). One test per party, naming its source id, so:
+ *  - a party file missing from the checkout (e.g. after the rights call in docs/rights.md holds
+ *    some of them back from a public repo) skips visibly instead of throwing, and `npm run check`
+ *    still passes overall — exactly one skip per missing file;
+ *  - `REQUIRE_PARTY_TEXTS=1` (set by the private repo's CI, `.github/workflows/ci.yml`) turns a
+ *    missing file back into a hard failure, so an accidental deletion there is still caught.
+ * Official sources (Lovdata, Prop. 1 LS, SSB, …) are never gated this way.
+ */
+describe('party text checks — skip visibly when the party file is absent', () => {
+  for (const partyId of PARTIES_WITH_TEXT) {
+    const sourceId = `${partyId}-alt-2026`;
+    const cases = PROV_CASES.filter((c) => c.party === partyId);
+    const skip = partyTextMissing(sourceId) && !REQUIRE_PARTY_TEXTS;
+    (skip ? it.skip : it)(`${partyId}: page-anchor and reviewed-note checks against ${sourceId}`, () => {
+      // 1. Every delta and unquantified proposal parses to at least one page in the source text.
+      const parsed = cases.map((c) => pagesOf(`${c.party} ${c.label}`, c.sourceId, c.pageOrTable));
+      expect(parsed.filter((pages) => pages.length > 0)).toHaveLength(cases.length);
+
+      // 2. Every reviewed-category note parses to at least one page in the source text.
+      for (const [category, note] of Object.entries(partyOf(partyId).reviewed)) {
+        pagesOf(`${partyId} reviewed ${category}`, sourceId, note!.pageOrTable);
+      }
+
+      // 3. Every case's anchor is found on one of its cited pages (or is a checked allowlist entry).
+      for (const c of cases) {
+        const pages = pagesOf(`${c.party} ${c.label}`, c.sourceId, c.pageOrTable);
+        const text = textPages(c.sourceId);
+        const hits = pages.filter((p) => anchorInText(c.anchor, text[p - 1]!));
+        const allow = allowlisted(c);
+        if (allow) {
+          // The entry must still be needed, and its stated reason must still hold.
+          expect(hits, `stale allowlist entry: ${c.party} ${c.label}`).toEqual([]);
+          if (allow.textEmpty) {
+            // Empty = nothing but the printed page number in the text layer.
+            expect(pages.filter((p) => !/^\d*$/.test(text[p - 1]!.trim()))).toEqual([]);
+          }
+          continue;
+        }
+        expect(hits.length, `${c.party} ${c.label}: ${JSON.stringify(c.anchor)} not on ${c.pageOrTable}`).toBeGreaterThan(0);
+      }
+    });
+  }
 });
 
 describe('KNOWN_KNOTS', () => {

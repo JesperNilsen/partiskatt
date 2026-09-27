@@ -95,6 +95,23 @@ sources), `sources/worksheets/*.claude.md` / `*.codex.md` / `*.reconciled.md`,
   that quoted span specifically — worth a skim before going public, not
   redone here).
 
+## 4. What withholding the party texts does to the build
+
+Whichever way the open decision below is resolved, the test suite does not force the eight
+party-budget files to stay in the repo. `src/tests/party-data.test.ts` reads each party's archived
+text file (`sources/text/*-alt-2026.txt`) to verify the page-anchor citations in
+`src/data/parties/*.ts`. If a rights call removes one or more of those eight files (option 2 or 3
+below), the affected checks skip **visibly** — a named `it.skip` per party naming the source id
+(e.g. `h: every reviewed note cites parsable pages (h-alt-2026)`) — instead of throwing, and
+`npm run check` still passes.
+
+This is env-gated, not silent: the private repo's CI (`.github/workflows/ci.yml`, `check` job) sets
+`REQUIRE_PARTY_TEXTS=1`, which turns a missing file back into a hard failure there, so an
+accidental deletion in the private repo is still caught. Netlify's build (`netlify.toml`) never
+sets this variable, matching whatever the public repo actually ships. The 31 official sources
+(Lovdata, Prop. 1 LS, SSB, Skatteetaten, NAV, Lånekassen) are unaffected either way — those checks
+are not gated by this variable and stay required unconditionally, in every environment.
+
 ## Open decision for Jesper
 
 `sources/` is left untouched by this lane — nothing has been removed, and

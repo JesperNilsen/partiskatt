@@ -9,6 +9,11 @@ concurrency:
 jobs:
   check:
     runs-on: ubuntu-latest
+    env:
+      # This is the private repo's CI: a missing party alt-2026 text file (docs/rights.md) must
+      # fail loudly here, not skip. Netlify's build (netlify.toml) never sets this, so a public
+      # repo that ships without those 8 files still builds green with visible skips.
+      REQUIRE_PARTY_TEXTS: '1'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

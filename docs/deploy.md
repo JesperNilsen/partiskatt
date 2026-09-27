@@ -39,7 +39,13 @@ public.
       alternative-budget PDFs/HTML and their text extracts under
       `sources/raw/` and `sources/text/` ship in the public repo, are held
       back, or are scrubbed from history. Nothing in `sources/` has been
-      removed by this lane; that call is still open.
+      removed by this lane; that call is still open. Whichever way it goes,
+      the build itself does not block on it: `npm run check` (what Netlify
+      runs) passes with those eight files withheld — the page-anchor checks
+      that read them skip visibly instead of failing (see `docs/rights.md`
+      §4). The private repo's GitHub Actions `check` job sets
+      `REQUIRE_PARTY_TEXTS=1` so a file missing *there* still fails loudly;
+      Netlify does not set that variable.
 - [ ] **Name picked.** The project's public name (repo name, site title,
       any custom domain) — not decided by this lane.
 - [ ] **Repo visibility switched deliberately**, not as a side effect of

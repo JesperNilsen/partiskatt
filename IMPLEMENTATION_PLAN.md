@@ -30,7 +30,7 @@ Autoritativ produktkontekst: `PROJECT.md`. Denne filen er fremdriftsloggen og ov
 - Usikre forslag (`uncertain: true`) og arbeidsgiveravgift er av som standard.
 
 ## Operatørporter
-1. Venstre- og Rødt-dokumenter dersom nettleserhenting også feiler: legg filen i `sources/raw/` og kjør `scripts/fetch-sources.sh --local`.
+1. Venstre- og Rødt-dokumenter dersom nettleserhenting også feiler: `scripts/fetch-sources.sh` finnes ikke (er aldri committet) — arkiver for hånd. Last ned filen til `sources/raw/`, kjør `pdftotext` (eller tilsvarende) til en tekstfil i `sources/text/`, og legg til en rad i `sources/manifest.json` med sha256 og bytes for filen (sjekket av `src/content/manifest-integrity.test.ts`).
 2. Koble GitHub-repoet til et nytt Netlify-site (byggeinnstillinger leses fra `netlify.toml`).
 3. Manuell kontroll av referansesystemets totaler for de fem testprofilene mot Skatteetatens kalkulator før snapshot-verdiene fryses som `confirmed`.
 4. Offentlig repo og endelig merkenavn: begge er ett-token-endringer (`src/config/brand.ts`). **2026-09-27: repoet skal være offentlig (ikke vippet ennå); merkenavnet er fortsatt åpent.**
