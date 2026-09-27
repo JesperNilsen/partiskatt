@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { ExciseGood } from '../types/index.ts';
 import { EXCISE_GOODS } from '../types/index.ts';
-import { Field } from './Field.tsx';
+import { Field, type DescribedByProps } from './Field.tsx';
 
 /** Norwegian label and unit suffix per excise good; the unit is what the engine multiplies the rate by. */
 export const EXCISE_UNIT_LABELS: Record<ExciseGood, { label: string; suffix: string }> = {
@@ -39,7 +39,7 @@ export function formatUnits(n: number): string {
   return n === 0 ? '' : oneDecimal.format(roundUnits(n));
 }
 
-interface UnitInputProps {
+interface UnitInputProps extends DescribedByProps {
   id: string;
   value: number;
   suffix: string;
@@ -47,8 +47,10 @@ interface UnitInputProps {
 }
 
 /** One-decimal quantity input. It dispatches on typing only, so focusing a field never rewrites the profile. */
-function UnitInput({ id, value, suffix, onChange }: UnitInputProps) {
+function UnitInput({ id, value, suffix, onChange, describedBy }: UnitInputProps) {
   const [text, setText] = useState<string | null>(null);
+  const suffixId = `${id}-suffix`;
+  const ariaDescribedBy = describedBy ? `${describedBy} ${suffixId}` : suffixId;
   return (
     <div className="money-input">
       <input
@@ -65,9 +67,9 @@ function UnitInput({ id, value, suffix, onChange }: UnitInputProps) {
           setText(e.target.value);
           onChange(parseUnits(e.target.value));
         }}
-        aria-describedby={`${id}-suffix`}
+        aria-describedby={ariaDescribedBy}
       />
-      <span className="money-input__suffix" id={`${id}-suffix`}>{suffix}</span>
+      <span className="money-input__suffix" id={suffixId}>{suffix}</span>
     </div>
   );
 }

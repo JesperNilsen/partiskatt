@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { kr } from '../engine/money.ts';
 import type { Kroner } from '../types/index.ts';
 import { formatKr } from '../utils/format.ts';
+import type { DescribedByProps } from './Field.tsx';
 
-interface MoneyInputProps {
+interface MoneyInputProps extends DescribedByProps {
   id: string;
   value: Kroner;
   onChange: (value: Kroner) => void;
@@ -19,9 +20,11 @@ function parseKr(raw: string): Kroner {
   return kr(Math.min(n, 1_000_000_000));
 }
 
-export function MoneyInput({ id, value, onChange, placeholder = '0', min = 0 }: MoneyInputProps) {
+export function MoneyInput({ id, value, onChange, placeholder = '0', min = 0, describedBy }: MoneyInputProps) {
   const [text, setText] = useState(formatKr(value));
   const [focused, setFocused] = useState(false);
+  const suffixId = `${id}-suffix`;
+  const ariaDescribedBy = describedBy ? `${describedBy} ${suffixId}` : suffixId;
 
   useEffect(() => {
     if (!focused) setText(value === 0 ? '' : formatKr(value));
@@ -53,9 +56,9 @@ export function MoneyInput({ id, value, onChange, placeholder = '0', min = 0 }: 
           setText(e.target.value);
           onChange(next < min ? kr(min ?? 0) : next);
         }}
-        aria-describedby={`${id}-suffix`}
+        aria-describedby={ariaDescribedBy}
       />
-      <span className="money-input__suffix" id={`${id}-suffix`}>kr/år</span>
+      <span className="money-input__suffix" id={suffixId}>kr/år</span>
     </div>
   );
 }

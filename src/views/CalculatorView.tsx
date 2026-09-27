@@ -68,6 +68,7 @@ export function CalculatorView() {
             <button
               type="button"
               className={profile.mode === 'person' ? 'segmented__btn segmented__btn--active' : 'segmented__btn'}
+              aria-pressed={profile.mode === 'person'}
               onClick={() => dispatchProfile({ type: 'mode', mode: 'person' })}
             >
               Én person
@@ -75,6 +76,7 @@ export function CalculatorView() {
             <button
               type="button"
               className={profile.mode === 'household' ? 'segmented__btn segmented__btn--active' : 'segmented__btn'}
+              aria-pressed={profile.mode === 'household'}
               onClick={() => dispatchProfile({ type: 'mode', mode: 'household' })}
             >
               Husholdning

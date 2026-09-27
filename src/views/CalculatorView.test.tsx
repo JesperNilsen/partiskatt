@@ -70,6 +70,17 @@ describe('CalculatorView: wealth fields the engine already models', () => {
     expect((screen.getByLabelText(/Ta med usikre forslag/) as HTMLInputElement).disabled).toBe(false);
   });
 
+  it('the segmented "person / husholdning" control reports aria-pressed and toggles it on click', () => {
+    renderCalculator();
+    const person = screen.getByRole('button', { name: 'Én person' });
+    const household = screen.getByRole('button', { name: 'Husholdning' });
+    expect(person.getAttribute('aria-pressed')).toBe('true');
+    expect(household.getAttribute('aria-pressed')).toBe('false');
+    fireEvent.click(household);
+    expect(person.getAttribute('aria-pressed')).toBe('false');
+    expect(household.getAttribute('aria-pressed')).toBe('true');
+  });
+
   it('the «what can be edited» claim in MethodView and METHODOLOGY.md matches the rendered fields', () => {
     renderCalculator();
     const words: Record<number, string> = { 8: 'åtte', 10: 'ti' };
