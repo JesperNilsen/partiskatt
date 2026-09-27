@@ -16,11 +16,11 @@ export interface ForlikChange {
   readonly note?: string;
 }
 
-const I2S = 'innst-2-s-2025-2026';
+const I2S = 'innst2s-2025-2026';
 const I2S_URL = 'https://www.stortinget.no/globalassets/pdf/innstillinger/stortinget/2025-2026/inns-202526-002s.pdf';
-const I3S = 'innst-3-s-2025-2026';
+const I3S = 'innst3s-2025-2026';
 const I3S_URL = 'https://www.stortinget.no/globalassets/pdf/innstillinger/stortinget/2025-2026/inns-202526-003s.pdf';
-const I4L = 'innst-4-l-2025-2026';
+const I4L = 'innst4l-2025-2026';
 const I4L_URL = 'https://www.stortinget.no/globalassets/pdf/innstillinger/stortinget/2025-2026/inns-202526-004l.pdf';
 
 /**

@@ -4,7 +4,7 @@ import { ADOPTED_2026 } from './adopted.ts';
 
 const P = 'prop1ls-2025-2026';
 const P_URL = 'https://www.regjeringen.no/no/dokumenter/prop.-1-ls-20252026/id3124192';
-const I2S = 'innst-2-s-2025-2026';
+const I2S = 'innst2s-2025-2026';
 const I2S_URL = 'https://www.stortinget.no/globalassets/pdf/innstillinger/stortinget/2025-2026/inns-202526-002s.pdf';
 
 const STATUS: DataStatus = 'estimated';
