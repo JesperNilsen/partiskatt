@@ -100,6 +100,23 @@ export function MethodView() {
       </section>
 
       <section>
+        <h2>Skattefradrag for pensjonsinntekt</h2>
+        <p>
+          Alderspensjon fra folketrygden og AFP gir skattefradrag for pensjonsinntekt (skatteloven § 16-1). Fradraget
+          trekkes fra skatten og vises som en egen linje. Vedtatt for 2026 er det høyst 39&nbsp;100&nbsp;kr per person,
+          nedtrappet med 19,1&nbsp;% av pensjonen over 294&nbsp;200&nbsp;kr og med 6&nbsp;% av pensjonen over
+          437&nbsp;100&nbsp;kr. Fradraget kan ikke bli større enn skatten på alminnelig inntekt, trinnskatten og
+          trygdeavgiften til sammen, og et eventuelt jobbfradrag trekkes fra først.
+        </p>
+        <p>
+          Vi regner med at pensjonen er tatt ut hele året med full uttaksgrad. Uføretrygd gir ikke fradraget og er ikke
+          modellert. Med bare pensjon er beregningen eksakt innenfor disse antagelsene. Med både lønn og pensjon er den en
+          tilnærming: ved gradert uttak blir fradraget mindre i virkeligheten, og kalkulatoren, som ikke kjenner
+          uttaksgraden, overvurderer det. Ingen partier har tallfestet en endring i fradraget.
+        </p>
+      </section>
+
+      <section>
         <h2>Forbruksprofil</h2>
         <p>
           Standardprofilene er utledet av SSBs forbruksundersøkelse 2022 (tabell 14100, arkivert). Profilen angir årlig forbruk inkl. mva per

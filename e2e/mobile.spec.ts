@@ -16,7 +16,7 @@ test.describe('375px — static routes', () => {
 });
 
 test.describe('375px — /resultat', () => {
-  test('redirects to / when the profile is empty, and lands on the calculator', async ({ page }) => {
+  test('redirects to / until the form has been submitted, and lands on the calculator', async ({ page }) => {
     await page.goto('/resultat');
     await page.waitForURL((url) => url.pathname === '/');
     expect(new URL(page.url()).pathname).toBe('/');

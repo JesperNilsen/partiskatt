@@ -13,7 +13,7 @@ import { calculateAll, sanitizeProfile } from '../engine/index.ts';
 import type { PartyResult, Toggles, UserProfile } from '../types/index.ts';
 import { DEFAULT_TOGGLES } from '../types/index.ts';
 import { loadDataSource, type DataSource } from './data-source.ts';
-import { createProfile, isProfileEmpty, profileReducer, type ProfileAction } from './profile.ts';
+import { createProfile, profileReducer, type ProfileAction } from './profile.ts';
 
 interface AppContextValue {
   profile: UserProfile;
@@ -26,7 +26,14 @@ interface AppContextValue {
   dataLoading: boolean;
   dataError: string | null;
   results: PartyResult[] | null;
-  profileEmpty: boolean;
+  /**
+   * True once the calculator form has been submitted in this session. `/resultat` redirects to `/`
+   * until then. A fresh profile already carries a seeded consumption profile, so "has the user
+   * entered data" cannot be read off the profile itself; a zero-income profile is a valid input.
+   */
+  submitted: boolean;
+  /** Marks the form as submitted; the calculator's submit handler calls it. */
+  markSubmitted: () => void;
   recalculate: () => void;
 }
 
@@ -40,6 +47,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [dataLoading, setDataLoading] = useState(true);
   const [dataError, setDataError] = useState<string | null>(null);
   const [results, setResults] = useState<PartyResult[] | null>(null);
+  const [submitted, setSubmitted] = useState(false);
+  const markSubmitted = useCallback(() => setSubmitted(true), []);
 
   useEffect(() => {
     let alive = true;
@@ -63,16 +72,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  const profileEmpty = isProfileEmpty(profile);
-
   const recalculate = useCallback(() => {
-    if (!data || profileEmpty) {
+    if (!data) {
       setResults(null);
       return;
     }
     const clean = sanitizeProfile(profile);
     setResults(calculateAll(clean, toggles, data.bundle));
-  }, [data, profile, profileEmpty, toggles]);
+  }, [data, profile, toggles]);
 
   const value = useMemo<AppContextValue>(
     () => ({
@@ -86,7 +93,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       dataLoading,
       dataError,
       results,
-      profileEmpty,
+      submitted,
+      markSubmitted,
       recalculate,
     }),
     [
@@ -97,7 +105,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       dataLoading,
       dataError,
       results,
-      profileEmpty,
+      submitted,
+      markSubmitted,
       recalculate,
     ],
   );

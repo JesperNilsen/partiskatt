@@ -138,11 +138,10 @@ export function profileReducer(state: UserProfile, action: ProfileAction): UserP
   }
 }
 
-/** True until the user has entered anything the calculator can meaningfully work from. */
-export function isProfileEmpty(profile: UserProfile): boolean {
-  const income = profile.adults.some(
-    (a) => a.wageIncome > 0 || a.pensionIncome > 0 || a.capitalIncome > 0 || (a.isStudent && a.studyMonths > 0),
-  );
-  const wealth = Object.values(profile.wealth).some((v) => v > 0);
-  return !income && !wealth;
+/**
+ * True when no adult has wage, pension or capital income. The results are then only taxes on
+ * consumption (and wealth) plus cash benefits, and the results page says so.
+ */
+export function hasNoIncome(profile: UserProfile): boolean {
+  return profile.adults.every((a) => a.wageIncome <= 0 && a.pensionIncome <= 0 && a.capitalIncome <= 0);
 }

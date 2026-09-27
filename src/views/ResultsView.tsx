@@ -4,27 +4,28 @@ import { DataBanner } from '../components/DataBanner.tsx';
 import { HeadlineVerdict } from '../components/HeadlineVerdict.tsx';
 import { PartyCard } from '../components/PartyCard.tsx';
 import { useApp } from '../state/app.tsx';
+import { hasNoIncome } from '../state/profile.ts';
 import { toggleEffects, toggleSummary } from '../state/toggle-effects.ts';
 import type { PartyId } from '../types/index.ts';
 
 export function ResultsView() {
   const [, navigate] = useLocation();
-  const { data, dataLoading, dataError, results, profileEmpty, recalculate, toggles, profile } = useApp();
+  const { data, dataLoading, dataError, results, submitted, recalculate, toggles, profile } = useApp();
   const [expanded, setExpanded] = useState<PartyId | null>(null);
 
   useEffect(() => {
-    if (profileEmpty) {
+    if (!submitted) {
       navigate('/');
       return;
     }
     if (!dataLoading && data) recalculate();
-  }, [profileEmpty, dataLoading, data, recalculate, navigate, profile, toggles]);
+  }, [submitted, dataLoading, data, recalculate, navigate, profile, toggles]);
 
-  if (profileEmpty) {
+  if (!submitted) {
     return (
       <section className="empty-state">
-        <h1>Ingen inndata ennå</h1>
-        <p>Du må fylle inn situasjonen din før vi kan vise resultater.</p>
+        <h1>Ingen beregning ennå</h1>
+        <p>Fyll inn situasjonen din i kalkulatoren og trykk «Se resultat».</p>
         <Link href="/" className="btn btn--primary">Til kalkulatoren</Link>
       </section>
     );
@@ -60,6 +61,12 @@ export function ResultsView() {
   return (
     <>
       <DataBanner data={data} loading={false} error={dataError} />
+
+      {hasNoIncome(profile) ? (
+        <div className="banner banner--notice" role="status">
+          <p>Ingen inntekt lagt inn: tallene viser bare avgifter og ytelser.</p>
+        </div>
+      ) : null}
 
       <div className="results-toolbar">
         <Link href="/" className="btn btn--ghost">Endre inndata</Link>

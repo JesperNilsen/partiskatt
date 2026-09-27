@@ -37,6 +37,7 @@ Hovedspørsmålet brukeren skal få svar på er:
 - Kalkulatoren starter enkelt og har en valgfri avansert del.
 - Moms og særavgifter bruker en standardisert forbruksprofil som brukeren kan justere.
 - Målgruppene er lønnsmottakere, studenter med lønn og stipend, enslige med barn og par med barn.
+- Pensjonister med alderspensjon eller AFP støttes (eget felt per voksen, med skattefradrag for pensjonsinntekt). Uføretrygd er ikke modellert.
 - Uttrykket skal være tabloid og konfronterende på forsiden og resultatsiden, men nøkternt og etterprøvbart i metode og kilder.
 - MVP-en har ingen delingsfunksjon, konto eller backend.
 - Alle beregninger skjer lokalt i nettleseren.

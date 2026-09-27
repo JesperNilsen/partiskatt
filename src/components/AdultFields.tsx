@@ -56,7 +56,10 @@ export function AdultFields({ index, adult, dispatch, showAdvanced, labelSuffix 
         <MoneyInput id={`wage-${index}`} value={adult.wageIncome} onChange={(v) => patch({ wageIncome: v })} />
       </Field>
 
-      {/* L5 slot: `pension-${index}` («Alderspensjon og AFP», hint «Ikke uføretrygd») goes here. */}
+      {/* Only alderspensjon and AFP give skattefradrag for pensjonsinntekt; uføretrygd does not (sktl. § 16-1 første ledd). */}
+      <Field label={`Alderspensjon og AFP${labelSuffix}`} id={`pension-${index}`} hint="Ikke uføretrygd.">
+        <MoneyInput id={`pension-${index}`} value={adult.pensionIncome} onChange={(v) => patch({ pensionIncome: v })} />
+      </Field>
 
       <label className="checkbox">
         <input

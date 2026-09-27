@@ -7,7 +7,7 @@
  */
 export const STATIC_ROUTES = ['/', '/metode', '/kilder', '/rettelseslogg'] as const;
 
-/** /resultat is covered separately because it redirects on an empty profile. */
+/** /resultat is covered separately because it redirects to / until the form has been submitted. */
 export const RESULT_ROUTE = '/resultat';
 
 export const ALL_ROUTES = [...STATIC_ROUTES, RESULT_ROUTE] as const;

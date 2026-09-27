@@ -35,13 +35,16 @@ export function CalculatorView() {
     data,
     dataLoading,
     dataError,
-    profileEmpty,
+    markSubmitted,
     recalculate,
   } = useApp();
 
+  // Any profile can be submitted, also one with no income: the results then show only taxes on
+  // consumption and cash benefits, and ResultsView says so.
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (profileEmpty || dataLoading || !data) return;
+    if (dataLoading || !data) return;
+    markSubmitted();
     recalculate();
     navigate('/resultat');
   };
@@ -245,14 +248,8 @@ export function CalculatorView() {
           ) : null}
         </section>
 
-        {profileEmpty ? (
-          <p className="empty-hint" role="status">
-            Fyll inn minst én inntekt eller formue for å beregne.
-          </p>
-        ) : null}
-
         <div className="form-actions">
-          <button type="submit" className="btn btn--primary" disabled={profileEmpty || dataLoading || !data}>
+          <button type="submit" className="btn btn--primary" disabled={dataLoading || !data}>
             Se resultat
           </button>
           <button type="button" className="btn btn--ghost" onClick={() => dispatchProfile({ type: 'reset' })}>

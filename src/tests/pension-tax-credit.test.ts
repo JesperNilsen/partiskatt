@@ -1,6 +1,10 @@
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { ADOPTED_2026, DATA_BUNDLE, PROPOSED_2026 } from '../data/index.ts';
 import {
+  paramsOf,
   computeIncomeTax,
   computeScenario,
   pensionTaxCredit,
@@ -199,6 +203,23 @@ describe('pension tax credit — net after tax never falls when pension rises (s
       const [a, b, c] = [t - 1, t, t + 1].map((x) => netAfterTax(make(x), rs, x));
       expect(b!).toBeGreaterThanOrEqual(a!);
       expect(c!).toBeGreaterThanOrEqual(b!);
+    }
+  });
+});
+
+describe('pension credit in the method texts', () => {
+  it('MethodView and METHODOLOGY.md state the adopted amount, thresholds and rates read from the rule', () => {
+    const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
+    const p = paramsOf(adopted, 'income.pensionTaxCredit');
+    const krText = (v: number) => `${v.toLocaleString('nb-NO').replace(/\s/g, ' ')} kr`;
+    const pctText = (bp: number) => `${(bp / 100).toLocaleString('nb-NO')} %`;
+    const claims = [krText(p.max), krText(p.threshold1), krText(p.threshold2), pctText(p.rate1Bp), pctText(p.rate2Bp)];
+    expect(claims).toEqual(['39 100 kr', '294 200 kr', '437 100 kr', '19,1 %', '6 %']);
+    for (const file of ['src/views/MethodView.tsx', 'METHODOLOGY.md']) {
+      const text = readFileSync(join(root, file), 'utf8').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ');
+      for (const claim of claims) expect(text, `${file}: ${claim}`).toContain(claim);
+      expect(text, file).toMatch(/Skattefradrag for pensjonsinntekt/);
+      expect(text, file).toMatch(/uføretrygd/i);
     }
   });
 });

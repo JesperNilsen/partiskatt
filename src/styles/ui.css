@@ -43,7 +43,7 @@
   margin-bottom: var(--sp-5);
   font-size: var(--fs-sm);
 }
-.banner--beta { background: var(--paper-2); border: 1px solid var(--line); }
+.banner--beta, .banner--notice { background: var(--paper-2); border: 1px solid var(--line); }
 .banner--loading { background: var(--paper-2); border: 1px dashed var(--line); }
 .banner--error { background: var(--loss-bg); border: 1px solid #e8b4b0; }
 .banner__warn { margin-top: var(--sp-2); color: inherit; opacity: 0.9; }
@@ -151,7 +151,6 @@ input[type='number'], select {
 .btn--ghost { background: transparent; border-color: var(--line); color: var(--ink); }
 
 .form-actions { display: flex; gap: var(--sp-3); flex-wrap: wrap; margin-top: var(--sp-5); }
-.empty-hint { color: var(--ink-3); font-size: var(--fs-sm); }
 .provisional-note {
   font-size: var(--fs-xs);
   text-transform: uppercase;

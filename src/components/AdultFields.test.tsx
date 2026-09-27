@@ -73,7 +73,7 @@ describe('AdultFields: both adults get the same fields', () => {
 
     const first = fieldSet(0);
     const second = fieldSet(1);
-    expect(first.map((f) => f.id)).toEqual(['wage', 'student', 'studyMonths', 'capital', 'interest', 'union']);
+    expect(first.map((f) => f.id)).toEqual(['wage', 'pension', 'student', 'studyMonths', 'capital', 'interest', 'union']);
     expect(second.map((f) => f.id)).toEqual(first.map((f) => f.id));
     expect(second.map((f) => f.label)).toEqual(first.map((f) => f.label));
     expect(first.every((f) => f.idEndsInIndex && !f.suffixed)).toBe(true);
@@ -83,8 +83,8 @@ describe('AdultFields: both adults get the same fields', () => {
   it('advanced fields stay hidden until the panel opens; the e2e ids are unchanged', () => {
     renderCalculator();
     household();
-    expect(fieldSet(0).map((f) => f.id)).toEqual(['wage', 'student']);
-    expect(fieldSet(1).map((f) => f.id)).toEqual(['wage', 'student']);
+    expect(fieldSet(0).map((f) => f.id)).toEqual(['wage', 'pension', 'student']);
+    expect(fieldSet(1).map((f) => f.id)).toEqual(['wage', 'pension', 'student']);
     openAdvanced();
     for (const id of ['#wage-0', '#units-petrolLitre', '#wealth-secondary']) expect(el(id)).toBeTruthy();
     expect(document.querySelectorAll('#capital-0, #interest-0, #union-0').length).toBe(3);
@@ -160,6 +160,53 @@ describe('AdultFields: union fee', () => {
     const general1 = result.components.find((c) => c.formulaId === 'income.generalRate' && c.adultIndex === 1)!;
     expect(general1.inputsAlt.fagforeningsfradrag).not.toBe(general1.inputsRef.fagforeningsfradrag);
     expect(general1.keptDelta).not.toBe(0);
+  });
+});
+
+describe('AdultFields: pension', () => {
+  it('both adults get «Alderspensjon og AFP» right after the wage field, with the «Ikke uføretrygd.» hint', () => {
+    renderCalculator();
+    household();
+    for (const [index, suffix] of [
+      [0, ''],
+      [1, ' (voksen 2)'],
+    ] as const) {
+      const ids = fieldSet(index).map((f) => f.id);
+      expect(ids.indexOf('pension'), `adult ${index}`).toBe(ids.indexOf('wage') + 1);
+      expect(el(`label[for="pension-${index}"]`).textContent).toBe(`Alderspensjon og AFP${suffix}`);
+      expect(el(`#pension-${index}-hint`).textContent).toBe('Ikke uføretrygd.');
+      expect(el(`#pension-${index}`).getAttribute('aria-describedby')).toContain(`pension-${index}-hint`);
+    }
+  });
+
+  it('a pension typed for each adult lands on that adult only', () => {
+    const seen = renderCalculator();
+    household();
+    fireEvent.change(el('#pension-0'), { target: { value: '300 000' } });
+    expect(seen.profile!.adults[0]?.pensionIncome).toBe(300_000);
+    expect(seen.profile!.adults[1]?.pensionIncome).toBe(0);
+    fireEvent.change(el('#pension-1'), { target: { value: '180000' } });
+    expect(seen.profile!.adults[1]?.pensionIncome).toBe(180_000);
+    expect(seen.profile!.adults[0]?.pensionIncome).toBe(300_000);
+    expect(seen.profile!.adults.map((a) => a.wageIncome)).toEqual([0, 0]);
+  });
+
+  it('adult 2’s pension reaches the engine through the calculator’s own submit and gets the pension credit', async () => {
+    const seen = renderCalculator();
+    household();
+    fireEvent.change(el('#pension-1'), { target: { value: '300000' } });
+
+    const submit = screen.getByRole('button', { name: 'Se resultat' });
+    await waitFor(() => expect((submit as HTMLButtonElement).disabled).toBe(false));
+    fireEvent.click(submit);
+    await waitFor(() => expect(seen.results).not.toBeNull());
+
+    for (const r of seen.results!) {
+      const credit = (i: number) => r.components.find((c) => c.formulaId === 'income.pensionTaxCredit' && c.adultIndex === i);
+      expect(credit(1)?.inputsRef.pensjon, r.party).toBe(300_000);
+      expect(credit(1)?.ref, r.party).toBeGreaterThan(0);
+      expect(credit(0)?.ref ?? 0, r.party).toBe(0);
+    }
   });
 });
 
