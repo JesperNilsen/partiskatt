@@ -30,9 +30,10 @@ describe('sources/manifest.json sha256/bytes integrity', () => {
     // Measured 2026-09-16 at 39; +1 for the r-alt-2026.html row and +5 for the
     // SSB FBU 2022 tables (Q-010), both 2026-09-26; +2 for SSB 10572 and the
     // Energibruk i husholdningene page (lane L11, 2026-09-26); +3 for skatteloven § 16-1,
-    // skattevedtak-endringen FOR-2026-06-19-1243 and Innst. 459 L (lane L3, 2026-09-27). Bump this
+    // skattevedtak-endringen FOR-2026-06-19-1243 and Innst. 459 L (lane L3, 2026-09-27); +3 for SSB KPI
+    // 14700 data and metadata and the discontinued 03013's metadata (lane L7, 2026-09-27). Bump this
     // when a source is archived; a drop means a row was deleted.
-    expect(ARCHIVED_WITH_FILE.length).toBe(50);
+    expect(ARCHIVED_WITH_FILE.length).toBe(53);
   });
 
   for (const entry of ARCHIVED_WITH_FILE) {
