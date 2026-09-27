@@ -27,14 +27,22 @@ describe('fixture profiles under adopted 2026', () => {
     expect(amount(s, 'vat.food')).toBe(6_522);
     expect(amount(s, 'vat.general')).toBe(24_000);
     expect(amount(s, 'vat.transportServices')).toBe(1_071);
-    expect(amount(s, 'vat.electricity')).toBe(3_000);
-    expect(amount(s, 'vat.fuel')).toBe(2_400);
+    // L1: the vat.electricity/vat.fuel base excludes the reference excise already carrying
+    // its own VAT-on-duty line (excise.kwh/excise.petrolLitre below), re-derived by hand:
+    // electricity: netOfGross(15_000, 25 %) = 15_000 * 10_000 / 12_500 = 12_000
+    //   refExcise = round(12_000 kWh * 0.0713 kr/kWh) = round(855.6) = 856
+    //   base = max0(12_000 - 856) = 11_144; vat = round(11_144 * 0.25) = round(2_786) = 2_786
+    // fuel: netOfGross(12_000, 25 %) = 12_000 * 10_000 / 12_500 = 9_600
+    //   refExcise = round(600 l * 7.57 kr/l) = round(4_542) = 4_542
+    //   base = max0(9_600 - 4_542) = 5_058; vat = round(5_058 * 0.25) = round(1_264.5) = 1_265
+    expect(amount(s, 'vat.electricity')).toBe(2_786);
+    expect(amount(s, 'vat.fuel')).toBe(1_265);
     expect(amount(s, 'excise.petrolLitre')).toBe(5_678);
     expect(amount(s, 'excise.kwh')).toBe(1_070);
     expect(amount(s, 'employer.contribution#0')).toBe(84_600);
     expect(amount(s, 'benefit.childBenefit')).toBe(0);
     expect(amount(s, 'wealth.netWealthTax')).toBe(0);
-    expect(s.net).toBe(-(84_427 + 12_835 + 45_600 + 6_522 + 24_000 + 1_071 + 3_000 + 2_400 + 5_678 + 1_070));
+    expect(s.net).toBe(-(84_427 + 12_835 + 45_600 + 6_522 + 24_000 + 1_071 + 2_786 + 1_265 + 5_678 + 1_070));
   });
 
   it('student, 150 000 in wages, ten months of support', () => {

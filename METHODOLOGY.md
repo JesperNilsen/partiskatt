@@ -22,7 +22,7 @@ Kun nasjonale regler. Ingen kommunal eiendomsskatt, ingen verdsetting av offentl
 
 ## Incidens
 - Direkte skatt og kontantytelser: 100 % på personen.
-- Moms og særavgifter: 100 % overveltning til forbrukerpris, uendrede mengder. Særavgifter beregnes per enhet (liter, kWh, passasjer) og mva legges oppå avgiften.
+- Moms og særavgifter: 100 % overveltning til forbrukerpris, uendrede mengder. Særavgifter beregnes per enhet (liter, kWh, passasjer) og mva legges oppå avgiften. Forbruket oppgis i referansesystemets priser, så momsgrunnlaget til den avgiftsbelagte kategorien (strøm, drivstoff, alkohol/tobakk) ville ellers inneholdt særavgiften en gang til; referanseavgiften (mengde × referansesystemets sats) trekkes derfor fra grunnlaget før moms beregnes, med et gulv på null.
 - Arbeidsgiveravgift: av som standard. Når den slås på, brukes full langsiktig incidens på arbeidstakeren som foreløpig antagelse, og beløpet vises adskilt fra direkte skatt.
 
 ## Forbruksprofil

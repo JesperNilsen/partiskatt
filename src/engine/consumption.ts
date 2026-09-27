@@ -1,7 +1,7 @@
-import type { Component, Consumption } from '../types/index.ts';
+import type { Component, Consumption, Kroner, VatCategory } from '../types/index.ts';
 import { EXCISE_GOODS, VAT_CATEGORIES } from '../types/index.ts';
 import { VAT_ON_EXCISE, makeComponent } from './formulas.ts';
-import { ZERO, add, mulBp, netOfGross, unitsTimesRate } from './money.ts';
+import { ZERO, add, max0, mulBp, netOfGross, sub, unitsTimesRate } from './money.ts';
 import type { ResolvedRuleSet } from './rule-set.ts';
 import { paramsOf } from './rule-set.ts';
 
@@ -11,8 +11,22 @@ import { paramsOf } from './rule-set.ts';
  * Spend is entered incl. VAT under the reference system, so the ex-VAT base is fixed by
  * the reference rate and each rule set's VAT is that base × its rate (100 % pass-through,
  * quantities held fixed). Excise = units × rate; the consumer also pays VAT on the duty,
- * which is attributed to the excise component so it is never counted twice.
+ * attributed to the excise component. But the reference-price spend the user typed already
+ * has that duty baked in, so `netOfGross(spend, refRate)` still contains it — left alone, the
+ * VAT category would tax the duty a second time. The reference excise for that category
+ * (units × the REFERENCE rule set's ratePerUnit, since spend is in reference prices) is
+ * subtracted back out, clamped at zero because `makeComponent` rejects a negative amount.
  */
+function referenceExciseFor(cat: Exclude<VatCategory, 'exempt'>, consumption: Consumption, reference: ResolvedRuleSet): Kroner {
+  let total = ZERO;
+  for (const good of EXCISE_GOODS) {
+    if (VAT_ON_EXCISE[good] !== cat) continue;
+    const refRatePerUnit = paramsOf(reference, `excise.${good}`).ratePerUnit;
+    total = add(total, unitsTimesRate(consumption.units[good], refRatePerUnit));
+  }
+  return total;
+}
+
 export function computeConsumptionTaxes(
   consumption: Consumption,
   rs: ResolvedRuleSet,
@@ -25,11 +39,16 @@ export function computeConsumptionTaxes(
     const refRateBp = paramsOf(reference, id).rateBp;
     const rateBp = paramsOf(rs, id).rateBp;
     const spend = consumption.spend[cat];
-    const netBase = netOfGross(spend, refRateBp);
+    const refExcise = referenceExciseFor(cat, consumption, reference);
+    // Clamp: a household whose typed excise units imply more duty than its typed spend
+    // covers (e.g. an unrealistically large petrol-litre override) would otherwise drive
+    // this negative, which makeComponent throws on. Harmless — see consumption.test.ts.
+    const netBase = max0(sub(netOfGross(spend, refRateBp), refExcise));
     out.push(
       makeComponent(rs, id, mulBp(netBase, rateBp), {
         forbrukInklMva: spend,
         referansesatsBp: refRateBp,
+        referanseavgift: refExcise,
         grunnlagEksMva: netBase,
         satsBp: rateBp,
       }),
