@@ -73,7 +73,13 @@ export function MethodView() {
         </ul>
         <p>
           Offentlige tjenester, gratisordninger, makspriser og dynamiske vekstvirkninger er ikke med. Utbytte og
-          næringsinntekt er utenfor MVP-en. Kun nasjonale regler — ingen kommunal eiendomsskatt.
+          næringsinntekt er utenfor MVP-en. Kun nasjonale regler — ingen kommunal eiendomsskatt. Skatten på alminnelig
+          inntekt (22&nbsp;%) inkluderer kommunens og fylkeskommunens andel til standardsats, og formuesskattesatsen
+          inkluderer kommunens andel til standardsats — begge de satsene de aller fleste kommuner og fylkeskommuner
+          bruker. Bø i Vesterålen og tiltakssonen i Finnmark og Nord-Troms har andre satser, som ikke er modellert. To
+          voksne regnes som ektefeller i formuesskatten; for samboere med lik eierandel gir det samme resultat, fordi
+          hvert innslagspunkt for par er nøyaktig det dobbelte av innslagspunktet for enslige — ulik eierandel mellom
+          samboere er ikke modellert.
         </p>
       </section>
 
