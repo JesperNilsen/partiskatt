@@ -23,11 +23,11 @@ import { buildGate3Sheet, renderGate3Sheet } from '../data/gate3-sheet.ts';
 import { FORMULA_IDS } from '../engine/formulas.ts';
 import { kr } from '../engine/money.ts';
 import type { AnyRule, FormulaId, UserProfile } from '../types/index.ts';
-import { FIXTURES, adult, profile, wealth } from './fixtures.ts';
+import { FIXTURES, FIXTURE_BIRTH_YEAR, adult, profile, wealth } from './fixtures.ts';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '../..');
 
-/** Rules whose every parameter the five fixtures exercise (asserted below, not assumed). */
+/** Rules whose every parameter the six fixtures exercise (asserted below, not assumed). */
 const FULLY_EXERCISED: FormulaId[] = ['income.generalRate', 'income.bracketTax', 'income.personalAllowance'];
 
 /** Engine values recorded as if Skatteetaten agreed exactly, with valid metadata. */
@@ -51,8 +51,8 @@ function confirmedIds(results: Gate3Results): FormulaId[] {
 }
 
 /**
- * Extra profiles, used only to prove the rule→component map: each reaches a branch the five
- * fixtures do not (pension, capped union fee, phase-in, high-value home, tier 2, other wealth).
+ * Extra profiles, used only to prove the rule→component map: each reaches a branch the six
+ * fixtures do not (pension with capped union fee, phase-in, high-value home, tier 2, other wealth).
  */
 const PROBES: Record<string, UserProfile> = {
   pensioner: profile({
@@ -198,7 +198,7 @@ describe('gate 3 — rule → component map is exact', () => {
     expect([...moved].sort()).toEqual([...declared].sort());
   });
 
-  it('the fully-exercised list matches the live exercise analysis on the five fixtures', () => {
+  it('the fully-exercised list matches the live exercise analysis on the six fixtures', () => {
     const full = GATE3_RULE_IDS.filter((id) =>
       exerciseOf(ADOPTED_2026_ENCODED, id, FIXTURES, GATE3_RULE_FEEDS[id]).every((l) => l.movedBy.length > 0),
     );
@@ -255,6 +255,38 @@ describe('gate 3 — sheet coverage', () => {
   it('renders without throwing and names every fixture', () => {
     const md = renderGate3Sheet(sheet);
     for (const id of Object.keys(FIXTURES)) expect(md).toContain(`## ${id}`);
+  });
+});
+
+describe('gate 3 — pensioner fixture (D5)', () => {
+  it('every fixture has a birth year, and the sheet types it for every adult', () => {
+    expect(Object.keys(FIXTURE_BIRTH_YEAR).sort()).toEqual(Object.keys(FIXTURES).sort());
+    expect(FIXTURE_BIRTH_YEAR.singlePensioner).toBe(1956);
+    for (const f of buildGate3Sheet().fixtures) {
+      const born = f.setup.filter((l) => l.includes('født (åååå)?»') && l.endsWith(`→ ${FIXTURE_BIRTH_YEAR[f.id]}`));
+      expect({ id: f.id, typed: born.length }).toEqual({ id: f.id, typed: f.adults });
+    }
+  });
+
+  it('the pensioner is phased out above trinn 1 and the cap (§ 16-1 sjette ledd) does not bind', () => {
+    const p = FIXTURES.singlePensioner!;
+    const { max, threshold1, threshold2 } = ADOPTED_2026_ENCODED.rules.find((r) => r.id === 'income.pensionTaxCredit')!
+      .params as { max: number; threshold1: number; threshold2: number };
+    expect(p.adults[0]!.pensionIncome).toBeGreaterThan(threshold1);
+    expect(p.adults[0]!.pensionIncome).toBeLessThan(threshold2);
+    const c = gate3Components(p, ADOPTED_2026_ENCODED);
+    const credit = c.get('skattefradragPensjon#0')!;
+    const taxes = c.get('skattAlminneligInntekt#0')! + c.get('trinnskatt#0')! + c.get('trygdeavgift#0')!;
+    expect(credit).toBeGreaterThan(0);
+    expect(credit).toBeLessThan(max);
+    expect(credit).toBeLessThan(taxes);
+  });
+
+  it('«Beregnet skatt og avgift» subtracts the credit', () => {
+    const f = buildGate3Sheet().fixtures.find((x) => x.id === 'singlePensioner')!;
+    const net = f.components.reduce((a, x) => (x.kind === 'skattefradragPensjon' ? a - x.engine : a + x.engine), 0);
+    const line = f.diagnostics.find((d) => d.includes('Beregnet skatt og avgift'))!;
+    expect(line.endsWith(`: ${net.toLocaleString('nb-NO').replace(/\u00a0/g, ' ')}`)).toBe(true);
   });
 });
 

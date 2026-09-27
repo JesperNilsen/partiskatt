@@ -1,6 +1,6 @@
 # Operatørport 3: kryssjekk mot Skatteetatens skattekalkulator
 
-Gate 3 er en datainnføring, ikke en kodeendring. Du taster de fem fixturene i
+Gate 3 er en datainnføring, ikke en kodeendring. Du taster de seks fixturene i
 `src/tests/fixtures.ts` inn i Skatteetatens skattekalkulator, skriver av skattelinjene den viser
 i `src/data/gate3-results.ts`, og kjører `npm run check`. Regler som stemmer, blir `confirmed`
 av seg selv. Ingen status settes for hånd noe sted.
@@ -28,8 +28,11 @@ Arbeidsarket har tre deler for hver fixture:
 
 1. **Oppsett.** Svarene på spørsmålene i «Tilpass skattekalkulatoren»: år, sivilstatus og
    fødselsår. I tillegg står det hvilke avkrysningsbokser som skal stå tomme.
-   Fødselsåret er et nøytralt valg. Motoren modellerer ingen aldersregler, så året er valgt
-   utenfor årskullene som får «Arbeidsfradrag for unge».
+   Fødselsåret står per fixture (`FIXTURE_BIRTH_YEAR` i `src/tests/fixtures.ts`). Motoren
+   modellerer ingen aldersregler. Lønnstakerne er født 1980, utenfor årskullene som får
+   «Arbeidsfradrag for unge». Pensjonisten er født 1956 og er dermed gammel nok til
+   alderspensjon. Pensjonisten har ingen lønn, så den lave trygdeavgiftssatsen på lønn
+   etter 69 år spiller ingen rolle.
 2. **Tast inn.** Hvilket kort og hvilket felt hvert beløp hører til, og hvilket felt i
    profilen beløpet kommer fra. Husstandsfixturen er et ektepar. Formuen deres er fordelt
    likt, halvparten på hver ektefelle. Det gir samme formuesskatt som motorens
@@ -39,7 +42,8 @@ Arbeidsarket har tre deler for hver fixture:
    motorens forventning.
 
 «Til feilsøking» lister mellomtall som minstefradrag, alminnelig inntekt, nettoformue og
-sum skatt. Dem skriver du ikke inn, men de hjelper deg å finne hvor et avvik oppstår.
+sum skatt (skattene minus skattefradraget for pensjonsinntekt). Dem skriver du ikke inn, men
+de hjelper deg å finne hvor et avvik oppstår.
 
 Feltnavn uten merknad er lest ordrett fra kalkulatorens egne tekstfiler for 2026
 (lest 2026-09-26, bare lesing: ingenting er tastet inn eller sendt). Navn merket
@@ -48,6 +52,22 @@ skattemeldingen. Gjelder det feltene inne i kortene «Bankinnskudd», gjeld og b
 navnene på skattelinjene («Fellesskatt», «Trinnskatt», «Trygdeavgift», «Formuesskatt til
 kommune/staten» osv.), bekrefter du navnet mens du taster. Er det feil, retter du `LABELS`
 i `src/data/gate3-sheet.ts`, og da blir merknaden borte.
+
+### Pensjonisten (beslutning D5, 2026-09-27)
+
+Fixturen `singlePensioner` har bare alderspensjon fra folketrygden. Den er lagt til fordi
+pensjonister er med i kalkulatoren (D5), og den er valgt slik at pensjonen ligger over
+innslagspunktet for trinn 1 i nedtrappingen av skattefradraget for pensjonsinntekt, mens
+fradraget fortsatt er mindre enn skatten det trekkes fra. Taket i skatteloven § 16-1 sjette
+ledd binder altså ikke, og fradraget avhenger bare av sine egne parametre.
+
+- Tast pensjonen som alderspensjon fra folketrygden for hele året, med full uttaksgrad.
+  Motoren modellerer ikke gradert uttak eller færre måneder med pensjon.
+- Kalkulatoren skal vise fradraget som en egen linje. Skattelinjene registreres før
+  fradraget, og fradraget registreres som et positivt beløp under `skattefradragPensjon#0`.
+  Viser kalkulatoren bare skatten etter fradraget, registrerer du ikke denne fixturen og
+  noterer det i `version`. Da blir ingen regel som fixturen mater bekreftet, og hvordan
+  fradraget skal sammenlignes, blir en egen beslutning.
 
 ### Kapitalinntekt og bolig/aksjer
 
@@ -77,6 +97,8 @@ export const GATE3_RESULTS: Gate3Results = {
 
 - `skattAlminneligInntekt#i` er summen av «Fellesskatt», «Inntektsskatt til kommune» og
   «Inntektsskatt til fylkeskommune» for voksen *i* (`#0` er deg, `#1` er ektefellen).
+- `skattefradragPensjon#i` er «Skattefradrag for pensjonsinntekt» for voksen *i*, skrevet som
+  et positivt beløp. For voksne uten pensjon er den 0.
 - `formuesskatt` er formuesskatt til kommune pluss til staten, summert for begge ektefellene.
 - Skriv hele kroner slik kalkulatoren viser dem, og skriv inn også linjer som er 0.
 
@@ -120,8 +142,9 @@ Arbeidsarket skriver ut listen med begrunnelse (`GATE3_OUT_OF_SCOPE`):
   ikke.
 - **Arbeidsgiveravgift.** Den betales av arbeidsgiveren.
 - **Regler med parametre ingen fixture påvirker.** Regeltabellen nevner hver parameter ved
-  navn. Typiske eksempler er pensjonssatser (ingen fixture har pensjon), trygdeavgiftens
-  nedre grense og opptrapping, taket på fagforeningsfradraget, formuesskattens trinn 2 og
-  parverdiene, og boligrabatten over innslagspunktet for høy verdi. Skal slike regler kunne
+  navn. Typiske eksempler er trinn 2 i nedtrappingen av skattefradraget for pensjonsinntekt
+  og satsen i minstefradraget for pensjon (den ene pensjonsfixturen ligger over begge
+  grensene), trygdeavgiftens nedre grense og opptrapping, taket på fagforeningsfradraget,
+  formuesskattens trinn 2 og parverdiene, og boligrabatten over innslagspunktet for høy verdi. Skal slike regler kunne
   bli `confirmed`, trengs flere fixturer som treffer disse grenene. Det er en egen beslutning.
   Gate 3 legger ikke til fixturer selv.

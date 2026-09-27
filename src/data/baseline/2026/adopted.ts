@@ -55,6 +55,8 @@ const FT = 'lovdata-folketrygdavgift-2026';
 const FT_URL = 'https://lovdata.no/dokument/LTI/forskrift/2025-12-18-2748';
 const SKL_ENDR = 'lovdata-endringslov-2026-06-23-66';
 const SKL_ENDR_URL = 'https://lovdata.no/dokument/LTI/lov/2026-06-23-66';
+const SV_ENDR = 'lovdata-skattevedtak-endring-2026-06-19-1243';
+const SV_ENDR_URL = 'https://lovdata.no/dokument/LTI/forskrift/2026-06-19-1243';
 const MVA = 'lovdata-mva-2026';
 const MVA_URL = 'https://lovdata.no/dokument/LTI/forskrift/2025-12-18-2752';
 const I4L = 'innst-4-l-2025-2026';
@@ -163,6 +165,24 @@ export const ADOPTED_2026_ENCODED: BaselineRuleSet = {
         'Skattevedtaket 2026 har ett personlig skattefradrag, for pensjonsinntekt (§6-5), og ingen generell skattereduksjon for folk i arbeid. Det eneste arbeidsfradraget er forsøksordningen for et trukket utvalg unge (§6-6, sktl. §6-86), et fradrag i alminnelig inntekt som ikke er modellert. Beløpet er derfor 0 kr.',
       ),
       { note: 'Finnes ikke i gjeldende rett; regelen finnes bare så Høyres jobbfradrag (usikkert, antatt flat) kan overlegges.' },
+    ),
+    rule(
+      'income.pensionTaxCredit',
+      { max: kr(39_100), threshold1: kr(294_200), rate1Bp: pct(19.1), threshold2: kr(437_100), rate2Bp: pct(6) },
+      'Skattefradrag for pensjonsinntekt maks 39 100 kr (nedtrapping 19,1 / 6 pst)',
+      {
+        ...prov(
+          SV_ENDR,
+          SV_ENDR_URL,
+          'Skattevedtak §6-5 endret ved FOR-2026-06-19-1243 (i kraft 1.1.2026); sktl. §16-1 (3) og (6) konsolidert; Innst. 459 L PDF p3',
+          'skal være 39 100 kroner',
+          'Beløp og beløpsgrenser fra skattevedtaket §6-5 slik det ble endret 19.06.2026 med virkning fra 1. januar 2026 (39 100 kr; trinn 1 294 200 kr; trinn 2 437 100 kr). Nedtrappingssatsen 19,1 pst over trinn 1 og 6 pst over trinn 2 står i sktl. §16-1 tredje ledd, endret ved lov 23.06.2026 nr. 66 (lovdata-endringslov-2026-06-23-66) og i konsolidert tekst (lovdata-skatteloven-kap16-1-2026); Innst. 459 L PDF p3 knytter endringen til inntektsåret: «justeres med virkning fra 1. januar 2026». Taket er «summen av fastsatte inntektsskatter og trygdeavgift» (§16-1 sjette ledd). Desembervedtaket (37 100 / 284 950 / 436 050 kr, 16,7 pst) er lik Prop. 1 LS og ligger i proposed.',
+        ),
+        lastChecked: '2026-09-27',
+      },
+      {
+        note: 'Gjelder alderspensjon fra folketrygden og AFP (§16-1 første ledd), ikke uføretrygd. Motoren antar at hele pensjonen gir rett til fradraget og er tatt ut hele året med 100 pst uttaksgrad (gradert uttak og færre måneder skalerer fradrag og grenser ned, §16-1 annet ledd), og modellerer ikke skattebegrensning (§17-1). Endret i juni 2026, ikke i budsjettforliket — se NON_FORLIK_BASELINE_DIFFS.',
+      },
     ),
     rule(
       'wealth.netWealthTax',

@@ -3,7 +3,7 @@ import { ADOPTED_2026, DATA_BUNDLE, partyOf } from '../data/index.ts';
 import { calculateParty } from '../engine/index.ts';
 import { kr } from '../engine/money.ts';
 import type { FormulaParams, PartyId } from '../types/index.ts';
-import { DEFAULT_TOGGLES } from '../types/index.ts';
+import { DEFAULT_TOGGLES, PARTY_IDS } from '../types/index.ts';
 import { adult, profile, wealth } from './fixtures.ts';
 
 /**
@@ -63,5 +63,15 @@ describe('untouched parameters stay at adopted values (L13)', () => {
     const job = partyOf('h').deltas.find((d) => d.id === 'income.workTaxCredit');
     expect(job?.uncertain).toBe(true);
     expect(job?.params).toEqual({ amountPerWorker: 4_300 });
+  });
+
+  it('no party encodes the pension tax credit; where its cap cannot bind, the credit delta is 0 (L3)', () => {
+    // 450 000 kr pension: credit 39 100 − 27 294 − 774 = 11 032 kr against 86 998 kr of tax, so no
+    // party's tax change reaches the cap and the adopted credit is kept unchanged.
+    const pensioner = profile({ adults: [adult({ pensionIncome: kr(450_000) })] });
+    for (const id of PARTY_IDS) {
+      expect(partyOf(id).deltas.some((d) => d.id === 'income.pensionTaxCredit'), id).toBe(false);
+      expect(kept(id, pensioner, 'income.pensionTaxCredit#0'), id).toBe(0);
+    }
   });
 });

@@ -375,8 +375,8 @@ describe('KNOWN_KNOTS', () => {
 });
 
 describe('NON_FORLIK_BASELINE_DIFFS', () => {
-  it('still flags wealth.valuation only', () => {
-    expect(NON_FORLIK_BASELINE_DIFFS.map((d) => d.formulaId)).toEqual(['wealth.valuation']);
+  it('flags wealth.valuation and the June 2026 pension tax credit only', () => {
+    expect(NON_FORLIK_BASELINE_DIFFS.map((d) => d.formulaId)).toEqual(['wealth.valuation', 'income.pensionTaxCredit']);
   });
 });
 

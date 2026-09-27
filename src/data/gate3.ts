@@ -23,8 +23,17 @@ export const GATE3_INNTEKTSAAR = 2026;
 /** Local sensitivity step for the exercise test: ±1 % of the parameter (at least 1 unit). */
 export const GATE3_EXERCISE_STEP_BP = 100;
 
-/** The four numbers per fixture the comparison needs (what the calculator shows as tax lines). */
-export const GATE3_COMPONENT_KINDS = ['skattAlminneligInntekt', 'trinnskatt', 'trygdeavgift', 'formuesskatt'] as const;
+/**
+ * The numbers per fixture the comparison needs (what the calculator shows as tax lines). Every
+ * kind but formuesskatt is per adult; `skattefradragPensjon` is a credit (it reduces the tax).
+ */
+export const GATE3_COMPONENT_KINDS = [
+  'skattAlminneligInntekt',
+  'trinnskatt',
+  'trygdeavgift',
+  'skattefradragPensjon',
+  'formuesskatt',
+] as const;
 export type Gate3ComponentKind = (typeof GATE3_COMPONENT_KINDS)[number];
 
 type PerAdultKind = Exclude<Gate3ComponentKind, 'formuesskatt'>;
@@ -35,6 +44,7 @@ export const GATE3_KIND_FORMULA: Record<Gate3ComponentKind, FormulaId> = {
   skattAlminneligInntekt: 'income.generalRate',
   trinnskatt: 'income.bracketTax',
   trygdeavgift: 'income.socialSecurity',
+  skattefradragPensjon: 'income.pensionTaxCredit',
   formuesskatt: 'wealth.netWealthTax',
 };
 
@@ -51,6 +61,8 @@ export function isPerAdult(kind: Gate3ComponentKind): kind is PerAdultKind {
  * - skatt på alminnelig inntekt = generalRate × max0(alminnelig inntekt − personfradrag), where
  *   alminnelig inntekt subtracts minstefradrag (wage + pension) and fagforeningsfradrag;
  * - trinnskatt reads only the bracket table; trygdeavgift only its own parameters;
+ * - skattefradragPensjon reads its own parameters; the taxes above reach it only through the cap
+ *   (§ 16-1 (6)), and every pension fixture is chosen so the cap does not bind;
  * - formuesskatt reads the valuation discounts and the allowance/tier table.
  * `gate3.test.ts` perturbs every parameter of every formula and checks this map is exact.
  */
@@ -62,6 +74,7 @@ export const GATE3_RULE_FEEDS = {
   'income.unionFeeDeduction': ['skattAlminneligInntekt'],
   'income.bracketTax': ['trinnskatt'],
   'income.socialSecurity': ['trygdeavgift'],
+  'income.pensionTaxCredit': ['skattefradragPensjon'],
   'wealth.netWealthTax': ['formuesskatt'],
   'wealth.valuation': ['formuesskatt'],
 } as const satisfies Partial<Record<FormulaId, readonly Gate3ComponentKind[]>>;

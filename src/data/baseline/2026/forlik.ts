@@ -202,4 +202,9 @@ export const NON_FORLIK_BASELINE_DIFFS: readonly { formulaId: FormulaId; reason:
     reason:
       'Primærbolig 14 mill.-trinn: skatteloven §4-10 endret ved lov 23.06.2026 nr. 66 med verknad frå inntektsåret 2026 (arkivert som lovdata-endringslov-2026-06-23-66). Prop. 1 LS Tabell 1.7 sier 10 mill. fordi den er eldre enn lovendringen (ikke forlikspost).',
   },
+  {
+    formulaId: 'income.pensionTaxCredit',
+    reason:
+      'Skattefradrag for pensjonsinntekt: skattevedtaket §6-5 endret 19.06.2026 (FOR-2026-06-19-1243, i kraft 1.1.2026) til 39 100 kr / 294 200 kr / 437 100 kr, og nedtrappingssatsen i trinn 1 hevet fra 16,7 til 19,1 pst ved lov 23.06.2026 nr. 66, «med virkning fra 1. januar 2026» (Innst. 459 L PDF p3). Prop. 1 LS og desembervedtaket har 37 100 / 284 950 / 436 050 kr og 16,7 pst (ikke forlikspost).',
+  },
 ];

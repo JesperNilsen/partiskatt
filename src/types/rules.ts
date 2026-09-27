@@ -33,6 +33,12 @@ export interface FormulaParams {
   'income.unionFeeDeduction': { max: Kroner };
   /** Skattefradrag per adult with wage income, capped at that adult's income tax (see income-tax.ts). */
   'income.workTaxCredit': { amountPerWorker: Kroner };
+  /**
+   * Skattefradrag for pensjonsinntekt (sktl. § 16-1): `max` per adult with pension income, phased
+   * out by `rate1Bp` of pension between `threshold1` and `threshold2` and by `rate2Bp` above
+   * `threshold2`; never more than the adult's income taxes and trygdeavgift (see income-tax.ts).
+   */
+  'income.pensionTaxCredit': { max: Kroner; threshold1: Kroner; rate1Bp: Bp; threshold2: Kroner; rate2Bp: Bp };
   'wealth.netWealthTax': {
     single: { allowance: Kroner; tier2Threshold: Kroner };
     couple: { allowance: Kroner; tier2Threshold: Kroner };

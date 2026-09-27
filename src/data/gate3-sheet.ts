@@ -17,7 +17,7 @@ import type { FixtureSet, Gate3ComponentKey, Gate3ComponentKind, Gate3Results, G
 import { GATE3_RESULTS } from './gate3-results.ts';
 import { computeScenario, sanitizeProfile } from '../engine/calculate-scenario.ts';
 import { resolveBaseline } from '../engine/resolve.ts';
-import { FIXTURES } from '../tests/fixtures.ts';
+import { FIXTURES, FIXTURE_BIRTH_YEAR } from '../tests/fixtures.ts';
 import type { Adult, BaselineRuleSet, FormulaId, UserProfile, Wealth } from '../types/index.ts';
 
 export const CALCULATOR_URL = 'https://skattekalkulator.formueinntekt.skatt.skatteetaten.no/';
@@ -47,6 +47,7 @@ export const LABELS = {
   delAar: v('Jeg bor i Norge kun deler av året'),
   loenn: v('Lønn'),
   pensjon: v('Pensjon'),
+  alderspensjon: u('Alderspensjon fra folketrygden'),
   fagforening: v('Fagforeningskontingent'),
   bankinnskudd: v('Bankinnskudd'),
   innskudd: u('Innskudd'),
@@ -69,6 +70,7 @@ export const LABELS = {
   skattFylke: u('Inntektsskatt til fylkeskommune'),
   trinnskatt: u('Trinnskatt'),
   trygdeavgift: u('Trygdeavgift'),
+  skattefradragPensjon: u('Skattefradrag for pensjonsinntekt'),
   formuesskattKommune: u('Formuesskatt til kommune'),
   formuesskattStat: u('Formuesskatt til staten'),
 } as const satisfies Record<string, CalcLabel>;
@@ -78,17 +80,24 @@ export function show(label: CalcLabel): string {
 }
 
 /**
- * Birth year typed for every adult. Not a tax number: the engine models no age rules, so any
- * year that makes the person 18–66 in 2026 and outside the 1991–2006 cohort of «Arbeidsfradrag
- * for unge» gives the calculator the same assumptions as the engine.
+ * Birth year typed for every adult of a fixture (`FIXTURE_BIRTH_YEAR` in src/tests/fixtures.ts,
+ * where the choice is explained). Throws for a fixture without one.
  */
-export const GATE3_BIRTH_YEAR = 1980;
+export function birthYearOf(fixtureId: string): number {
+  const year = FIXTURE_BIRTH_YEAR[fixtureId];
+  if (year === undefined) throw new Error(`gate 3: fixture «${fixtureId}» mangler fødselsår (FIXTURE_BIRTH_YEAR)`);
+  return year;
+}
+
+/** Credit kinds reduce the tax: «Beregnet skatt og avgift» is the taxes minus these. */
+export const CREDIT_KINDS: ReadonlySet<Gate3ComponentKind> = new Set<Gate3ComponentKind>(['skattefradragPensjon']);
 
 /** Which calculator lines sum to each compared component. */
 export const KIND_LINES: Record<Gate3ComponentKind, readonly CalcLabel[]> = {
   skattAlminneligInntekt: [LABELS.fellesskatt, LABELS.skattKommune, LABELS.skattFylke],
   trinnskatt: [LABELS.trinnskatt],
   trygdeavgift: [LABELS.trygdeavgift],
+  skattefradragPensjon: [LABELS.skattefradragPensjon],
   formuesskatt: [LABELS.formuesskattKommune, LABELS.formuesskattStat],
 };
 
@@ -97,7 +106,7 @@ type FieldSpec = { card: CalcLabel; field?: CalcLabel } | { notTyped: string };
 /** Every profile field → where it goes in the calculator. Exhaustive by type. */
 export const ADULT_FIELDS: Record<keyof Adult, FieldSpec> = {
   wageIncome: { card: LABELS.loenn },
-  pensionIncome: { card: LABELS.pensjon },
+  pensionIncome: { card: LABELS.pensjon, field: LABELS.alderspensjon },
   capitalIncome: { card: LABELS.bankinnskudd, field: LABELS.opptjenteRenter },
   interestExpense: { card: LABELS.gjeldKort, field: LABELS.paaloepteRenter },
   unionFee: { card: LABELS.fagforening },
@@ -160,12 +169,18 @@ function placeOf(spec: { card: CalcLabel; field?: CalcLabel }): string {
 function fixtureSheet(id: string, profile: UserProfile, ruleSet: BaselineRuleSet, results: Gate3Results): SheetFixture {
   const p = sanitizeProfile(profile);
   const n = p.adults.length;
+  const born = birthYearOf(id);
   const setup = [
     `${show(LABELS.aar)} → ${GATE3_INNTEKTSAAR}`,
     `${show(LABELS.sivilstatus)} → ${show(n === 2 ? LABELS.gift : LABELS.ugift)}`,
-    `${show(LABELS.foedselsaar)} → ${GATE3_BIRTH_YEAR}`,
-    ...(n === 2 ? [`${show(LABELS.foedselsaarEktefelle)} → ${GATE3_BIRTH_YEAR}`] : []),
+    `${show(LABELS.foedselsaar)} → ${born}`,
+    ...(n === 2 ? [`${show(LABELS.foedselsaarEktefelle)} → ${born}`] : []),
     `La være uavkrysset: ${[LABELS.unge, LABELS.finnmark, LABELS.kildeskatt, LABELS.delAar].map(show).join(', ')}`,
+    ...(p.adults.some((a) => a.pensionIncome > 0)
+      ? [
+          'Pensjonen er alderspensjon fra folketrygden, mottatt hele året med 100 % uttaksgrad (motoren modellerer ikke gradert uttak eller færre måneder)',
+        ]
+      : []),
   ];
 
   const inputs: SheetInput[] = [];
@@ -229,7 +244,7 @@ function fixtureSheet(id: string, profile: UserProfile, ruleSet: BaselineRuleSet
       diagnostics.push(`${show(LABELS.nettoformue)}${n === 2 ? ' (sum begge)' : ''}: ${nf(c.inputs.nettoformue ?? 0)}`);
     }
   }
-  const total = [...engine.values()].reduce((a, b) => a + b, 0);
+  const total = [...engine].reduce((a, [key, v]) => (CREDIT_KINDS.has(kindOfKey(key)) ? a - v : a + v), 0);
   diagnostics.push(`${show(LABELS.sumSkatt)}${n === 2 ? ' (sum begge)' : ''}: ${nf(total)}`);
 
   return { id, adults: n, setup, inputs, notTyped, components, diagnostics };

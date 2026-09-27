@@ -60,9 +60,28 @@ describe('proposed vs adopted — forlik diff', () => {
     }
   });
 
-  it('non-forlik baseline diffs are exactly wealth.valuation today', () => {
-    expect(NON_FORLIK_BASELINE_DIFFS.map((d) => d.formulaId)).toEqual(['wealth.valuation']);
-    expect(ruleOf(ADOPTED_2026, 'wealth.valuation').params).not.toEqual(ruleOf(PROPOSED_2026, 'wealth.valuation').params);
+  it('non-forlik baseline diffs are exactly wealth.valuation and income.pensionTaxCredit today', () => {
+    expect(NON_FORLIK_BASELINE_DIFFS.map((d) => d.formulaId)).toEqual(['wealth.valuation', 'income.pensionTaxCredit']);
+    for (const { formulaId } of NON_FORLIK_BASELINE_DIFFS) {
+      expect(ruleOf(ADOPTED_2026, formulaId).params).not.toEqual(ruleOf(PROPOSED_2026, formulaId).params);
+    }
+  });
+
+  it('pension tax credit: Prop. 1 LS / desembervedtak → juni 2026 (39 100 kr, 19,1 pst over trinn 1)', () => {
+    expect(ruleParams(PROPOSED_2026, 'income.pensionTaxCredit')).toEqual({
+      max: kr(37_100),
+      threshold1: kr(284_950),
+      rate1Bp: pct(16.7),
+      threshold2: kr(436_050),
+      rate2Bp: pct(6),
+    });
+    expect(ruleParams(ADOPTED_2026, 'income.pensionTaxCredit')).toEqual({
+      max: kr(39_100),
+      threshold1: kr(294_200),
+      rate1Bp: pct(19.1),
+      threshold2: kr(437_100),
+      rate2Bp: pct(6),
+    });
   });
 
   it('1) trinnskatt trinn 4: 16,7 → 16,8 pst', () => {

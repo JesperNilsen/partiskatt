@@ -21,6 +21,7 @@ export const FORMULA_IDS = [
   'income.minimumDeductionPension',
   'income.unionFeeDeduction',
   'income.workTaxCredit',
+  'income.pensionTaxCredit',
   'wealth.netWealthTax',
   'wealth.valuation',
   'vat.food',
@@ -58,7 +59,7 @@ export function categoryOf(id: FormulaId): Category {
 }
 
 /** Tax credits reduce tax: they are income-tax components the person receives, not pays. */
-const CREDIT_FORMULAS: ReadonlySet<FormulaId> = new Set<FormulaId>(['income.workTaxCredit']);
+const CREDIT_FORMULAS: ReadonlySet<FormulaId> = new Set<FormulaId>(['income.workTaxCredit', 'income.pensionTaxCredit']);
 
 export function directionOf(id: FormulaId): Direction {
   return categoryOf(id) === 'benefit' || CREDIT_FORMULAS.has(id) ? 'received' : 'paid';
@@ -74,6 +75,7 @@ export const COMPONENT_LABEL: Record<FormulaId, string> = {
   'income.minimumDeductionPension': 'Minstefradrag i pensjon',
   'income.unionFeeDeduction': 'Fagforeningsfradrag',
   'income.workTaxCredit': 'Jobbfradrag (H), antatt flat',
+  'income.pensionTaxCredit': 'Skattefradrag for pensjonsinntekt',
   'wealth.netWealthTax': 'Formuesskatt',
   'wealth.valuation': 'Verdsettelse av formue',
   'vat.food': 'Merverdiavgift på mat',
@@ -149,6 +151,11 @@ export function thresholdsOf<F extends FormulaId>(id: F, params: FormulaParams[F
       return [(params as FormulaParams['income.personalAllowance']).amount];
     case 'income.unionFeeDeduction':
       return [(params as FormulaParams['income.unionFeeDeduction']).max];
+    case 'income.pensionTaxCredit': {
+      // Pension income where the phase-out rate changes (trinn 1, trinn 2).
+      const p = params as FormulaParams['income.pensionTaxCredit'];
+      return [p.threshold1, p.threshold2];
+    }
     case 'wealth.netWealthTax': {
       const p = params as FormulaParams['wealth.netWealthTax'];
       return [p.single.allowance, p.single.tier2Threshold, p.couple.allowance, p.couple.tier2Threshold];

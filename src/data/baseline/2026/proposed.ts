@@ -83,6 +83,25 @@ function patchRules(rules: readonly AnyRule[]): AnyRule[] {
   });
 
   out = patch(out, {
+    id: 'income.pensionTaxCredit',
+    params: { max: kr(37_100), threshold1: kr(284_950), rate1Bp: pct(16.7), threshold2: kr(436_050), rate2Bp: pct(6) },
+    status: STATUS,
+    uncertain: false,
+    label: 'Skattefradrag for pensjonsinntekt maks 37 100 kr (Prop. 1 LS; nedtrapping 16,7 / 6 pst)',
+    provenance: {
+      ...prov(
+        P,
+        P_URL,
+        'Tabell 1.7 PDF p34–35 / printed 32–33',
+        '37 100 kr',
+        'Prop. 1 LS Tabell 1.7 «Skattefradrag for pensjonsinntekt»: maksimalt beløp 37 100 kr, trinn 1 284 950 kr / 16,7 pst, trinn 2 436 050 kr / 6,0 pst. Desembervedtaket (skattevedtak §6-5) hadde de samme beløpene. Vedtatt verdi ble endret i juni 2026 (39 100 / 294 200 / 437 100 kr, 19,1 pst) — ikke forlikspost.',
+      ),
+      lastChecked: '2026-09-27',
+    },
+    note: 'Adopted ≠ proposed her uten at budsjettforliket endret fradraget — se NON_FORLIK_BASELINE_DIFFS.',
+  });
+
+  out = patch(out, {
     id: 'wealth.valuation',
     params: {
       primaryHomeBp: pct(25),

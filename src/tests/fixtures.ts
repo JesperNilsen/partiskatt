@@ -51,7 +51,11 @@ export function profile(overrides: Partial<UserProfile> = {}): UserProfile {
   };
 }
 
-/** The five fixtures mandated by the brief. */
+/**
+ * The five fixtures mandated by the brief, plus a single pensioner (decision D5, 2026-09-27) so gate 3
+ * sees pension income: alderspensjon only, above trinn 1 of the pension tax credit, where the credit
+ * is phased out but still smaller than the tax it is set off against (the cap does not bind).
+ */
 export const FIXTURES: Record<string, UserProfile> = {
   student: profile({
     adults: [adult({ wageIncome: kr(150_000), isStudent: true, studyMonths: 10 })],
@@ -93,4 +97,24 @@ export const FIXTURES: Record<string, UserProfile> = {
     }),
     consumption: consumption({ food: 60_000, general: 200_000, electricity: 25_000 }, { kwh: 20_000 }),
   }),
+  singlePensioner: profile({
+    adults: [adult({ pensionIncome: kr(300_000) })],
+    consumption: consumption({ food: 45_000, general: 90_000, electricity: 15_000 }, { kwh: 12_000 }),
+  }),
+};
+
+/**
+ * Birth year each fixture's adults are typed with in Skatteetaten's skattekalkulator (gate 3). Not a
+ * tax number in the engine, which models no age rules: 1980 keeps a wage earner 18–66 in 2026 and
+ * outside the 1991–2006 cohort of «Arbeidsfradrag for unge»; 1956 makes the pensioner 70, old enough
+ * for alderspensjon. The pensioner has no wage, so the low trygdeavgift rate on wages after 69 does
+ * not arise.
+ */
+export const FIXTURE_BIRTH_YEAR: Readonly<Record<string, number>> = {
+  student: 1980,
+  medianSingle: 1980,
+  twoEarnersTwoKids: 1980,
+  highEarner: 1980,
+  homeownerWithWealth: 1980,
+  singlePensioner: 1956,
 };
