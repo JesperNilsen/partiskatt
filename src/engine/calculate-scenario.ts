@@ -12,7 +12,7 @@ import type {
   VatCategory,
   Wealth,
 } from '../types/index.ts';
-import { EXCISE_GOODS, VAT_CATEGORIES } from '../types/index.ts';
+import { DEFAULT_PRICE_YEAR, EXCISE_GOODS, PRICE_YEARS, VAT_CATEGORIES } from '../types/index.ts';
 import { computeBenefits } from './benefits.ts';
 import { computeConsumptionTaxes } from './consumption.ts';
 import { computeEmployerContribution } from './employer-contribution.ts';
@@ -82,6 +82,9 @@ export function sanitizeProfile(profile: UserProfile): UserProfile {
     wealth: cleanWealth(profile.wealth),
     consumption: cleanConsumption(profile.consumption),
     consumptionProfileId: profile.consumptionProfileId ?? 'custom',
+    // Passes through untouched: the engine never reads it (spend is already in whichever
+    // prices it was seeded or typed in). Anything but a known price year becomes the default.
+    priceYear: PRICE_YEARS.includes(profile.priceYear) ? profile.priceYear : DEFAULT_PRICE_YEAR,
   };
 }
 

@@ -1,5 +1,5 @@
 import { kr } from '../engine/money.ts';
-import type { Consumption, ConsumptionProfileId, ExciseGood, Kroner, VatCategory } from '../types/index.ts';
+import type { Consumption, ConsumptionProfileId, ExciseGood, Kroner, PriceYear, VatCategory } from '../types/index.ts';
 import { EXCISE_GOODS, VAT_CATEGORIES } from '../types/index.ts';
 
 /**
@@ -14,6 +14,9 @@ import { EXCISE_GOODS, VAT_CATEGORIES } from '../types/index.ts';
  * Alt i datalaget er `estimated` inntil operatorport 3 (Skatteetaten-kryssjekk).
  * Profilene inngar ikke i den porten, men provenance-disiplinen er den samme:
  * ingen tall uten kilde eller merket anslag.
+ *
+ * Froene star i 2022-kroner. `consumptionFor` løfter KRONENE til 2026-priser med SSBs KPI
+ * per varegruppe (beslutning D4, se PRICE_INDEX_MAPPING); mengdene løftes aldri.
  */
 
 /** COICOP-koder hentet ut av tabell 14100, per `VatCategory`. */
@@ -105,6 +108,99 @@ export const HOUSEHOLD_SPEND_2022: Readonly<Record<VatCategory, number>> = {
 
 /** Gruppe 00 «I alt» i samme tabell — kontrollsummen kategoriene ma treffe. */
 export const FBU_TOTAL_2022 = 554_585;
+
+/**
+ * PRISLØFT 2022 -> 2026 (beslutning D4, 2026-09-27; erstatter valget 2026-09-25 om a bruke
+ * 2022-kroner uendret).
+ *
+ * Kilde: SSB-tabell 14700 «Konsumprisindeks, etter vare- og tjenestegruppe» (2025=100),
+ * arkivert som `ssb-kpi-14700`. Tabell 03013, som oppdraget nevnte, er en avsluttet serie som
+ * stopper i 2025M12 (`ssb-kpi-03013-meta`) og har ingen 2026-indeks; 14700 er etterfolgeren og
+ * dekker begge arene i en tabell. Den folger COICOP 2018, samme inndeling som FBU-tabell 14100,
+ * sa gruppekodene under er de samme kodene som COICOP_MAPPING bruker der det finnes en enkelt
+ * gruppe.
+ *
+ * Faktoren per kategori er snittet av de publiserte 2026-manedene (KPI_2026_MONTHS) delt pa
+ * snittet av de tolv manedene i 2022. Et snitt og ikke en enkeltmaned, fordi en enkelt maned
+ * baerer sesongen med seg — stromprisen mest av alt. Forholdet mellom to indekstall avhenger
+ * ikke av basisaret, sa 2025=100 gir samme faktor som 2015=100 ville gjort.
+ */
+export interface PriceIndexRule {
+  readonly category: VatCategory;
+  /** `VareTjenesteGrp`-kode i tabell 14700. */
+  readonly group: string;
+  /** Hvorfor akkurat denne gruppen. */
+  readonly why: string;
+}
+
+export const PRICE_INDEX_MAPPING: readonly PriceIndexRule[] = [
+  { category: 'food', group: '01', why: 'Samme divisjon som FBU-kronene: 01 «Matvarer og alkoholfrie drikkevarer».' },
+  { category: 'alcoholTobacco', group: '02', why: 'Divisjon 02, alkohol og tobakk, som i COICOP_MAPPING.' },
+  {
+    category: 'electricity',
+    group: '04.5.1',
+    why: '«Elektrisitet inkludert nettleie», samme gruppe som FBU-kronene. 2022 var et krisear for strompris, sa faktoren er under 1.',
+  },
+  { category: 'fuel', group: '07.2.2', why: '«Drivstoff og smoremidler», samme gruppe som FBU-kronene.' },
+  { category: 'flights', group: '07.3.3', why: '«Passasjertransport med fly», samme gruppe som FBU-kronene.' },
+  {
+    category: 'transportServices',
+    group: '07.3',
+    why: 'Minste gruppe som rommer skinner, vei og bat (07.3.1, 07.3.2, 07.3.4). En indeks kan ikke trekkes fra, sa flyreisene (07.3.3) er med i den; det trekker faktoren opp. Kjent skjevhet, ikke glemt.',
+  },
+  {
+    category: 'general',
+    group: '00',
+    why: 'Ingen enkelt gruppe dekker restkodene i COICOP_MAPPING (03, 05, 08, 09, 11, 13 og restene av 04 og 07); totalindeksen brukes.',
+  },
+  {
+    category: 'exempt',
+    group: '00',
+    why: 'Husleie, helse, utdanning og forsikring har ingen felles gruppe; totalindeksen brukes. Kategorien har ingen mva, sa faktoren flytter ingen avgiftskrone, bare det viste belopet.',
+  },
+];
+
+/** 2026-manedene SSB hadde publisert i 14700 da løftet ble regnet (hentet 2026-09-27). */
+export const KPI_2026_MONTHS: readonly string[] = [
+  '2026M01',
+  '2026M02',
+  '2026M03',
+  '2026M04',
+  '2026M05',
+  '2026M06',
+  '2026M07',
+  '2026M08',
+];
+
+/**
+ * Summen av manedsindeksene (KpiIndMnd, en desimal) per 14700-gruppe i den arkiverte filen:
+ * `sum2022` over 2022M01-2022M12, `sum2026` over KPI_2026_MONTHS. Snittet er summen delt pa
+ * antall maneder. Testen regner summene om igjen fra rafilen.
+ */
+export const KPI_MONTHLY_SUMS: Readonly<Record<string, { readonly sum2022: number; readonly sum2026: number }>> = {
+  '00': { sum2022: 1_069.9, sum2026: 822.1 },
+  '01': { sum2022: 982.8, sum2026: 819.0 },
+  '02': { sum2022: 1_053.4, sum2026: 821.7 },
+  '04.5.1': { sum2022: 1_352.8, sum2026: 833.2 },
+  '07.2.2': { sum2022: 1_273.8, sum2026: 805.6 },
+  '07.3': { sum2022: 997.4, sum2026: 814.1 },
+  '07.3.3': { sum2022: 795.3, sum2026: 798.4 },
+};
+
+function kpiUplift(group: string): number {
+  const sums = KPI_MONTHLY_SUMS[group];
+  if (!sums) throw new Error(`KPI-gruppe mangler: ${group}`);
+  return sums.sum2026 / KPI_2026_MONTHS.length / (sums.sum2022 / 12);
+}
+
+/**
+ * Faktoren 2026-snitt / 2022-snitt per mva-kategori, utledet av PRICE_INDEX_MAPPING og
+ * KPI_MONTHLY_SUMS. En kategori uten regel far ingen faktor, og `consumptionFor` kaster da —
+ * den blir ikke stille 1.
+ */
+export const PRICE_UPLIFT_2022_2026: Readonly<Partial<Record<VatCategory, number>>> = Object.fromEntries(
+  PRICE_INDEX_MAPPING.map((rule) => [rule.category, kpiUplift(rule.group)]),
+);
 
 /**
  * Beregnet husleie (COICOP 04.2), 109 976 kr av totalen.
@@ -492,12 +588,27 @@ export function equivalenceFactor(adults: number, children: number): number {
   return 1 + 0.5 * Math.max(0, adults - 1) + 0.3 * Math.max(0, children);
 }
 
-export function consumptionFor(id: ConsumptionProfileId, adults: number, children: number): Consumption {
+/**
+ * Frøet for en husholdning: kronene skalert med ekvivalensfaktoren og, for `priceYear` 2026,
+ * løftet med PRICE_UPLIFT_2022_2026 — deretter rundet til naermeste hundre, en gang.
+ * Mengdene (liter, kWh, reiser, stk, gram) løftes ALDRI: saeravgiften ligger pa mengden, og en
+ * liter bensin i 2026 er samme liter som i 2022.
+ */
+export function consumptionFor(
+  id: ConsumptionProfileId,
+  adults: number,
+  children: number,
+  priceYear: PriceYear,
+): Consumption {
   const seed = SEEDS.find((s) => s.id === id) ?? SEEDS[1];
   if (!seed) throw new Error('forbruksprofil mangler');
   const factor = equivalenceFactor(adults, children);
   const spend = {} as Record<VatCategory, Kroner>;
-  for (const cat of VAT_CATEGORIES) spend[cat] = kr(Math.round((seed.spend[cat] * factor) / 100) * 100);
+  for (const cat of VAT_CATEGORIES) {
+    const uplift = priceYear === 2026 ? PRICE_UPLIFT_2022_2026[cat] : 1;
+    if (uplift === undefined) throw new Error(`prisløft mangler for mva-kategori: ${cat}`);
+    spend[cat] = kr(Math.round((seed.spend[cat] * factor * uplift) / 100) * 100);
+  }
   const units = {} as Record<ExciseGood, number>;
   // `spend` og `units` er komplette Record-er (se ProfileSeed), sa tsc garanterer hver nokkel
   // og ingen fallback trengs. Ingen avrunding til hele enheter — se AVRUNDING_AV_MENGDER over.

@@ -5,10 +5,12 @@ import type {
   Consumption,
   ConsumptionProfileId,
   ExciseGood,
+  PriceYear,
   UserProfile,
   VatCategory,
   Wealth,
 } from '../types/index.ts';
+import { DEFAULT_PRICE_YEAR } from '../types/index.ts';
 
 export const DEFAULT_CONSUMPTION_PROFILE: ConsumptionProfileId = 'typisk';
 
@@ -42,8 +44,9 @@ export function createProfile(): UserProfile {
     adults: [emptyAdult()],
     childrenAges: [],
     wealth: emptyWealth(),
-    consumption: consumptionFor(DEFAULT_CONSUMPTION_PROFILE, 1, 0),
+    consumption: consumptionFor(DEFAULT_CONSUMPTION_PROFILE, 1, 0, DEFAULT_PRICE_YEAR),
     consumptionProfileId: DEFAULT_CONSUMPTION_PROFILE,
+    priceYear: DEFAULT_PRICE_YEAR,
   };
 }
 
@@ -54,7 +57,12 @@ export type ProfileAction =
   | { type: 'removeChild'; index: number }
   | { type: 'childAge'; index: number; age: number }
   | { type: 'wealth'; patch: Partial<Wealth> }
-  | { type: 'consumptionProfile'; id: ConsumptionProfileId }
+  /**
+   * Så inn en standardprofil. `priceYear` bytter prisåret samtidig; uten det beholdes det
+   * gjeldende. Prisårskontrollen går gjennom denne handlingen, så den kan bare så inn en
+   * standardprofil på nytt — egne beløp (`custom`) har ingen profil å så inn og røres ikke.
+   */
+  | { type: 'consumptionProfile'; id: ConsumptionProfileId; priceYear?: PriceYear }
   | { type: 'spend'; category: VatCategory; value: number }
   | { type: 'units'; good: ExciseGood; value: number }
   | { type: 'reset' };
@@ -70,7 +78,12 @@ function rescale(profile: UserProfile): UserProfile {
   if (profile.consumptionProfileId === 'custom') return profile;
   return {
     ...profile,
-    consumption: consumptionFor(profile.consumptionProfileId, profile.adults.length, profile.childrenAges.length),
+    consumption: consumptionFor(
+      profile.consumptionProfileId,
+      profile.adults.length,
+      profile.childrenAges.length,
+      profile.priceYear,
+    ),
   };
 }
 
@@ -101,12 +114,15 @@ export function profileReducer(state: UserProfile, action: ProfileAction): UserP
     }
     case 'wealth':
       return { ...state, wealth: { ...state.wealth, ...action.patch } };
-    case 'consumptionProfile':
+    case 'consumptionProfile': {
+      const priceYear = action.priceYear ?? state.priceYear;
       return {
         ...state,
         consumptionProfileId: action.id,
-        consumption: consumptionFor(action.id, state.adults.length, state.childrenAges.length),
+        priceYear,
+        consumption: consumptionFor(action.id, state.adults.length, state.childrenAges.length, priceYear),
       };
+    }
     case 'spend':
       return withCustomConsumption(state, {
         ...state.consumption,

@@ -4,12 +4,13 @@ export type {
   Consumption,
   ConsumptionProfileId,
   ExciseGood,
+  PriceYear,
   Toggles,
   UserProfile,
   VatCategory,
   Wealth,
 } from './profile.ts';
-export { DEFAULT_TOGGLES, EXCISE_GOODS, VAT_CATEGORIES } from './profile.ts';
+export { DEFAULT_PRICE_YEAR, DEFAULT_TOGGLES, EXCISE_GOODS, PRICE_YEARS, VAT_CATEGORIES } from './profile.ts';
 export type {
   AnyRule,
   BaselineId,

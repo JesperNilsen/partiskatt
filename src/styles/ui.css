@@ -109,6 +109,11 @@ input[type='number'], select {
   color: #fff;
   border-color: var(--accent);
 }
+.segmented__btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.price-year { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2) var(--sp-3); margin-top: var(--sp-4); }
+.price-year__label { font-weight: 600; }
+.price-year__hint { flex-basis: 100%; margin: 0; }
 
 .profile-picks { display: grid; gap: var(--sp-3); }
 @media (min-width: 640px) { .profile-picks { grid-template-columns: repeat(3, 1fr); } }

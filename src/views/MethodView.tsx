@@ -120,8 +120,15 @@ export function MethodView() {
           forventede avreiser utenfor Europa i året, altså 88 kr i avgift. Derfor rundes mengder ikke til hele enheter — det er
           avrundingen som ellers gjør en fjerdedels reise til ingen avgift.
         </p>
+        <p>
+          Prisår: standardprofilene står i 2026-priser. Kronene fra 2022 er løftet per mva-kategori med SSBs konsumprisindeks (tabell
+          14700): snittet for januar–august 2026 delt på snittet for 2022. Mat løftes med 1,250 og strøm med 0,924 — under 1 fordi 2022
+          var et krisår for strømprisen. Mengdene (liter, kWh, reiser) løftes ikke, så særavgiftene er de samme i begge prisår; det er
+          momsen som følger kronene. Velg «2022» ved siden av profilvelgeren for å se profilene uløftet. Beløp du har skrevet inn selv,
+          løftes aldri. Alle faktorene står i metodedokumentet.
+        </p>
         <p className="muted">
-          Beløpene står i 2022-kroner uten KPI-løft, og prisene på øl, vin, brennevin, sigaretter, snus og flyreiser er anslag — det finnes
+          Prisene på øl, vin, brennevin, sigaretter, snus og flyreiser som mengdene er regnet ut med, er anslag — det finnes
           ingen offisiell kroner-per-enhet for dem. Strømforbruket i kWh er ikke lenger kroner delt på en strømpris: strømstøtten i 2022 gjorde
           det valget usikkert, og SSBs målte forbruk har erstattet det. Utledningen og forbeholdene står i sin helhet i metodedokumentet og under «Kilder».
         </p>

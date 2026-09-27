@@ -6,8 +6,9 @@ import { resolveBaseline } from './resolve.ts';
 
 /**
  * Direct engine test for `computeConsumptionTaxes`, called with an explicit `Consumption`
- * input rather than through a seeded `ConsumptionProfileId` — lane L1 is changing the
- * `PROFILE_SEEDS` in parallel, so a profile-seed-based test here would be a merge hazard.
+ * input rather than through a seeded `ConsumptionProfileId`, so the engine arithmetic is
+ * pinned independently of the profile seeds and their price year. The seeds are tested
+ * against their SSB sources in `src/tests/consumption-profiles.test.ts`.
  */
 const rs = resolveBaseline(ADOPTED_2026);
 

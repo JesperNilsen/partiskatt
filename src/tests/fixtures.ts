@@ -47,6 +47,7 @@ export function profile(overrides: Partial<UserProfile> = {}): UserProfile {
     wealth: wealth(),
     consumption: consumption(),
     consumptionProfileId: 'custom',
+    priceYear: 2026,
     ...overrides,
   };
 }

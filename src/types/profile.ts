@@ -82,6 +82,18 @@ export interface Consumption {
 
 export type ConsumptionProfileId = 'noktern' | 'typisk' | 'hoy';
 
+/**
+ * Prisåret kronene i en standardprofil står i (beslutning D4, 2026-09-27). Profilene er fra
+ * FBU 2022; 2026 løfter kronene med SSBs KPI per varegruppe, 2022 viser dem uløftet.
+ * Mengdene (liter, kWh, reiser) løftes aldri. Motoren leser ikke feltet — det styrer bare
+ * hvilke kroner `consumptionFor` sår inn.
+ */
+export type PriceYear = 2022 | 2026;
+
+export const PRICE_YEARS: readonly PriceYear[] = [2026, 2022];
+
+export const DEFAULT_PRICE_YEAR: PriceYear = 2026;
+
 export interface UserProfile {
   version: 1;
   mode: 'person' | 'household';
@@ -91,6 +103,8 @@ export interface UserProfile {
   wealth: Wealth;
   consumption: Consumption;
   consumptionProfileId: ConsumptionProfileId | 'custom';
+  /** Prisåret standardprofilen ble sådd i. Egne beløp (`custom`) står i det brukeren skrev. */
+  priceYear: PriceYear;
 }
 
 export interface Toggles {

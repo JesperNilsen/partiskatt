@@ -10,7 +10,7 @@ import { BRAND } from '../config/brand.ts';
 import { CONSUMPTION_PROFILES } from '../data/consumption-profiles.ts';
 import { useApp } from '../state/app.tsx';
 import type { ConsumptionProfileId } from '../types/index.ts';
-import { VAT_CATEGORIES } from '../types/index.ts';
+import { PRICE_YEARS, VAT_CATEGORIES } from '../types/index.ts';
 
 const VAT_LABELS: Record<string, string> = {
   food: 'Mat',
@@ -157,6 +157,7 @@ export function CalculatorView() {
               </button>
             ))}
           </div>
+          <PriceYearControl />
         </section>
 
         <section className="card">
@@ -260,5 +261,43 @@ export function CalculatorView() {
         </div>
       </form>
     </>
+  );
+}
+
+/**
+ * «Priser: 2026 / 2022» (beslutning D4). Bytter prisåret ved å så inn den valgte standardprofilen
+ * på nytt. Egne beløp (`custom`) har ingen profil å så inn, så kontrollen er av og sier hvorfor —
+ * et bytte skal aldri kaste tall brukeren har skrevet selv.
+ */
+function PriceYearControl() {
+  const { profile, dispatchProfile } = useApp();
+  const seeded = profile.consumptionProfileId === 'custom' ? null : profile.consumptionProfileId;
+  return (
+    <div className="price-year">
+      <span className="price-year__label" id="price-year-label">
+        Priser
+      </span>
+      <div className="segmented" role="group" aria-labelledby="price-year-label" aria-describedby="price-year-hint">
+        {PRICE_YEARS.map((year) => (
+          <button
+            key={year}
+            type="button"
+            className={profile.priceYear === year ? 'segmented__btn segmented__btn--active' : 'segmented__btn'}
+            aria-pressed={profile.priceYear === year}
+            disabled={seeded === null}
+            onClick={() => {
+              if (seeded !== null) dispatchProfile({ type: 'consumptionProfile', id: seeded, priceYear: year });
+            }}
+          >
+            {year}
+          </button>
+        ))}
+      </div>
+      <p className="field__hint price-year__hint" id="price-year-hint">
+        {seeded === null
+          ? 'Du har skrevet inn egne beløp. Prisåret endrer dem ikke; velg en profil over for å bruke det.'
+          : 'Profilene er fra 2022. 2026 løfter kronene med SSBs prisindeks per varegruppe; liter, kWh og reiser endres ikke.'}
+      </p>
+    </div>
   );
 }

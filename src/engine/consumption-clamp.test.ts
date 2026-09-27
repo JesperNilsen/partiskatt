@@ -5,7 +5,7 @@ import { withRuleParams } from '../data/gate3.ts';
 import { FIXTURES, consumption } from '../tests/fixtures.ts';
 import { SYNTHETIC } from '../tests/synthetic-rules.ts';
 import type { Consumption, VatCategory } from '../types/index.ts';
-import { EXCISE_GOODS, VAT_CATEGORIES } from '../types/index.ts';
+import { EXCISE_GOODS, PRICE_YEARS, VAT_CATEGORIES } from '../types/index.ts';
 import { computeConsumptionTaxes } from './consumption.ts';
 import { VAT_ON_EXCISE } from './formulas.ts';
 import { ZERO, add, netOfGross, pct, unitsTimesRate } from './money.ts';
@@ -35,15 +35,19 @@ function unclampedMargin(consumption: Consumption, cat: Exclude<VatCategory, 'ex
 }
 
 describe('L1: the max0 clamp on the VAT base does not fire on real data', () => {
-  it('the three seed profiles (nøktern/typisk/høy), at 1 and at 2 adults + 2 children', () => {
-    for (const seed of PROFILE_SEEDS) {
-      for (const [adults, children] of [
-        [1, 0],
-        [2, 2],
-      ] as const) {
-        const c = consumptionFor(seed.id, adults, children);
-        for (const cat of EXCISABLE_CATS) {
-          expect(unclampedMargin(c, cat), `${seed.id} ${adults}a${children}b ${cat}`).toBeGreaterThanOrEqual(0);
+  it('the three seed profiles (nøktern/typisk/høy), at 1 and at 2 adults + 2 children, in both price years', () => {
+    // L7: the 2026 uplift LOWERS fuel and electricity spend (factors below 1) while the units,
+    // and so the reference excise, stay put — the margin is thinnest there, so both years run.
+    for (const priceYear of PRICE_YEARS) {
+      for (const seed of PROFILE_SEEDS) {
+        for (const [adults, children] of [
+          [1, 0],
+          [2, 2],
+        ] as const) {
+          const c = consumptionFor(seed.id, adults, children, priceYear);
+          for (const cat of EXCISABLE_CATS) {
+            expect(unclampedMargin(c, cat), `${priceYear} ${seed.id} ${adults}a${children}b ${cat}`).toBeGreaterThanOrEqual(0);
+          }
         }
       }
     }
@@ -61,7 +65,7 @@ describe('L1: the max0 clamp on the VAT base does not fire on real data', () => 
     // e2e/calculator-inputs.spec.ts sets #units-petrolLitre to 5000,5 on top of a seeded
     // profile's ordinary spend.fuel: the implied duty then dwarfs the ex-VAT spend, so the
     // margin goes negative and the engine's max0 floors the base at 0 instead of throwing.
-    const c = consumptionFor('typisk', 1, 0);
+    const c = consumptionFor('typisk', 1, 0, 2026);
     c.units.petrolLitre = 5000.5;
     expect(unclampedMargin(c, 'fuel')).toBeLessThan(0);
   });

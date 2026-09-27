@@ -94,3 +94,37 @@ describe('CalculatorView: wealth fields the engine already models', () => {
     }
   });
 });
+
+describe('CalculatorView: «Priser: 2026 / 2022» (L7, D4)', () => {
+  const button = (year: string) => screen.getByRole('button', { name: year }) as HTMLButtonElement;
+
+  it('starts in 2026 prices and re-seeds the chosen profile in 2022 prices', () => {
+    const seen = renderCalculator();
+    expect(screen.getByRole('group', { name: 'Priser' })).toBeTruthy();
+    expect(button('2026').getAttribute('aria-pressed')).toBe('true');
+    expect(button('2022').getAttribute('aria-pressed')).toBe('false');
+    // «Typisk», one adult: 44 700 kr food in 2022; x 1,25 = 55 875 -> 55 900 in 2026.
+    expect(seen.profile!.consumption.spend.food).toBe(55_900);
+
+    fireEvent.click(button('2022'));
+    expect(seen.profile!.priceYear).toBe(2022);
+    expect(seen.profile!.consumptionProfileId).toBe('typisk');
+    expect(seen.profile!.consumption.spend.food).toBe(44_700);
+    expect(button('2022').getAttribute('aria-pressed')).toBe('true');
+  });
+
+  it('is disabled with a reason once the user has typed their own spend, and never touches it', () => {
+    const seen = renderCalculator();
+    fireEvent.change(document.querySelector<HTMLInputElement>('#spend-food')!, { target: { value: '70000' } });
+    expect(seen.profile!.consumptionProfileId).toBe('custom');
+    const typed = seen.profile!.consumption;
+
+    expect(button('2022').disabled).toBe(true);
+    expect(button('2026').disabled).toBe(true);
+    expect(screen.getByText(/Du har skrevet inn egne beløp/)).toBeTruthy();
+    fireEvent.click(button('2022'));
+    expect(seen.profile!.priceYear).toBe(2026);
+    expect(seen.profile!.consumption).toEqual(typed);
+    expect(seen.profile!.consumption.spend.food).toBe(70_000);
+  });
+});
