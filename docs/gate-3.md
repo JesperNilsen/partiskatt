@@ -68,6 +68,12 @@ ledd binder altså ikke, og fradraget avhenger bare av sine egne parametre.
   Viser kalkulatoren bare skatten etter fradraget, registrerer du ikke denne fixturen og
   noterer det i `version`. Da blir ingen regel som fixturen mater bekreftet, og hvordan
   fradraget skal sammenlignes, blir en egen beslutning.
+- **Beslutning 2026-09-28 (Jesper):** fradraget bekreftes mot vedtaket (39 100 kr / 294 200 kr /
+  19,1 %), ikke mot Skatteetatens kalkulator så lenge den bruker desemberverdiene (37 100 kr /
+  284 950 kr / 16,7 %). Tast inn Skatteetatens tall slik det står, og noter i `version` at
+  kalkulatoren bruker desemberverdiene. Den som går gjennom arket, sjekker avviket mot
+  desemberformelen i METHODOLOGY.md. Lovdatas fotnote «i kraft 1 juli 2026» ved § 6-5 overstyres av vedtakets egen tekst
+  (1. januar), jf. METHODOLOGY.md.
 
 ### Kapitalinntekt og bolig/aksjer
 
