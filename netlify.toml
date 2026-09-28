@@ -4,6 +4,8 @@
 
 [build.environment]
   NODE_VERSION = "24"
+  # Rights call 2026-09-28: the party texts ship, so a missing one fails the deploy as it fails CI.
+  REQUIRE_PARTY_TEXTS = "1"
 
 [[redirects]]
   from = "/*"

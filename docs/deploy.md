@@ -15,6 +15,8 @@ Netlify at it.
      stale build).
    - **Publish directory:** `dist`
    - **Node version:** 24 (`build.environment.NODE_VERSION`)
+   - **`REQUIRE_PARTY_TEXTS=1`** (since the 2026-09-28 rights call to ship
+     the party texts): a missing party text fails the deploy, as it fails CI.
 3. SPA routing (`/*` → `/index.html`, status 200) and the security headers
    (CSP with `connect-src 'none'`, `X-Frame-Options: DENY`,
    `Referrer-Policy: no-referrer`, etc.) are already in `[[redirects]]` /
