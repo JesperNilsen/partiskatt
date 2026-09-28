@@ -25,6 +25,12 @@ export function Shell({ children }: { children: React.ReactNode }) {
         </p>
         <p>
           <a href={BRAND.feedbackMailto}>Meld feil</a>
+          {BRAND.repoUrl ? (
+            <>
+              <span aria-hidden="true"> · </span>
+              <a href={BRAND.repoUrl}>Kildekode</a>
+            </>
+          ) : null}
         </p>
       </footer>
     </div>

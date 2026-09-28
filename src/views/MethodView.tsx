@@ -214,6 +214,11 @@ export function MethodView() {
           Oppdager du en feil?{' '}
           <a href={BRAND.feedbackMailto}>Meld fra</a> eller se{' '}
           <Link href="/rettelseslogg">rettelsesloggen</Link> for publiserte korreksjoner.
+          {BRAND.repoUrl ? (
+            <>
+              {' '}Kildekoden og dataene ligger åpent på <a href={BRAND.repoUrl}>GitHub</a>.
+            </>
+          ) : null}
         </p>
       </section>
 

@@ -10,7 +10,8 @@ export const BRAND = {
     'Offentlig beta: Kalkulatoren bygger på publiserte 2026-budsjetter og standardiserte antagelser. Tallene er anslag, ikke en individuell skatteberegning. Se metode og kilder før du tolker små forskjeller.',
   /** Path to an SVG in /public, or null for a text wordmark. */
   logoSrc: null as string | null,
-  /** Channel for reporting errors. Replace before launch. */
-  feedbackMailto: 'mailto:feil@example.invalid',
-  repoUrl: null as string | null,
+  /** Channel for reporting errors. */
+  feedbackMailto: 'mailto:jesper.nilsen05@gmail.com?subject=Feil%20i%20Partiskatt',
+  /** Public source repository, or null to hide the link. */
+  repoUrl: 'https://github.com/JesperNilsen/partiskatt' as string | null,
 } as const;
