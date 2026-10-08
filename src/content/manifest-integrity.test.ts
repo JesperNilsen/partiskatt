@@ -33,7 +33,7 @@ describe('sources/manifest.json sha256/bytes integrity', () => {
     // skattevedtak-endringen FOR-2026-06-19-1243 and Innst. 459 L (lane L3, 2026-09-27); +3 for SSB KPI
     // 14700 data and metadata and the discontinued 03013's metadata (lane L7, 2026-09-27). Bump this
     // when a source is archived; a drop means a row was deleted.
-    expect(ARCHIVED_WITH_FILE.length).toBe(53);
+    expect(ARCHIVED_WITH_FILE.length).toBe(55);
   });
 
   for (const entry of ARCHIVED_WITH_FILE) {

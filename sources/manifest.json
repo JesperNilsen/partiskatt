@@ -983,5 +983,39 @@
     "textFile": null,
     "status": "archived",
     "note": "StatBank 03013 metadata (GET). KPI etter konsumgruppe, COICOP 1999, 2015=100. Arkivert som bevis for at tabellen er avsluttet: siste måned er 2025M12, så den har ingen 2026-indeks. Prisløftet bruker etterfølgeren 14700 (ssb-kpi-14700)."
+  },
+  {
+    "id": "prop1ls-2026-2027",
+    "party": null,
+    "title": "Prop. 1 LS (2026–2027) Skatter og avgifter 2027",
+    "publisher": "Finansdepartementet",
+    "url": "https://www.regjeringen.no/contentassets/36e022cd31e34350b61a5f2c7b33fa74/no/pdfs/prp202620270001ls0dddpdfs.pdf",
+    "format": "pdf",
+    "retrievedAt": "2026-10-08T00:00:00Z",
+    "method": "curl",
+    "sha256": "8da3575b261862d2faad8f6de8737cb2ab3c2ed7fb64cc6e32fe3251da42a8e4",
+    "bytes": 4848378,
+    "pages": 344,
+    "rawFile": "sources/raw/prop1ls-2026-2027.pdf",
+    "textFile": "sources/text/prop1ls-2026-2027.txt",
+    "status": "archived",
+    "note": "Government PROPOSAL for 2027, presented 2026-10-07 (not adopted; the Storting votes in December). Tabell 1.5 (income tax, wealth tax, deductions; 2026 column vs 2027 proposal) = PDF pages 26–30; Tabell 1.6 (mva and særavgifter) = PDF pages 31–35. Printed page = PDF page − 2. Its 2026 column is the ADOPTED 2026 system incl. the June 2026 pension-credit change."
+  },
+  {
+    "id": "regjeringen-skattesatser-2027",
+    "party": null,
+    "title": "Skattesatser 2027 - regjeringen.no",
+    "publisher": "Finansdepartementet",
+    "url": "https://www.regjeringen.no/no/tema/okonomi-og-budsjett/skatter-og-avgifter/skatte-og-avgiftssatser/skattesatser-2027/id3173438/",
+    "format": "html",
+    "retrievedAt": "2026-10-08T00:00:00Z",
+    "method": "curl",
+    "sha256": "64d8a7fb1b5fbc4e57c11cfb7a7c93f9f5ef66c6f9511b88fabdeca6ba56f846",
+    "bytes": 102937,
+    "pages": 0,
+    "rawFile": "sources/raw/regjeringen-skattesatser-2027.html",
+    "textFile": "sources/text/regjeringen-skattesatser-2027.txt",
+    "status": "archived",
+    "note": "Government summary page of the 2027 proposal's rates (retrieved 2026-10-08). Secondary to Prop. 1 LS (2026–2027); used to cross-check Tabell 1.5."
   }
 ]
