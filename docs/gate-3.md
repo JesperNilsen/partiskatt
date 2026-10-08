@@ -1,6 +1,6 @@
 # Operatørport 3: kryssjekk mot Skatteetatens skattekalkulator
 
-Gate 3 er en datainnføring, ikke en kodeendring. Du taster de seks fixturene i
+Gate 3 er en datainnføring, ikke en kodeendring. Du taster de syv fixturene i
 `src/tests/fixtures.ts` inn i Skatteetatens skattekalkulator, skriver av skattelinjene den viser
 i `src/data/gate3-results.ts`, og kjører `npm run check`. Regler som stemmer, blir `confirmed`
 av seg selv. Ingen status settes for hånd noe sted.

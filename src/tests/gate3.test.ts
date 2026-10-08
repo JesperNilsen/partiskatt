@@ -27,8 +27,8 @@ import { FIXTURES, FIXTURE_BIRTH_YEAR, adult, profile, wealth } from './fixtures
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '../..');
 
-/** Rules whose every parameter the six fixtures exercise (asserted below, not assumed). */
-const FULLY_EXERCISED: FormulaId[] = ['income.generalRate', 'income.bracketTax', 'income.personalAllowance'];
+/** Rules whose every parameter the seven fixtures exercise (asserted below, not assumed). */
+const FULLY_EXERCISED: FormulaId[] = ['income.generalRate', 'income.bracketTax', 'income.personalAllowance', 'income.pensionTaxCredit'];
 
 /** Engine values recorded as if Skatteetaten agreed exactly, with valid metadata. */
 function matchingResults(overrides: Partial<Gate3Results> = {}): Gate3Results {
@@ -198,7 +198,7 @@ describe('gate 3 — rule → component map is exact', () => {
     expect([...moved].sort()).toEqual([...declared].sort());
   });
 
-  it('the fully-exercised list matches the live exercise analysis on the six fixtures', () => {
+  it('the fully-exercised list matches the live exercise analysis on the seven fixtures', () => {
     const full = GATE3_RULE_IDS.filter((id) =>
       exerciseOf(ADOPTED_2026_ENCODED, id, FIXTURES, GATE3_RULE_FEEDS[id]).every((l) => l.movedBy.length > 0),
     );

@@ -1,6 +1,8 @@
 import { Link } from 'wouter';
 import { DocDataBanner } from '../components/DocDataBanner.tsx';
+import { OmissionList } from '../components/OmissionList.tsx';
 import { BRAND } from '../config/brand.ts';
+import { OMISSIONS } from '../config/omissions.ts';
 
 export function MethodView() {
   return (
@@ -81,6 +83,12 @@ export function MethodView() {
           hvert innslagspunkt for par er nøyaktig det dobbelte av innslagspunktet for enslige — ulik eierandel mellom
           samboere er ikke modellert.
         </p>
+      </section>
+
+      <section>
+        <h2>Det modellen ikke tar med</h2>
+        <p>Hver av disse er utelatt med vilje. Resultatsiden viser bare de som gjelder din situasjon.</p>
+        <OmissionList items={OMISSIONS} />
       </section>
 
       <section>

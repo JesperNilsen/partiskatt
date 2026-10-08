@@ -102,6 +102,11 @@ export const FIXTURES: Record<string, UserProfile> = {
     adults: [adult({ pensionIncome: kr(300_000) })],
     consumption: consumption({ food: 45_000, general: 90_000, electricity: 15_000 }, { kwh: 12_000 }),
   }),
+  // 500 000 kr is above trinn 2 (437 100 kr) of the pension credit, so the 6 % step is live: credit 8 032 kr.
+  highPensioner: profile({
+    adults: [adult({ pensionIncome: kr(500_000) })],
+    consumption: consumption({ food: 60_000, general: 150_000, electricity: 20_000 }, { kwh: 16_000 }),
+  }),
 };
 
 /**
@@ -118,4 +123,5 @@ export const FIXTURE_BIRTH_YEAR: Readonly<Record<string, number>> = {
   highEarner: 1980,
   homeownerWithWealth: 1980,
   singlePensioner: 1956,
+  highPensioner: 1956,
 };
