@@ -87,8 +87,12 @@ export function patchWealthValuation(
   return { ...adoptedParams('wealth.valuation'), ...patch };
 }
 
-export function emptyParty(id: PartyRuleSet['id'], reviewed: PartyRuleSet['reviewed'] = {}): PartyRuleSet {
-  return { id, year: 2026, base: 'proposed', deltas: [], reviewed, unquantified: [] };
+export function emptyParty(
+  id: PartyRuleSet['id'],
+  reviewed: PartyRuleSet['reviewed'] = {},
+  year: PartyRuleSet['year'] = 2026,
+): PartyRuleSet {
+  return { id, year, base: 'proposed', deltas: [], reviewed, unquantified: [] };
 }
 
 export { kr, krPerUnit, pct };

@@ -16,6 +16,7 @@ export type {
   BaselineId,
   BaselineRuleSet,
   Bracket,
+  BudgetYear,
   Category,
   DataStatus,
   ExciseFormulaId,

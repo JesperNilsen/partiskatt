@@ -4,6 +4,9 @@ import type { ExciseGood, VatCategory } from './profile.ts';
 export type PartyId = 'ap' | 'h' | 'frp' | 'sv' | 'sp' | 'r' | 'v' | 'mdg' | 'krf';
 export const PARTY_IDS: readonly PartyId[] = ['ap', 'h', 'frp', 'sv', 'sp', 'r', 'v', 'mdg', 'krf'];
 
+/** A budget round: the year whose rules the government proposes and the parties amend. */
+export type BudgetYear = 2026 | 2027;
+
 export type BaselineId = 'proposed' | 'adopted';
 export type RuleSetId = BaselineId | PartyId;
 
@@ -125,7 +128,7 @@ export type AnyRule = { [F in FormulaId]: Rule<F> }[FormulaId];
 
 export interface BaselineRuleSet {
   id: BaselineId;
-  year: 2026;
+  year: BudgetYear;
   rules: readonly AnyRule[];
 }
 
@@ -146,7 +149,7 @@ export interface UnquantifiedProposal {
 
 export interface PartyRuleSet {
   id: PartyId;
-  year: 2026;
+  year: BudgetYear;
   /** Party documents state changes relative to the government's proposal. */
   base: 'proposed';
   /** Absolute values of every rule the party proposes to change. */

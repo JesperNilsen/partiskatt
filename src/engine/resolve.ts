@@ -1,5 +1,6 @@
 import type {
   AnyRule,
+  BaselineId,
   BaselineRuleSet,
   ExcludedRule,
   FormulaId,
@@ -16,6 +17,13 @@ export interface DataBundle {
   readonly proposed: BaselineRuleSet;
   readonly adopted: BaselineRuleSet;
   readonly parties: readonly PartyRuleSet[];
+  /**
+   * What a party's absolute values are laid over. `adopted` (default) is the 2026 round: the party
+   * is judged against the adopted system. `proposed` is the 2027 round: no 2027 system is adopted
+   * yet, so a party alternative is the government's 2027 proposal plus its own changes, still
+   * compared against `adopted` (the 2026 system as adopted).
+   */
+  readonly partyBase?: BaselineId;
 }
 
 export interface Resolution {
@@ -75,5 +83,5 @@ export function resolveRuleSet(id: RuleSetId, data: DataBundle, toggles: Toggles
   }
   const party = data.parties.find((p) => p.id === id);
   if (!party) throw new Error(`ingen data for partiet «${id}»`);
-  return resolveParty(party, resolveBaseline(data.adopted), toggles);
+  return resolveParty(party, resolveBaseline(data[data.partyBase ?? 'adopted']), toggles);
 }

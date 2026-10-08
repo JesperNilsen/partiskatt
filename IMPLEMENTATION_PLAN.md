@@ -35,6 +35,11 @@ Autoritativ produktkontekst: `PROJECT.md`. Denne filen er fremdriftsloggen og ov
 3. Manuell kontroll av referansesystemets totaler for de fem testprofilene mot Skatteetatens kalkulator før snapshot-verdiene fryses som `confirmed`.
 4. Offentlig repo og endelig merkenavn: begge er ett-token-endringer (`src/config/brand.ts`). **2026-09-28: navnet er `partiskatt`; `feedbackMailto` og `repoUrl` er satt. Repoet ble offentlig samme dag.**
 
+## 2027-runden (trinn 1 ferdig 2026-10-08, gren `round-2027`)
+1. Arkivert: Prop. 1 LS (2026–2027) (`prop1ls-2026-2027`, Tabell 1.5 = PDF p26–30, 1.6 = p31–35) og regjeringens satsside. Sammenlignes mot vedtatt 2026.
+2. Bygget: `BudgetYear`, `DataBundle.partyBase`, `PROPOSED_2027` (18 endrede regler, resten videreført med 2027-sitat), `AP_2027`, `ROUND_2027_BUNDLE`, `src/tests/round-2027.test.ts` (sømtest mot vedtatt 2026, ankre, håndregnet 500 000 kr-lønn = 3 535 kr). Ikke i appen.
+3. Neste (trinn 2): arkivér Prop. 1 S / NAV (barnetrygd) og Lånekassen for 2027; partienes alternative budsjetter 2027 når de er ute (nov.–des.), lagt over `PROPOSED_2027`; årsvelger og 2027-resultatside; vedtatt 2027 erstatter forslaget først når Stortinget har vedtatt (desember). Mva-satsene er uendret i forslaget (grunnlagsendringer som ikke er modellert: postsending, elbiler).
+
 ## Neste økt (overlevering 2026-09-27, etter sprint 2026-10)
 1. **Sprint 2026-10 ferdig** (`docs/sprint-2026-10.md`, resultattabell nederst): Codex-revisjonen `docs/audit-2026-09-27.md` er fulgt opp i åtte baner. `main` = origin `49a105f`; 589 tester + 17 e2e grønne; ingen sprint-worktrees/-grener.
 2. **Nytt i modellen:** skattefradrag for pensjonsinntekt med junivedtakets verdier (39 100 kr, 294 200 kr @ 19,1 %, 437 100 kr @ 6 %; foreslått beholder Prop. 1 LS); mva-grunnlaget trekker fra referanseavgiften; forbruket løftes til 2026-priser (SSB 14700) som standard, 2022-priser som alternativ; «i 2026»-tall for regler med ikrafttredelse midt i året (hovedtallet er fortsatt helårseffekt); brikke med antall ikke tallfestede forslag per parti; pensjonsfelt, fagforeningskontingent og studiemåneder per voksen; resultat også uten inntekt.
