@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import { DataBanner } from '../components/DataBanner.tsx';
 import { HeadlineVerdict } from '../components/HeadlineVerdict.tsx';
+import { OmissionList } from '../components/OmissionList.tsx';
 import { PartyCard } from '../components/PartyCard.tsx';
+import { omissionsFor } from '../config/omissions.ts';
 import { useApp } from '../state/app.tsx';
 import { hasNoIncome } from '../state/profile.ts';
 import { toggleEffects, toggleSummary } from '../state/toggle-effects.ts';
@@ -93,6 +95,11 @@ export function ResultsView() {
             </li>
           ))}
         </ol>
+      </section>
+
+      <section className="card card--calm" aria-labelledby="omissions-title">
+        <h2 id="omissions-title">Dette er ikke med i tallene</h2>
+        <OmissionList items={omissionsFor(profile)} />
       </section>
 
       <section className="card card--calm">

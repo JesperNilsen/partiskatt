@@ -456,3 +456,11 @@ fieldset.adult-fields + fieldset.adult-fields {
   .child-list li .btn { width: 100%; }
   .form-actions .btn { flex: 1 1 100%; }
 }
+
+.omission-list {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+.omission-list li + li {
+  margin-top: 0.5rem;
+}
