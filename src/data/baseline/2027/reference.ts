@@ -134,6 +134,17 @@ const RATE_P73 = 'Prosentsatser, som for eksempel merverdiavgiftssatsene';
 const rateHeld = (what: string) =>
   prov('PDF p73', RATE_P73, `${what} Prosentsatser holdes uendret i referansesystemet (§2.9.1 note 3); 2026-satsen er videreført.`);
 
+/** Benefits are outside the tax referansesystem: carried, as PROPOSED_2027 carries them, so they give zero. */
+const benefitHeld = (id: 'benefit.childBenefit' | 'benefit.studentSupport') => {
+  const src = adoptedRule(id).provenance;
+  return prov(
+    'PDF p73',
+    'Referansesystemet for skatt er basert på',
+    `Referansesystemet i §2.9.1 gjelder skatter og avgifter; ytelser inngår ikke, og Prop. 1 LS trykker ikke 2027-satsen. 2026-satsen (${src.sourceId}, ${src.pageOrTable}) er videreført i referansen som i forslaget, så linjen gir null.`,
+    'medium',
+  );
+};
+
 const W = GROWTH_2027_BP.wage;
 const P = GROWTH_2027_BP.pension;
 const C = GROWTH_2027_BP.cpi;
@@ -284,14 +295,8 @@ const RULES: readonly AnyRule[] = [
   exciseRule('excise.spiritsLitre', 'Alkoholavgift brennevin ca. 40 vol.pst. (379,20 kr/l) (referanse 2027)', 'p31', '9,23 9,48', ' 9,48 × 40 = 379,20 kr/l, lik forslaget.'),
   exciseRule('excise.cigarette', 'Tobakksavgift sigaretter 3,40 kr/stk (referanse 2027)', 'p31', '331 340', ' 3,40 kr/stk, lik forslaget.'),
   exciseRule('excise.snusGram', 'Tobakksavgift snus 1,05 kr/gram (referanse 2027)', 'p31', '102 105', ' 1,05 kr/g, lik forslaget.'),
-  carried(
-    'benefit.childBenefit',
-    { ...adoptedRule('benefit.childBenefit').provenance, method: `${adoptedRule('benefit.childBenefit').provenance.method} [Referanse 2027: videreført. Ytelser er ikke en del av referansesystemet for skatt, og forslaget viderefører også 2026-satsen, så linjen gir null.]` },
-  ),
-  carried(
-    'benefit.studentSupport',
-    { ...adoptedRule('benefit.studentSupport').provenance, method: `${adoptedRule('benefit.studentSupport').provenance.method} [Referanse 2027: videreført. Ytelser er ikke en del av referansesystemet for skatt, og forslaget viderefører også 2026-satsen, så linjen gir null.]` },
-  ),
+  carried('benefit.childBenefit', benefitHeld('benefit.childBenefit')),
+  carried('benefit.studentSupport', benefitHeld('benefit.studentSupport')),
   carried(
     'employer.contribution',
     rateHeld('Arbeidsgiveravgift sone I 14,1 pst.'),

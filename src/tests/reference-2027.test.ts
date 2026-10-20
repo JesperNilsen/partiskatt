@@ -202,13 +202,9 @@ describe('REFERENCE_2027', () => {
     ]);
   });
 
-  it('every rule cites the Prop (or, for benefits, its 2026 source) with an anchor on a cited page', () => {
+  it('every rule cites the Prop with an anchor on a cited page', () => {
     for (const r of REFERENCE_2027.rules) {
-      if (r.provenance.sourceId !== SRC) {
-        expect(r.id.startsWith('benefit.'), r.id).toBe(true);
-        expect(r.provenance.sourceId).toBe(ADOPTED_2026.rules.find((a) => a.id === r.id)!.provenance.sourceId);
-        continue;
-      }
+      expect(r.provenance.sourceId, r.id).toBe(SRC);
       const pages = parsePageRefs(r.provenance.pageOrTable);
       expect(pages, `${r.id}: ${r.provenance.pageOrTable}`).not.toBeNull();
       expect(pages!.some((p) => onPage(p, r.provenance.anchor)), `${r.id}: «${r.provenance.anchor}» not on ${r.provenance.pageOrTable}`).toBe(true);
