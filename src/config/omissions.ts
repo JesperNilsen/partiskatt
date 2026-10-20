@@ -21,7 +21,7 @@ export const OMISSIONS: readonly Omission[] = [
     id: 'public-services',
     label: 'Offentlige tjenester og gratisordninger',
     caveat:
-      'Hva du får igjen i helse, skole, barnehage og andre tjenester er ikke regnet inn. Et parti kan gi deg mer i lommeboken og samtidig kutte i tjenester, eller omvendt.',
+      'Hva du får igjen i helse, skole, barnehage og andre tjenester er ikke regnet inn. Et parti kan gi deg mer igjen og samtidig bruke mindre på tjenester, eller omvendt.',
   },
   {
     id: 'price-caps',

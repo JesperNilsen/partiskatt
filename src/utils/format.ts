@@ -21,11 +21,14 @@ export function formatEffectiveDate(iso: string): string {
   return nbDate.format(new Date(`${iso}T00:00:00Z`));
 }
 
-/** Plain-language headline for a party delta. */
+/**
+ * Plain-language headline for a party delta. Neutral civic register (decision 2026-10-20): a gain and
+ * a loss use the same sentence with only «mer» / «mindre» swapped, so neither outcome is dramatised.
+ */
 export function headlinePhrase(amount: Kroner, partyShort: string): string {
   const amountKr = formatKr(kr(Math.abs(amount)));
-  if (amount > 0) return `${partyShort} lar deg beholde ${amountKr} kroner mer i året.`;
-  if (amount < 0) return `Skattesmellen: ${amountKr} kroner mindre igjen med ${partyShort}.`;
+  if (amount > 0) return `Med ${partyShort} har du ${amountKr} kroner mer igjen i året.`;
+  if (amount < 0) return `Med ${partyShort} har du ${amountKr} kroner mindre igjen i året.`;
   return `${partyShort} gir samme resultat som referansen.`;
 }
 

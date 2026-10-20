@@ -25,7 +25,7 @@ export function MethodView() {
         </p>
         <p>
           Arbeiderpartiet er regjeringsparti og har ikke et alternativt statsbudsjett for 2026. Partiets kort viser derfor
-          null avvik per konstruksjon — det vedtatte systemet er regjeringens politikk etter budsjettforliket.
+          null avvik per konstruksjon, fordi referansen er det vedtatte systemet etter budsjettforliket.
         </p>
         <p>
           Endringer fra forliket (15 regler som avviker fra Prop. 1 LS) er dokumentert i prosjektets kildemateriale og
@@ -52,7 +52,7 @@ export function MethodView() {
         </ol>
         <p>
           Partienes egne tall er formulert som avvik fra regjeringens forslag. Vi regner om til absolutte satser og
-          terskler, og sammenligner med referansen. Løse formuleringer i partiprogram brukes ikke.
+          terskler, og sammenligner med referansen. Formuleringer i partiprogram uten tall eller satser brukes ikke.
         </p>
       </section>
 
@@ -147,8 +147,8 @@ export function MethodView() {
         </p>
         <p>
           Prisår: standardprofilene står i 2026-priser. Kronene fra 2022 er løftet per mva-kategori med SSBs konsumprisindeks (tabell
-          14700): snittet for januar–august 2026 delt på snittet for 2022. Mat løftes med 1,250 og strøm med 0,924 — under 1 fordi 2022
-          var et krisår for strømprisen. Kollektivtransport løftes med 1,094: en vektet indeks av tog, buss og båt (07.3.1, 07.3.2 og
+          14700): snittet for januar–august 2026 delt på snittet for 2022. Mat løftes med 1,250 og strøm med 0,924 — under 1 fordi strømprisene
+          var uvanlig høye i 2022. Kollektivtransport løftes med 1,094: en vektet indeks av tog, buss og båt (07.3.1, 07.3.2 og
           07.3.4, med 2026-vektene 3,9, 11,4 og 4,5 promille), uten flyreisene, som har sin egen faktor. Mengdene (liter, kWh, reiser) løftes ikke, så særavgiftene er de samme i begge prisår; det er
           momsen som følger kronene. Velg «2022» ved siden av profilvelgeren for å se profilene uløftet. Beløp du har skrevet inn selv,
           løftes aldri. Alle faktorene står i metodedokumentet.
@@ -198,8 +198,8 @@ export function MethodView() {
           antagelsen, kilden og hvorfor forslaget er usikkert.
         </p>
         <p>
-          Eksempel: Høyres jobbfradrag skal gi «4300 kroner lavere skatt for folk i arbeid», men partiet sier ikke hvem som
-          regnes som i arbeid eller om fradraget trappes av. Kalkulatoren antar en flat skattereduksjon på 4 300 kr per
+          Eksempel: Høyres alternative budsjett beskriver jobbfradraget som «4300 kroner lavere skatt for folk i arbeid».
+          Budsjettet angir ikke hvem som regnes som i arbeid eller om fradraget trappes av. Kalkulatoren antar en flat skattereduksjon på 4 300 kr per
           voksen med lønnsinntekt, trukket fra skatt på alminnelig inntekt, trinnskatt og trygdeavgift, aldri så skatten
           blir negativ. Forslaget er merket usikkert.
         </p>

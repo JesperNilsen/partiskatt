@@ -123,7 +123,7 @@ export function PartyCard({ result, rank, expanded = false, onToggle }: PartyCar
             </h3>
             {isReference ? (
               <p className="party-card__ref-note">
-                Referanseparti — det vedtatte 2026-systemet er regjeringens politikk, så avviket er null per konstruksjon.
+                Referanseparti — sammenligningen bruker det vedtatte 2026-systemet, så avviket er null per konstruksjon.
               </p>
             ) : null}
             {uCount > 0 ? (
