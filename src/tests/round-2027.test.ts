@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { ADOPTED_2026, AP_2027, PROPOSED_2027, ROUND_2027_BUNDLE, sourceOf } from '../data/index.ts';
+import { ADOPTED_2026, AP_2027, PROPOSED_2027, REFERENCE_2027, ROUND_2027_BUNDLE, sourceOf } from '../data/index.ts';
 import { FORMULA_IDS } from '../engine/formulas.ts';
 import { calculateParty } from '../engine/calculate-scenario.ts';
 import { resolveRuleSet } from '../engine/resolve.ts';
@@ -12,9 +12,10 @@ import { kr } from '../engine/money.ts';
 import { adult, FIXTURES, profile } from './fixtures.ts';
 
 /**
- * 2027 round, stage 1: the government's proposal (Prop. 1 LS (2026–2027)) against the 2026 budget as
- * ADOPTED. The document prints both years side by side, so the proposal's «2026» column must equal
- * ADOPTED_2026 — checked here rule by rule, in both directions.
+ * 2027 round, stage 1: the government's proposal (Prop. 1 LS (2026–2027)). The document prints both years
+ * side by side, so the proposal's «2026» column must equal ADOPTED_2026 — checked here rule by rule, in
+ * both directions. Cards compare with REFERENCE_2027 (ADOPTED_2026 indexed to 2027 level; convention in
+ * src/tests/reference-2027.test.ts); the same-kroner comparison survives only as a labelled method check.
  */
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -121,7 +122,11 @@ describe('PROPOSED_2027 provenance against the archived text', () => {
 });
 
 describe('2027 round engine', () => {
-  const ap = () => calculateParty(profile({ adults: [adult({ wageIncome: kr(500_000) })] }), 'ap', ROUND_2027_BUNDLE, DEFAULT_TOGGLES);
+  const single = (wage: number) => profile({ adults: [adult({ wageIncome: kr(wage) })] });
+  const ap = (wage: number, bundle = ROUND_2027_BUNDLE) => calculateParty(single(wage), 'ap', bundle, DEFAULT_TOGGLES);
+  const kept = (res: ReturnType<typeof ap>, id: string) => res.components.filter((c) => c.formulaId === id).reduce((s, c) => s + c.keptDelta, 0);
+  /** The method comparison only: the same proposal against the 2026 rules at the same kroner. */
+  const SAME_KRONER = { ...ROUND_2027_BUNDLE, reference: ADOPTED_2026 };
 
   it('lays Ap over the proposal, not over adopted 2026', () => {
     const rs = resolveRuleSet('ap', ROUND_2027_BUNDLE, DEFAULT_TOGGLES).ruleSet;
@@ -130,22 +135,52 @@ describe('2027 round engine', () => {
     expect(AP_2027.deltas).toHaveLength(0);
   });
 
-  it('500 000 kr wage, no consumption: tax saving matches an independent hand calculation', () => {
+  it('compares with the indexed referansesystem, not with the 2026 rules', () => {
+    expect(ROUND_2027_BUNDLE.reference).toBe(REFERENCE_2027);
+    expect(resolveRuleSet('reference', ROUND_2027_BUNDLE, DEFAULT_TOGGLES).ruleSet.id).toBe('reference');
+  });
+
+  it('750 000 kr wage, no consumption: trygdeavgift is exactly the Prop\'s 1 500 kr, total = hand calculation', () => {
+    // Prop. 1 LS PDF p80: «750 000 kroner gir det en skattelettelse på 1 500».
+    expect(anchorInText('750 000 kroner gir det en skattelettelse på 1 500', PAGES[79] ?? '')).toBe(true);
+    const res = ap(750_000);
+    expect(kept(res, 'income.socialSecurity')).toBe(1_500); // 0,2 pst. × 750 000
+    // Reference: (750 000 − 99 550 − 119 100) × 22 % = 116 897. Proposal: (750 000 − 99 550 − 120 180) × 22 %
+    // = 116 659,4 → 116 659. Minstefradrag and trinn thresholds equal the reference, so 0.
+    expect(kept(res, 'income.generalRate')).toBe(238);
+    expect(kept(res, 'income.bracketTax')).toBe(0);
+    expect(res.headline as number).toBe(1_738);
+    // The audit's approximation (1 500 + 0,22 × 1 086) was 1 739; the target band is ±50 kr.
+    expect(Math.abs((res.headline as number) - 1_739)).toBeLessThanOrEqual(50);
+  });
+
+  it('500 000 and 1 000 000 kr wage: 0,2 pst. trygdeavgift + the same 238 kr personfradrag gain', () => {
+    // Personfradrag 120 180 − 119 100 = 1 080 kr; 22 % → 237,6, rounded per tax to 238 at every income here.
+    expect(ap(500_000).headline as number).toBe(1_000 + 238);
+    expect(ap(1_000_000).headline as number).toBe(2_000 + 238);
+    expect(Math.abs((ap(500_000).headline as number) - 1_238)).toBeLessThanOrEqual(50);
+    expect(Math.abs((ap(1_000_000).headline as number) - 2_239)).toBeLessThanOrEqual(50);
+  });
+
+  it('method comparison (same kroner, reference = ADOPTED_2026) matches an independent hand calculation at 500 000 kr', () => {
+    // Not the headline frame: it counts the indexation of trinn and fradrag as a tax cut.
     // 2026: minstefradrag 95 700; (500 000 − 95 700 − 114 540) × 22 % = 63 747,2; trinn 1 567,4 + 7 268;
     //       trygdeavgift 38 000                                                  → 110 582,6
     // 2027: minstefradrag 99 550; (500 000 − 99 550 − 120 180) × 22 % = 61 659,4; trinn 1 630,3 + 6 758;
     //       trygdeavgift 37 000                                                  → 107 047,7
-    const headline = ap().headline as number;
+    const headline = ap(500_000, SAME_KRONER).headline as number;
     expect(Math.abs(headline - 3_534.9)).toBeLessThan(2);
+    // The indexed frame removes the indexation part: 3 535 → 1 238.
+    expect(headline - (ap(500_000).headline as number)).toBe(2_297);
   });
 
-  it('a pure wage earner is better off, and the reference is the 2026 system (zero change against itself)', () => {
+  it('a pure wage earner is better off, and the proposal against itself is zero', () => {
     for (const key of ['medianSingle', 'twoEarnersTwoKids', 'highEarner']) {
       const res = calculateParty(FIXTURES[key]!, 'ap', ROUND_2027_BUNDLE, DEFAULT_TOGGLES);
-      expect(res.headline as number, key).not.toBe(0);
+      expect(res.headline as number, key).toBeGreaterThan(0);
     }
-    // The 2026 bundle keeps Ap at zero by construction; only the 2027 round moves it.
-    const zero = calculateParty(FIXTURES.medianSingle!, 'ap', { ...ROUND_2027_BUNDLE, proposed: ROUND_2027_BUNDLE.adopted, partyBase: 'adopted' }, DEFAULT_TOGGLES);
+    // Ap = the proposal; compared with a reference equal to the proposal, the card is zero by construction.
+    const zero = calculateParty(FIXTURES.medianSingle!, 'ap', { ...ROUND_2027_BUNDLE, reference: PROPOSED_2027 }, DEFAULT_TOGGLES);
     expect(zero.headline as number).toBe(0);
   });
 });
