@@ -20,7 +20,7 @@ import { compareScenarios, summarizeParty } from './headline.ts';
 import { computeIncomeTax } from './income-tax.ts';
 import { neg, sanitizeKroner, sanitizeUnits, sum } from './money.ts';
 import type { DataBundle } from './resolve.ts';
-import { resolveBaseline, resolveRuleSet } from './resolve.ts';
+import { baselineOf, resolveBaseline, resolveRuleSet } from './resolve.ts';
 import type { ResolvedRuleSet } from './rule-set.ts';
 import { computeWealthTax } from './wealth-tax.ts';
 
@@ -106,10 +106,12 @@ export function computeScenario(profile: UserProfile, rs: ResolvedRuleSet, refer
 
 export function calculateParty(profile: UserProfile, party: PartyId, data: DataBundle, toggles: Toggles): PartyResult {
   const clean = sanitizeProfile(profile);
-  const adopted = resolveBaseline(data.adopted);
+  // The comparison system, also the price level spend is entered in: `adopted` unless the round
+  // sets a referansesystem (2027: REFERENCE_2027). See DataBundle.reference.
+  const reference = resolveBaseline(baselineOf(data, 'reference'));
   const resolution = resolveRuleSet(party, data, toggles);
-  const ref = computeScenario(clean, adopted, adopted);
-  const alt = computeScenario(clean, resolution.ruleSet, adopted);
+  const ref = computeScenario(clean, reference, reference);
+  const alt = computeScenario(clean, resolution.ruleSet, reference);
   return summarizeParty(party, compareScenarios(ref, alt), resolution.excluded, resolution.appliedRuleCount, toggles);
 }
 

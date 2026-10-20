@@ -15,7 +15,7 @@ export { compareScenarios, headlineGate, summarizeParty } from './headline.ts';
 export type { GateVerdict } from './headline.ts';
 export { bracketTax, computeIncomeTax, minimumDeduction, pensionTaxCredit, socialSecurity } from './income-tax.ts';
 export * from './money.ts';
-export { resolveBaseline, resolveParty, resolveRuleSet } from './resolve.ts';
+export { baselineOf, resolveBaseline, resolveParty, resolveRuleSet } from './resolve.ts';
 export type { DataBundle, Resolution } from './resolve.ts';
 export { paramsOf, ruleOf } from './rule-set.ts';
 export type { ResolvedRuleSet } from './rule-set.ts';
