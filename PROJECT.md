@@ -38,11 +38,11 @@ Hovedspørsmålet brukeren skal få svar på er:
 - Moms og særavgifter bruker en standardisert forbruksprofil som brukeren kan justere.
 - Målgruppene er lønnsmottakere, studenter med lønn og stipend, enslige med barn og par med barn.
 - Pensjonister med alderspensjon eller AFP støttes (eget felt per voksen, med skattefradrag for pensjonsinntekt). Uføretrygd er ikke modellert.
-- Uttrykket skal være tabloid og konfronterende på forsiden og resultatsiden, men nøkternt og etterprøvbart i metode og kilder.
+- Uttrykket er et nøytralt samfunnsverktøy: klart og presist på forsiden og resultatsiden, nøkternt og etterprøvbart i metode og kilder. Ingen partier eller utfall skal framheves med ladede ord (beslutning 2026-10-20).
 - MVP-en har ingen delingsfunksjon, konto eller backend.
 - Alle beregninger skjer lokalt i nettleseren.
 - Lanseringen merkes tydelig som offentlig beta.
-- Mises-profilering er ikke besluttet. Ikke bruk Mises-navn eller logo uten senere eksplisitt instruks.
+- Ingen Mises- eller annen organisasjonsprofilering: verken navn, logo eller avsender fra en organisasjon (beslutning 2026-10-20).
 
 ## Teknisk ramme
 
@@ -267,11 +267,13 @@ Ikke be om navn, personnummer, adresse eller andre unødvendige personopplysning
 
 ## Resultatside
 
-Resultatsiden skal være mobiltilpasset og åpne med en tabloid, konkret konklusjon. Eksempler på tone:
+Resultatsiden skal være mobiltilpasset og åpne med en konkret, nøktern konklusjon i kroner. Eksempler på tone:
 
-> Dette partiet lar deg beholde 8 430 kroner mer i året.
+> Med parti X har du 8 430 kroner mer igjen i året.
 
-> Skattesmellen: 12 700 kroner mindre igjen.
+> Med parti Y har du 12 700 kroner mindre igjen i året.
+
+En gevinst og et tap bruker samme setning; bare «mer» og «mindre» skiller dem.
 
 Vis deretter:
 
@@ -291,15 +293,15 @@ Ikke bygg delingskort, eksport eller delingslenker i MVP-en.
 
 - Mobil først
 - Store tall
-- Korte, konfronterende overskrifter
+- Korte, presise overskrifter som sier hva tallet betyr
 - Umiddelbar forskjell mellom mer og mindre igjen
 - Partifarger som identifikasjon
 - God kontrast og tilgjengelighet
 - Klart norsk uten unødvendig fagspråk
-- Forsiden og resultatene kan være tabloide
+- Forsiden og resultatene skal være tydelige og direkte, uten ladede ord eller dramatisering
 - Metode og kildevisning skal være rolige og institusjonelle
 - Unngå både generisk offentlig portal-estetikk og useriøst memepreg
-- Resultatet skal være skarpt; metoden skal være kjølig
+- Resultatet skal være skarpt og nøkternt; metoden skal være kjølig
 
 Bruk plassholder for logo og merkenavn slik at navnet kan byttes senere uten omfattende refaktorering.
 

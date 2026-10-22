@@ -15,7 +15,7 @@ export function HeadlineVerdict({ top }: HeadlineVerdictProps) {
       <h2 className="verdict__headline">{headlinePhrase(top.headline, meta.shortName)}</h2>
       <p className="verdict__sub">{monthlyPhrase(top.headline)}</p>
       <p className="verdict__note">
-        Rangert etter hvem som gir deg mest penger igjen. Alle partier sammenlignes med det vedtatte 2026-systemet.
+        Sortert etter hvor mye du har igjen i året. Alle partier sammenlignes med det vedtatte 2026-systemet.
       </p>
     </section>
   );

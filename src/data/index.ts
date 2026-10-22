@@ -1,5 +1,6 @@
 import { ADOPTED_2026 } from './baseline/2026/adopted.ts';
 import { PROPOSED_2027 } from './baseline/2027/proposed.ts';
+import { REFERENCE_2027 } from './baseline/2027/reference.ts';
 import { PROPOSED_2026 } from './baseline/2026/proposed.ts';
 import { NON_FORLIK_BASELINE_DIFFS } from './baseline/2026/forlik.ts';
 import type { DataBundle } from '../engine/resolve.ts';
@@ -15,7 +16,7 @@ import { SP_2026 } from './parties/sp.ts';
 import { SV_2026 } from './parties/sv.ts';
 import { V_2026 } from './parties/v.ts';
 
-export { ADOPTED_2026, PROPOSED_2026, PROPOSED_2027, NON_FORLIK_BASELINE_DIFFS };
+export { ADOPTED_2026, PROPOSED_2026, PROPOSED_2027, REFERENCE_2027, NON_FORLIK_BASELINE_DIFFS };
 export { SOURCES, PARTY_SOURCE_ID, partySource, sourceOf } from './sources.ts';
 export { AP_2026, AP_2027 } from './parties/ap.ts';
 export { H_2026 } from './parties/h.ts';
@@ -51,14 +52,19 @@ export const DATA_BUNDLE: DataBundle = {
 };
 
 /**
- * The 2027 round (stage 1: the government's proposal only). Reference = the 2026 budget as
- * ADOPTED; `proposed` = Prop. 1 LS (2026–2027); parties are laid over the proposal, since no 2027
- * system is adopted before December. Party alternatives for 2027 are added in stage 2. Not wired
- * into the UI: DATA_BUNDLE (the 2026 round) is what the app shows.
+ * The 2027 round (stage 1: the government's proposal only). `proposed` = Prop. 1 LS (2026–2027);
+ * parties are laid over the proposal, since no 2027 system is adopted before December. Every card is
+ * compared with `reference` = REFERENCE_2027, the 2026 budget as ADOPTED indexed to 2027 level the
+ * way the Prop builds its referansesystem (decision 2026-10-20), so a card shows the change against
+ * unchanged policy, not against the 2026 rules at the same kroner. `adopted` stays ADOPTED_2026: it is
+ * the system the reference is built from and what PROPOSED_2027's «2026» column is checked against.
+ * Party alternatives for 2027 are added in stage 2. Not wired into the UI: DATA_BUNDLE (the 2026
+ * round) is what the app shows.
  */
 export const ROUND_2027_BUNDLE: DataBundle = {
   proposed: PROPOSED_2027,
   adopted: ADOPTED_2026,
+  reference: REFERENCE_2027,
   parties: [AP_2027],
   partyBase: 'proposed',
 };

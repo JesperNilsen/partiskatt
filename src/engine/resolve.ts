@@ -16,14 +16,26 @@ import type { ResolvedRuleSet } from './rule-set.ts';
 export interface DataBundle {
   readonly proposed: BaselineRuleSet;
   readonly adopted: BaselineRuleSet;
+  /**
+   * What every alternative is compared against, and the price level consumption spend is entered in.
+   * Default `adopted`: the 2026 round compares with the system in force. The 2027 round sets the
+   * referansesystem (REFERENCE_2027: adopted 2026 with amounts indexed to 2027 level, as Prop. 1 LS
+   * computes «endring fra referansen»), so indexation alone is not counted as a tax change.
+   */
+  readonly reference?: BaselineRuleSet;
   readonly parties: readonly PartyRuleSet[];
   /**
    * What a party's absolute values are laid over. `adopted` (default) is the 2026 round: the party
    * is judged against the adopted system. `proposed` is the 2027 round: no 2027 system is adopted
-   * yet, so a party alternative is the government's 2027 proposal plus its own changes, still
-   * compared against `adopted` (the 2026 system as adopted).
+   * yet, so a party alternative is the government's 2027 proposal plus its own changes, compared
+   * against `reference`.
    */
   readonly partyBase?: BaselineId;
+}
+
+/** The rule set a bundle names by id; `reference` falls back to `adopted` when the bundle sets none. */
+export function baselineOf(data: DataBundle, id: BaselineId): BaselineRuleSet {
+  return id === 'reference' ? (data.reference ?? data.adopted) : data[id];
 }
 
 export interface Resolution {
@@ -78,10 +90,10 @@ export function resolveParty(party: PartyRuleSet, adopted: ResolvedRuleSet, togg
 }
 
 export function resolveRuleSet(id: RuleSetId, data: DataBundle, toggles: Toggles): Resolution {
-  if (id === 'adopted' || id === 'proposed') {
-    return { ruleSet: resolveBaseline(data[id]), excluded: [], appliedRuleCount: 0 };
+  if (id === 'adopted' || id === 'proposed' || id === 'reference') {
+    return { ruleSet: resolveBaseline(baselineOf(data, id)), excluded: [], appliedRuleCount: 0 };
   }
   const party = data.parties.find((p) => p.id === id);
   if (!party) throw new Error(`ingen data for partiet «${id}»`);
-  return resolveParty(party, resolveBaseline(data[data.partyBase ?? 'adopted']), toggles);
+  return resolveParty(party, resolveBaseline(baselineOf(data, data.partyBase ?? 'adopted')), toggles);
 }

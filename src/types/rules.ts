@@ -7,7 +7,12 @@ export const PARTY_IDS: readonly PartyId[] = ['ap', 'h', 'frp', 'sv', 'sp', 'r',
 /** A budget round: the year whose rules the government proposes and the parties amend. */
 export type BudgetYear = 2026 | 2027;
 
-export type BaselineId = 'proposed' | 'adopted';
+/**
+ * `adopted`: the system in force. `proposed`: the government's proposal. `reference`: the
+ * referansesystem a round is compared against when it is not `adopted` itself (2027: the adopted
+ * 2026 system indexed to 2027 level, src/data/baseline/2027/reference.ts).
+ */
+export type BaselineId = 'proposed' | 'adopted' | 'reference';
 export type RuleSetId = BaselineId | PartyId;
 
 /** Internal category; display groups collapse these to three (see result.ts). */

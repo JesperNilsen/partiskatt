@@ -778,7 +778,7 @@
     "rawFile": "sources/raw/ssb-fbu-14156.json",
     "textFile": null,
     "status": "archived",
-    "note": "StatBank 14156 data (POST json-stat2; query: 66 VareTjenesteGruppe, InntektForbrEnhet 0/41/44, ContentsCode Utgift, Tid 2022). Enhet: kr per husholdning per år. Dette er kilden som gjør «nøktern» og «høy» KILDEFESTET i stedet for oppdiktede faktorer over «typisk»: 41 = laveste inntektskvartil -> nøktern, 0 = alle husholdninger -> typisk, 44 = høyeste inntektskvartil -> høy. Tabellen sist oppdatert hos SSB 2024-03-25. Arkivert av køkjøringen 2026-09-15, som avbrøt før manifestraden ble skrevet; raden er ført 2026-09-16 og retrievedAt er filens mtime, ikke et loggført hentetidspunkt."
+    "note": "StatBank 14156 data (POST json-stat2; query: 66 VareTjenesteGruppe, InntektForbrEnhet 0/41/44, ContentsCode Utgift, Tid 2022). Enhet: kr per husholdning per år. Dette er kilden som gir «nøktern» og «høy» et dokumentert grunnlag i stedet for skjønnsmessige påslag over «typisk»: 41 = laveste inntektskvartil -> nøktern, 0 = alle husholdninger -> typisk, 44 = høyeste inntektskvartil -> høy. Tabellen sist oppdatert hos SSB 2024-03-25. Arkivert av køkjøringen 2026-09-15, som avbrøt før manifestraden ble skrevet; raden er ført 2026-09-16 og retrievedAt er filens mtime, ikke et loggført hentetidspunkt."
   },
   {
     "id": "ssb-06076-husholdningsstorrelse-2022",
