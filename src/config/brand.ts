@@ -14,4 +14,7 @@ export const BRAND = {
   feedbackMailto: 'mailto:jesper.nilsen05@gmail.com?subject=Feil%20i%20Partiskatt',
   /** Public source repository, or null to hide the link. */
   repoUrl: 'https://github.com/JesperNilsen/partiskatt' as string | null,
+  /** Owner homepage, linked from the footer. */
+  homepageUrl: 'https://jespernilsen.com/',
+  homepageLabel: 'jespernilsen.com',
 } as const;

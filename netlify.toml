@@ -20,4 +20,6 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "no-referrer"
     X-Frame-Options = "DENY"
+    # Not searchable by design (owner decision 2026-11-16). No robots.txt Disallow: it would hide this header from crawlers.
+    X-Robots-Tag = "noindex, nofollow"
     Permissions-Policy = "geolocation=(), camera=(), microphone=(), payment=()"

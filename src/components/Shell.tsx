@@ -31,6 +31,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
               <a href={BRAND.repoUrl}>Kildekode</a>
             </>
           ) : null}
+          <span aria-hidden="true"> · </span>
+          <a href={BRAND.homepageUrl}>{BRAND.homepageLabel}</a>
         </p>
       </footer>
     </div>
