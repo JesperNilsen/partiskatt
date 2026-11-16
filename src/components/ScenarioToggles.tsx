@@ -49,7 +49,7 @@ export function ScenarioToggles({ bundle, toggles, setToggles }: ScenarioToggles
     <>
       <ToggleRow
         id="toggle-uncertain"
-        label="Ta med usikre forslag (av som standard)"
+        label="Regn med usikre forslag (på som standard)"
         checked={toggles.includeUncertain}
         effect={effects?.includeUncertain ?? null}
         onChange={(checked) => setToggles((t) => ({ ...t, includeUncertain: checked }))}

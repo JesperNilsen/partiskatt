@@ -4,6 +4,7 @@ import { DataBanner } from '../components/DataBanner.tsx';
 import { HeadlineVerdict } from '../components/HeadlineVerdict.tsx';
 import { OmissionList } from '../components/OmissionList.tsx';
 import { PartyCard } from '../components/PartyCard.tsx';
+import { ScenarioToggles } from '../components/ScenarioToggles.tsx';
 import { omissionsFor } from '../config/omissions.ts';
 import { useApp } from '../state/app.tsx';
 import { hasNoIncome } from '../state/profile.ts';
@@ -12,7 +13,7 @@ import type { PartyId } from '../types/index.ts';
 
 export function ResultsView() {
   const [, navigate] = useLocation();
-  const { data, dataLoading, dataError, results, submitted, recalculate, toggles, profile } = useApp();
+  const { data, dataLoading, dataError, results, submitted, recalculate, toggles, setToggles, profile } = useApp();
   const [expanded, setExpanded] = useState<PartyId | null>(null);
 
   useEffect(() => {
@@ -80,8 +81,13 @@ export function ResultsView() {
         <h2 className="results-list__title">Alle ni partier</h2>
         <p className="results-list__sub">Sortert etter mest penger igjen per år mot det vedtatte 2026-systemet.</p>
         <p className="results-list__sub">
-          Forslag partiene ikke har tallfestet er ikke med i rangeringen; chipen på partikortet viser hvor mange.
+          Forslag partiene ikke har tallfestet er ikke med i rangeringen; merket på partikortet viser hvor mange.
+          Usikre forslag er regnet med, og kortet viser hvor mye de utgjør.
         </p>
+        <fieldset className="results-assumptions">
+          <legend>Forutsetninger</legend>
+          <ScenarioToggles bundle={data.bundle} toggles={toggles} setToggles={setToggles} />
+        </fieldset>
         <ol className="party-list">
           {results.map((result, i) => (
             <li key={result.party}>

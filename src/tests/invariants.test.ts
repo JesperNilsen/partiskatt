@@ -81,7 +81,8 @@ describe('party overlay and headline gate', () => {
 
   it('uncertain rules need the toggle', () => {
     const data = bundle(party([higherAllowance({ uncertain: true })]));
-    expect(calculateParty(FIXTURES.medianSingle!, 'h', data, DEFAULT_TOGGLES).headline).toBe(0);
+    const off: Toggles = { ...DEFAULT_TOGGLES, includeUncertain: false };
+    expect(calculateParty(FIXTURES.medianSingle!, 'h', data, off).headline).toBe(0);
     const on: Toggles = { ...DEFAULT_TOGGLES, includeUncertain: true };
     expect(calculateParty(FIXTURES.medianSingle!, 'h', data, on).headline).toBe(2_200);
   });

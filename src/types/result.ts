@@ -1,5 +1,5 @@
 import type { Kroner } from './money.ts';
-import type { Category, DataStatus, FormulaId, PartyId, RuleSetId } from './rules.ts';
+import type { Category, DataStatus, FormulaId, OffsetRef, PartyId, RuleSetId } from './rules.ts';
 
 /** The three groups shown to the user. */
 export type HeadlineGroup = 'direct' | 'consumption' | 'benefit';
@@ -64,6 +64,8 @@ export interface ExcludedRule {
   status: DataStatus;
   reason: string;
   uncertain: boolean;
+  /** Carried from `UnquantifiedProposal.offsets`. */
+  offsets?: OffsetRef;
 }
 
 export interface PartyResult {
@@ -78,4 +80,9 @@ export interface PartyResult {
   excluded: readonly ExcludedRule[];
   /** Number of rules the party changed that entered the arithmetic. */
   appliedRuleCount: number;
+  /**
+   * Kroner of `headline` that come from proposals marked uncertain. `null` when the uncertain
+   * toggle is off or the party has no uncertain proposal in the arithmetic.
+   */
+  uncertainShare: Kroner | null;
 }

@@ -194,8 +194,9 @@ export function MethodView() {
           </li>
         </ul>
         <p>
-          Forslag merket som usikre er av som standard og kan slås på under «Mulige endringer» i kalkulatoren. Da vises
-          antagelsen, kilden og hvorfor forslaget er usikkert.
+          Forslag merket som usikre er regnet med som standard, fordi å utelate dem er det samme som å anta at de er
+          verdt 0 kroner. Partikortet viser hvor mye de utgjør, og under regelen står antagelsen, kilden og hvorfor
+          forslaget er usikkert. De kan slås av under «Forutsetninger» på resultatsiden.
         </p>
         <p>
           Eksempel: Høyres alternative budsjett beskriver jobbfradraget som «4300 kroner lavere skatt for folk i arbeid».

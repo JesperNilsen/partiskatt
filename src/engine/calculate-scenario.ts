@@ -112,7 +112,24 @@ export function calculateParty(profile: UserProfile, party: PartyId, data: DataB
   const resolution = resolveRuleSet(party, data, toggles);
   const ref = computeScenario(clean, reference, reference);
   const alt = computeScenario(clean, resolution.ruleSet, reference);
-  return summarizeParty(party, compareScenarios(ref, alt), resolution.excluded, resolution.appliedRuleCount, toggles);
+  const deltas = compareScenarios(ref, alt);
+  const { excluded, appliedRuleCount } = resolution;
+  const result = summarizeParty(party, deltas, excluded, appliedRuleCount, toggles);
+  if (!toggles.includeUncertain) return result;
+
+  // What the uncertain proposals contribute to this user's number: the same party once more
+  // with them left out. Skipped when the party has none in the arithmetic.
+  const certain = resolveRuleSet(party, data, { ...toggles, includeUncertain: false });
+  if (certain.appliedRuleCount === appliedRuleCount) return result;
+  const altCertain = computeScenario(clean, certain.ruleSet, reference);
+  const withoutUncertain = summarizeParty(
+    party,
+    compareScenarios(ref, altCertain),
+    certain.excluded,
+    certain.appliedRuleCount,
+    toggles,
+  );
+  return { ...result, uncertainShare: sum([result.headline, neg(withoutUncertain.headline)]) };
 }
 
 /** Every party in the bundle, best headline first (ties broken by party id for stable rendering). */

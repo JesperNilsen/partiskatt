@@ -22,6 +22,7 @@ export type {
   ExciseFormulaId,
   FormulaId,
   FormulaParams,
+  OffsetRef,
   PartyId,
   PartyMeta,
   PartyRuleSet,

@@ -5,7 +5,7 @@ import type { PartyResult } from '../types/index.ts';
 import { kr } from '../engine/money.ts';
 import { formatSignedKr } from '../utils/format.ts';
 import { BreakdownBars } from './BreakdownBars.tsx';
-import { partyRuleRows, sourceLine, unquantifiedCount, type RuleRow } from './rule-provenance.ts';
+import { leftOut, offsetWarnings, partyRuleRows, sourceLine, type RuleRow } from './rule-provenance.ts';
 import { StatusBadge } from './StatusBadge.tsx';
 
 interface PartyCardProps {
@@ -79,7 +79,9 @@ export function PartyCard({ result, rank, expanded = false, onToggle }: PartyCar
   const deltaCls = gain ? 'party-card--gain' : loss ? 'party-card--loss' : 'party-card--neutral';
   const isReference = meta.inGovernment && neutral;
   const rules = expanded ? partyRuleRows(result) : null;
-  const uCount = unquantifiedCount(result);
+  const out = leftOut(result);
+  const outLabel = out.allUnquantified ? 'ikke tallfestet' : 'ikke medregnet';
+  const warnings = offsetWarnings(result);
   const excludedHeadingRef = useRef<HTMLHeadingElement>(null);
   const pendingScrollToExcluded = useRef(false);
 
@@ -126,14 +128,18 @@ export function PartyCard({ result, rank, expanded = false, onToggle }: PartyCar
                 Referanseparti — sammenligningen bruker det vedtatte 2026-systemet, så avviket er null per konstruksjon.
               </p>
             ) : null}
-            {uCount > 0 ? (
+            {out.count > 0 ? (
               <button
                 type="button"
                 className="status-badge status-badge--unquantified party-card__coverage"
                 onClick={showUnquantified}
-                aria-label={`${uCount} forslag fra ${meta.shortName} er ikke tallfestet og ikke med i hovedtallet. Vis dem.`}
+                aria-label={
+                  out.allUnquantified
+                    ? `${out.count} forslag fra ${meta.shortName} er ikke tallfestet og ikke med i hovedtallet. Vis dem.`
+                    : `${out.count} forslag fra ${meta.shortName} er ikke med i hovedtallet. Vis dem.`
+                }
               >
-                {uCount} forslag ikke tallfestet
+                {out.count} forslag {outLabel}
               </button>
             ) : null}
           </div>
@@ -145,6 +151,13 @@ export function PartyCard({ result, rank, expanded = false, onToggle }: PartyCar
           <p className="party-card__monthly">{formatSignedKr(result.monthly)} kr/mnd</p>
         </div>
       </header>
+
+      {warnings.map((w) => (
+        <p key={w.title} className="party-card__incomplete" role="note">
+          <strong>Ufullstendig tall.</strong> Endringen i {w.componentLabel.toLowerCase()} er regnet med (
+          {formatSignedKr(w.counted)} kr), men «{w.title}» trekker motsatt vei og er ikke tallfestet.
+        </p>
+      ))}
 
       <BreakdownBars byGroup={result.byGroup} />
 
@@ -158,6 +171,12 @@ export function PartyCard({ result, rank, expanded = false, onToggle }: PartyCar
           </div>
         ))}
       </dl>
+
+      {result.uncertainShare !== null && result.uncertainShare !== 0 ? (
+        <p className="party-card__uncertain">
+          Av dette: {formatSignedKr(result.uncertainShare)} kr/år fra usikre forslag, som bygger på en antagelse.
+        </p>
+      ) : null}
 
       {result.employerDelta !== null ? (
         <p className="party-card__employer">
@@ -213,7 +232,7 @@ export function PartyCard({ result, rank, expanded = false, onToggle }: PartyCar
             </section>
           ) : null}
           <p className="party-card__meta">
-            {result.appliedRuleCount} regel{result.appliedRuleCount === 1 ? '' : 'er'} inngår i beregningen. Alle
+            {result.appliedRuleCount} {result.appliedRuleCount === 1 ? 'regel' : 'regler'} inngår i beregningen. Alle
             dokumentene og arkivstatus: <Link href="/kilder">Kilder</Link>.
           </p>
         </div>

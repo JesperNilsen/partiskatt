@@ -30,6 +30,8 @@ const employerDelta = rule(
   { status: 'estimated' },
 );
 
+const ALL_OFF: Toggles = { includeUncertain: false, includeEmployerContribution: false };
+
 function renderToggles(data: DataBundle | null, initial: Toggles = DEFAULT_TOGGLES) {
   const state = { toggles: initial };
   render(
@@ -43,7 +45,7 @@ function renderToggles(data: DataBundle | null, initial: Toggles = DEFAULT_TOGGL
   );
   return {
     state,
-    uncertain: screen.getByLabelText(/Ta med usikre forslag/) as HTMLInputElement,
+    uncertain: screen.getByLabelText(/Regn med usikre forslag/) as HTMLInputElement,
     employer: screen.getByLabelText(/Vis arbeidsgiveravgift/) as HTMLInputElement,
   };
 }
@@ -64,7 +66,7 @@ describe('ScenarioToggles: disabled with a reason only when no loaded rule is af
   });
 
   it('synthetic uncertain + employer rules: both enabled, and they dispatch', () => {
-    const { uncertain, employer, state } = renderToggles(bundle([uncertainDelta, employerDelta]));
+    const { uncertain, employer, state } = renderToggles(bundle([uncertainDelta, employerDelta]), ALL_OFF);
     expect(uncertain.disabled).toBe(false);
     expect(employer.disabled).toBe(false);
     expect(screen.getByText('Gjelder 1 regel merket usikre (SV).')).toBeTruthy();
@@ -99,7 +101,7 @@ describe('ScenarioToggles with the loaded data (DATA_BUNDLE)', () => {
       childrenAges: [3, 8],
       wealth: wealth({ bankDeposits: kr(40_000_000) }),
     });
-    const off = calculateAll(rich, DEFAULT_TOGGLES, DATA_BUNDLE);
+    const off = calculateAll(rich, ALL_OFF, DATA_BUNDLE);
     const on = calculateAll(rich, { ...DEFAULT_TOGGLES, includeUncertain: true }, DATA_BUNDLE);
     // Every listed party gets each of its uncertain rules applied when the toggle is on …
     for (const id of effects.includeUncertain.parties) {
@@ -128,7 +130,10 @@ describe('ScenarioToggles with the loaded data (DATA_BUNDLE)', () => {
 
   it('the results-page sentence matches the effects', () => {
     expect(toggleSummary(effects, DEFAULT_TOGGLES)).toBe(
-      'Usikre forslag (4 regler) er av som standard og ikke regnet med. Ingen partier endrer arbeidsgiveravgiften.',
+      'Usikre forslag (4 regler) er regnet med som standard og merket «Usikkert». Ingen partier endrer arbeidsgiveravgiften.',
+    );
+    expect(toggleSummary(effects, ALL_OFF)).toBe(
+      'Usikre forslag (4 regler) er slått av og ikke regnet med. Ingen partier endrer arbeidsgiveravgiften.',
     );
     const none = toggleEffects(bundle([plainDelta]));
     expect(toggleSummary(none, DEFAULT_TOGGLES)).toBe(

@@ -30,7 +30,7 @@ Hovedspørsmålet brukeren skal få svar på er:
 - Hovedtallet er kroner mer eller mindre igjen mot referansen, per år og per måned.
 - Partiene rangeres som standard etter hvem som gir den aktuelle brukeren mest penger igjen.
 - Hovedtallet består av direkte skatt, moms/særavgifter og direkte kontantytelser. Disse skal også vises separat.
-- Usikre forslag er av som standard og kan eventuelt aktiveres som eksplisitte scenario-brytere.
+- Usikre forslag regnes med som standard, tydelig merket, og kan slås av med en eksplisitt scenario-bryter (beslutning 2026-11-16; før: av som standard).
 - Arbeidsgiveravgift kan slås av og på, men skal metodisk skilles fra direkte skattetrekk.
 - Brukeren kan beregne for én person eller en husholdning.
 - MVP-en bruker kun nasjonale regler. Ikke bygg kommunal skatte- eller avgiftsmodell.
@@ -222,7 +222,7 @@ Når brukeren aktiverer den:
 
 ### Usikre forslag
 
-Ufullstendige forslag er av som standard. Dersom et rimelig anslag er mulig, legg det bak en bryter under «Mulige endringer». Vis:
+Dersom et rimelig anslag er mulig, regn det med som standard, merk det som usikkert og gi en bryter som slår det av (beslutning 2026-11-16: å utelate anslaget er det samme som å anta 0 kroner). Forslag uten et rimelig anslag er ikke med i tallet. Vis:
 
 - antagelsen;
 - kilden;
@@ -342,7 +342,7 @@ For alle terskelbaserte regler: test rett under, på og rett over innslagspunkte
 - standardreferansen gir null avvik mot seg selv;
 - partirangeringen samsvarer med beregnede summer;
 - detaljkomponentene summerer til hovedtallet;
-- scenario-brytere er av som standard;
+- arbeidsgiveravgift-bryteren er av som standard; usikre forslag er på (2026-11-16);
 - person- og husholdningsmodus håndterer samme voksne konsistent;
 - ingen ugyldige eller negative brukerverdier gir ødelagt resultat;
 - siden fungerer på små mobilskjermer;
@@ -380,7 +380,7 @@ MVP-en er ferdig når:
 - partiene sorteres etter penger igjen;
 - skatt, avgifter og ytelser vises separat;
 - forbruksprofilen kan justeres;
-- usikre forslag er av som standard og tydelig merket;
+- usikre forslag er regnet med som standard og tydelig merket;
 - arbeidsgiveravgift kan aktiveres og forklares;
 - alle aktive regler har kilde og status;
 - alle beregninger skjer lokalt;
