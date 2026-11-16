@@ -112,7 +112,12 @@ export interface Toggles {
   includeEmployerContribution: boolean;
 }
 
+/**
+ * Uncertain proposals count by default (decision 2026-11-16, reverses the earlier "off by
+ * default"): leaving a coded estimate out is the same as assuming it is worth 0 kr, which is a
+ * worse assumption than the labelled estimate. Each card states what they contribute.
+ */
 export const DEFAULT_TOGGLES: Toggles = {
-  includeUncertain: false,
+  includeUncertain: true,
   includeEmployerContribution: false,
 };

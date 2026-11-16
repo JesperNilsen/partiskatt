@@ -75,7 +75,7 @@ describe('CalculatorView: wealth fields the engine already models', () => {
   it('the calculator wires the loaded data into the toggles', async () => {
     renderCalculator();
     expect(await screen.findByText(/Gjelder 4 regler merket usikre/)).toBeTruthy();
-    expect((screen.getByLabelText(/Ta med usikre forslag/) as HTMLInputElement).disabled).toBe(false);
+    expect((screen.getByLabelText(/Regn med usikre forslag/) as HTMLInputElement).disabled).toBe(false);
   });
 
   it('the segmented "person / husholdning" control reports aria-pressed and toggles it on click', () => {

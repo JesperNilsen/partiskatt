@@ -14,7 +14,10 @@ export interface RuleRow {
   readonly title: string;
   readonly status: DataStatus;
   readonly uncertain: boolean;
-  /** Why the rule is left out of the headline; absent for rules in the arithmetic. */
+  /**
+   * Why the rule is left out of the headline. On a rule in the arithmetic it is set only for
+   * uncertain rules, where it says the figure rests on an assumption.
+   */
   readonly reason?: string;
   /** `null` only if the excluded item cannot be matched to the party's data (a data bug). */
   readonly provenance: Provenance | null;
@@ -142,6 +145,10 @@ export function sourceLine(prov: Provenance): SourceLine {
   };
 }
 
+/** Shown on an uncertain rule that is in the number, so the estimate never passes as a stated figure. */
+export const UNCERTAIN_APPLIED_REASON =
+  'Usikkert forslag: partiet oppgir ikke alle detaljene, så tallet bygger på en antagelse (se «Slik er tallet hentet»). Regnet med som standard; kan slås av under «Forutsetninger».';
+
 /**
  * Rules the party changed that entered the arithmetic (`applied`) and the ones left
  * out of it (`excluded`, same order as `result.excluded`: gated deltas, then
@@ -158,6 +165,7 @@ export function partyRuleRows(result: PartyResult): { applied: RuleRow[]; exclud
       title: d.label,
       status: d.status,
       uncertain: d.uncertain,
+      ...(d.uncertain ? { reason: UNCERTAIN_APPLIED_REASON } : {}),
       provenance: d.provenance,
       effectiveNote: effectiveDateNote(d.provenance),
       midYearDelta: midYearDelta(result, d.id, d.provenance),
@@ -182,10 +190,43 @@ export function partyRuleRows(result: PartyResult): { applied: RuleRow[]; exclud
 }
 
 /**
- * D3: how many of the party's proposals never entered the arithmetic because they are not
- * tallfestet (`PartyRuleSet.unquantified`), for the card's "n forslag ikke tallfestet" chip.
- * Independent of `partyRuleRows`/`expanded` so the chip shows on a collapsed card too.
+ * The card's coverage label (D3, widened 2026-11-16): every proposal of the party that is not in
+ * the headline of this result. That is the unquantified ones always, and the uncertain ones when
+ * that toggle is off; the label used to count only the first kind and under-reported the rest.
+ * Read from `result.excluded`, so it shows on a collapsed card too.
  */
-export function unquantifiedCount(result: PartyResult): number {
-  return partyOf(result.party).unquantified.length;
+export function leftOut(result: PartyResult): { count: number; allUnquantified: boolean } {
+  return {
+    count: result.excluded.length,
+    allUnquantified: result.excluded.every((e) => e.status === 'unquantified'),
+  };
+}
+
+export interface OffsetWarning {
+  /** The proposal that is not in the number. */
+  title: string;
+  /** The counted result line it pulls against, as the card labels it. */
+  componentLabel: string;
+  /** What that line contributes to the headline for this user. */
+  counted: Kroner;
+}
+
+/**
+ * Left-out proposals that pull against a counted line which moves this user's number
+ * (`UnquantifiedProposal.offsets`). The headline then shows one half of the party's proposal for
+ * that tax, and the missing half would reduce it or turn it around.
+ */
+export function offsetWarnings(result: PartyResult): OffsetWarning[] {
+  const warnings: OffsetWarning[] = [];
+  for (const item of result.excluded) {
+    const offsets = item.offsets;
+    if (!offsets) continue;
+    const components = result.components.filter((c) => c.formulaId === offsets.component);
+    const counted = sum(components.map((c) => c.keptDelta));
+    if (counted === 0) continue;
+    const condition = offsets.whenInputAbove;
+    if (condition && !components.some((c) => (c.inputsRef[condition.input] ?? 0) > condition.value)) continue;
+    warnings.push({ title: item.title, componentLabel: components[0]!.label, counted });
+  }
+  return warnings;
 }

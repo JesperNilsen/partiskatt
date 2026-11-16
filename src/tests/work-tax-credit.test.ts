@@ -15,7 +15,7 @@ import { FIXTURES, adult, profile } from './fixtures.ts';
  * income, capped at that adult's income tax, and marked uncertain (counts only with «usikre forslag»).
  */
 const ON: Toggles = { ...DEFAULT_TOGGLES, includeUncertain: true };
-const OFF: Toggles = DEFAULT_TOGGLES;
+const OFF: Toggles = { ...DEFAULT_TOGGLES, includeUncertain: false };
 
 /** The app's default profile (typisk consumption) with the given adults. */
 function appProfile(first: Partial<Adult>, second?: Partial<Adult>): UserProfile {

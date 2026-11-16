@@ -73,8 +73,8 @@ export function toggleSummary(effects: ToggleEffects, toggles: Toggles): string 
     u.ruleCount === 0
       ? 'Ingen regler er merket usikre.'
       : toggles.includeUncertain
-        ? `Usikre forslag (${rules(u.ruleCount)}) er slått på og regnet med.`
-        : `Usikre forslag (${rules(u.ruleCount)}) er av som standard og ikke regnet med.`;
+        ? `Usikre forslag (${rules(u.ruleCount)}) er regnet med som standard og merket «Usikkert».`
+        : `Usikre forslag (${rules(u.ruleCount)}) er slått av og ikke regnet med.`;
   const e = effects.includeEmployerContribution;
   const employer =
     e.ruleCount === 0

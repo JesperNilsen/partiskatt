@@ -121,6 +121,8 @@ export const KRF_2026: PartyRuleSet = {
       reason:
         'Skattetabellen p19 (bilde) sier «Boliger med verdi o. 8 mill. kr verdsettes med 100 pst.» (+2 065 mill.), men ikke om 100 pst. gjelder hele boligverdien eller bare delen over 8 mill., og skiller ikke primær- fra sekundærbolig. Kan ikke kodes entydig.',
       provenance: prov('krf', 'PDF p17', 'over 8 mill. kroner, for å dempe', 'Prosa p17 («fjerne verdsettelsesrabatten»); satsen fra p19 (bilde).'),
+      // Raises the wealth tax on homes above 8 mill. kr, against the counted valuation change.
+      offsets: { component: 'wealth.netWealthTax', whenInputAbove: { input: 'primaerboligVerdi', value: 8_000_000 } },
     },
     {
       category: 'consumption-tax',

@@ -275,7 +275,22 @@ fieldset.adult-fields + fieldset.adult-fields {
 .party-card__group-row { display: flex; justify-content: space-between; gap: var(--sp-3); }
 .party-card__group-row dt { color: var(--ink-3); }
 .party-card__group-row dd { margin: 0; font-weight: 600; }
-.party-card__employer { font-size: var(--fs-sm); color: var(--ink-2); margin: var(--sp-3) 0 0; }
+.party-card__employer, .party-card__uncertain { font-size: var(--fs-sm); color: var(--ink-2); margin: var(--sp-3) 0 0; }
+.party-card__incomplete {
+  font-size: var(--fs-sm);
+  margin: var(--sp-3) 0;
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+.results-assumptions {
+  margin: var(--sp-3) 0 var(--sp-4);
+  padding: var(--sp-3) var(--sp-3) 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+.results-assumptions legend { font-size: var(--fs-sm); font-weight: 600; padding: 0 var(--sp-1); }
 .party-card__toggle { margin-top: var(--sp-3); width: 100%; }
 .party-card__details {
   margin-top: var(--sp-4);

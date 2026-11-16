@@ -78,6 +78,7 @@ export function summarizeParty(
   excluded: readonly ExcludedRule[],
   appliedRuleCount: number,
   toggles: Toggles,
+  uncertainShare: Kroner | null = null,
 ): PartyResult {
   const byGroup: Record<HeadlineGroup, Kroner> = { direct: ZERO, consumption: ZERO, benefit: ZERO };
   let employer = ZERO;
@@ -95,5 +96,6 @@ export function summarizeParty(
     components: toggles.includeEmployerContribution ? deltas : deltas.filter((d) => d.group !== 'employer'),
     excluded,
     appliedRuleCount,
+    uncertainShare,
   };
 }

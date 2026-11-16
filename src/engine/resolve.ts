@@ -84,7 +84,13 @@ export function resolveParty(party: PartyRuleSet, adopted: ResolvedRuleSet, togg
     }
   }
   for (const u of party.unquantified) {
-    excluded.push({ title: u.title, status: u.status, reason: u.reason, uncertain: false });
+    excluded.push({
+      title: u.title,
+      status: u.status,
+      reason: u.reason,
+      uncertain: false,
+      ...(u.offsets ? { offsets: u.offsets } : {}),
+    });
   }
   return { ruleSet: { id: party.id, rules }, excluded, appliedRuleCount };
 }

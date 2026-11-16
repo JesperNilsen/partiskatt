@@ -116,7 +116,7 @@ export interface Rule<F extends FormulaId = FormulaId> {
   id: F;
   params: FormulaParams[F];
   status: DataStatus;
-  /** Off by default; shown under «Mulige endringer». */
+  /** An estimate resting on an assumption. Counted by default since 2026-11-16 and labelled; the toggle leaves it out. */
   uncertain: boolean;
   /** Short Norwegian description of the rule as the source states it. */
   label: string;
@@ -144,12 +144,26 @@ export interface ReviewNote {
 }
 
 /** A proposal that exists in the source but cannot enter the arithmetic. */
+/**
+ * A counted result line an unquantified proposal pulls against: same tax, opposite direction
+ * (2026-11-16). The card warns when that line moves the user's number, because the number then
+ * shows only the counted half of what the party proposes for that tax.
+ */
+export interface OffsetRef {
+  /** Formula id of the result component (e.g. `wealth.netWealthTax`), not of a party rule. */
+  component: FormulaId;
+  /** Set when the proposal only bites above a level: warn only if this component input exceeds it. */
+  whenInputAbove?: { input: string; value: number };
+}
+
 export interface UnquantifiedProposal {
   category: Category;
   title: string;
   status: 'unquantified' | 'not-reviewed';
   reason: string;
   provenance: Provenance;
+  /** Only where the proposal works on the same tax as a counted one, in the opposite direction. */
+  offsets?: OffsetRef;
 }
 
 export interface PartyRuleSet {

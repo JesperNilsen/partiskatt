@@ -91,6 +91,8 @@ export const MDG_2026: PartyRuleSet = {
       status: 'unquantified',
       reason: 'Dokumentet sier ikke hvilke rabatter som kuttes eller til hvilket nivå (s. 9 «kutte», s. 79 «fjernes»).',
       provenance: partyProv('mdg', 'PDF p79', 'Bunnfradrag økes til 10 mill. og rabatter', 'Vedlegget s. 79; omtalt s. 9.'),
+      // Same table line as the counted bunnfradrag: higher allowance lowers the tax, cut discounts raise it.
+      offsets: { component: 'wealth.netWealthTax' },
     },
     {
       category: 'consumption-tax',
